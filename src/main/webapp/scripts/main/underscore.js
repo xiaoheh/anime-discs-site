@@ -442,7 +442,7 @@
   // ---------------
 
   // Get the first element of an array. Passing **n** will return the first N
-  // values in the array. Aliased as `head` and `take`. The **guard** check
+  // values in the array. Aliased as `head` and `take`. The **guard** test_and_put
   // allows it to work with `_.map`.
   _.first = _.head = _.take = function(array, n, guard) {
     if (array == null) return void 0;
@@ -1177,7 +1177,7 @@
     return true;
   };
 
-  // Perform a deep comparison to check if two objects are equal.
+  // Perform a deep comparison to test_and_put if two objects are equal.
   _.isEqual = function(a, b) {
     return eq(a, b);
   };

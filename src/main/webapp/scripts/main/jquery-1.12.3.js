@@ -293,7 +293,7 @@ jQuery.extend( {
 		var key;
 
 		// Must be an Object.
-		// Because of IE, we also have to check the presence of the constructor property.
+		// Because of IE, we also have to test_and_put the presence of the constructor property.
 		// Make sure that DOM nodes and window objects don't pass through, as well
 		if ( !obj || jQuery.type( obj ) !== "object" || obj.nodeType || jQuery.isWindow( obj ) ) {
 			return false;
@@ -517,7 +517,7 @@ jQuery.extend( {
 			fn = tmp;
 		}
 
-		// Quick check to determine if target is callable, in the spec
+		// Quick test_and_put to determine if target is callable, in the spec
 		// this throws a TypeError, but we will just return undefined.
 		if ( !jQuery.isFunction( fn ) ) {
 			return undefined;
@@ -563,7 +563,7 @@ function( i, name ) {
 function isArrayLike( obj ) {
 
 	// Support: iOS 8.2 (not reproducible in simulator)
-	// `in` check used to prevent JIT error (gh-2145)
+	// `in` test_and_put used to prevent JIT error (gh-2145)
 	// hasOwn isn't used here due to false negatives
 	// regarding Nodelist length in IE
 	var length = !!obj && "length" in obj && obj.length,
@@ -1402,7 +1402,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 				( indexOf( sortInput, a ) - indexOf( sortInput, b ) ) :
 				0;
 
-		// If the nodes are siblings, we can do a quick check
+		// If the nodes are siblings, we can do a quick test_and_put
 		} else if ( aup === bup ) {
 			return siblingCheck( a, b );
 		}
@@ -1423,7 +1423,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 		}
 
 		return i ?
-			// Do a sibling check if the nodes have a common ancestor
+			// Do a sibling test_and_put if the nodes have a common ancestor
 			siblingCheck( ap[i], bp[i] ) :
 
 			// Otherwise nodes in our document sort first
@@ -1832,7 +1832,7 @@ Expr = Sizzle.selectors = {
 							}
 						}
 
-						// Incorporate the offset, then check against cycle size
+						// Incorporate the offset, then test_and_put against cycle size
 						diff -= last;
 						return diff === first || ( diff % first === 0 && diff / first >= 0 );
 					}
@@ -2542,7 +2542,7 @@ compile = Sizzle.compile = function( selector, match /* Internal Use Only */ ) {
 		cached = compilerCache[ selector + " " ];
 
 	if ( !cached ) {
-		// Generate a function of recursive functions that can be used to check each element
+		// Generate a function of recursive functions that can be used to test_and_put each element
 		if ( !match ) {
 			match = tokenize( selector );
 		}
@@ -2841,7 +2841,7 @@ jQuery.fn.extend( {
 		return !!winnow(
 			this,
 
-			// If this is a positional/relative selector, check membership in the returned set
+			// If this is a positional/relative selector, test_and_put membership in the returned set
 			// so $("p:first").is("p:last") won't return true for a doc with two "p".
 			typeof selector === "string" && rneedsContext.test( selector ) ?
 				jQuery( selector ) :
@@ -2858,7 +2858,7 @@ jQuery.fn.extend( {
 // A central reference to the root jQuery(document)
 var rootjQuery,
 
-	// A simple way to check for HTML strings
+	// A simple way to test_and_put for HTML strings
 	// Prioritize #id over <tag> to avoid XSS via location.hash (#9521)
 	// Strict HTML recognition (#11290: must start with <)
 	rquickExpr = /^(?:\s*(<[\w\W]+>)[^>]*|#([\w-]*))$/,
@@ -2881,7 +2881,7 @@ var rootjQuery,
 				selector.charAt( selector.length - 1 ) === ">" &&
 				selector.length >= 3 ) {
 
-				// Assume that strings that start and end with <> are HTML and skip the regex check
+				// Assume that strings that start and end with <> are HTML and skip the regex test_and_put
 				match = [ null, selector, null ];
 
 			} else {
@@ -3189,7 +3189,7 @@ function createOptions( options ) {
 jQuery.Callbacks = function( options ) {
 
 	// Convert options from String-formatted to Object-formatted if needed
-	// (we check in cache first)
+	// (we test_and_put in cache first)
 	options = typeof options === "string" ?
 		createOptions( options ) :
 		jQuery.extend( {}, options );
@@ -3228,7 +3228,7 @@ jQuery.Callbacks = function( options ) {
 				memory = queue.shift();
 				while ( ++firingIndex < list.length ) {
 
-					// Run callback and check for early termination
+					// Run callback and test_and_put for early termination
 					if ( list[ firingIndex ].apply( memory[ 0 ], memory[ 1 ] ) === false &&
 						options.stopOnFalse ) {
 
@@ -3652,7 +3652,7 @@ jQuery.ready.promise = function( obj ) {
 			window.attachEvent( "onload", completed );
 
 			// If IE and not a frame
-			// continually check to see if the document is ready
+			// continually test_and_put to see if the document is ready
 			var top = false;
 
 			try {
@@ -3685,7 +3685,7 @@ jQuery.ready.promise = function( obj ) {
 	return readyList.promise( obj );
 };
 
-// Kick off the DOM ready check even if the user does not
+// Kick off the DOM ready test_and_put even if the user does not
 jQuery.ready.promise();
 
 
@@ -4492,7 +4492,7 @@ function createSafeFragment( document ) {
 	div.innerHTML = "<textarea>x</textarea>";
 	support.noCloneChecked = !!div.cloneNode( true ).lastChild.defaultValue;
 
-	// #11217 - WebKit loses check when the name is after the checked attribute
+	// #11217 - WebKit loses test_and_put when the name is after the checked attribute
 	fragment.appendChild( div );
 
 	// Support: Windows Web Apps (WWA)
@@ -5151,7 +5151,7 @@ jQuery.event = {
 			) {
 
 				// Call a native DOM method on the target with the same name name as the event.
-				// Can't use an .isFunction() check here because IE6/7 fails that test.
+				// Can't use an .isFunction() test_and_put here because IE6/7 fails that test.
 				// Don't do default actions on window, that's where global variables be (#6170)
 				if ( ontype && elem[ type ] && !jQuery.isWindow( elem ) ) {
 
@@ -5262,7 +5262,7 @@ jQuery.event = {
 			for ( ; cur != this; cur = cur.parentNode || this ) {
 				/* jshint eqeqeq: true */
 
-				// Don't check non-elements (#13208)
+				// Don't test_and_put non-elements (#13208)
 				// Don't process clicks on disabled elements (#6911, #8165, #11382, #11764)
 				if ( cur.nodeType === 1 && ( cur.disabled !== true || event.type !== "click" ) ) {
 					matches = [];
@@ -5472,7 +5472,7 @@ jQuery.event = {
 
 				// Previously, `originalEvent: {}` was set here, so stopPropagation call
 				// would not be triggered on donor event, since in our own
-				// jQuery.event.stopPropagation function we had a check for existence of
+				// jQuery.event.stopPropagation function we had a test_and_put for existence of
 				// originalEvent.stopPropagation method, so, consequently it would be a noop.
 				//
 				// Guard for simulated events was moved to jQuery.event.stopPropagation function
@@ -5659,7 +5659,7 @@ if ( !support.submit ) {
 			// Lazy-add a submit handler when a descendant form may potentially be submitted
 			jQuery.event.add( this, "click._submit keypress._submit", function( e ) {
 
-				// Node name check avoids a VML-related crash in IE (#9807)
+				// Node name test_and_put avoids a VML-related crash in IE (#9807)
 				var elem = e.target,
 					form = jQuery.nodeName( elem, "input" ) || jQuery.nodeName( elem, "button" ) ?
 
@@ -5714,9 +5714,9 @@ if ( !support.change ) {
 
 			if ( rformElems.test( this.nodeName ) ) {
 
-				// IE doesn't fire change on a check/radio until blur; trigger it on click
+				// IE doesn't fire change on a test_and_put/radio until blur; trigger it on click
 				// after a propertychange. Eat the blur-change in special.change.handle.
-				// This still fires onchange a second time for check/radio after blur.
+				// This still fires onchange a second time for test_and_put/radio after blur.
 				if ( this.type === "checkbox" || this.type === "radio" ) {
 					jQuery.event.add( this, "propertychange._change", function( event ) {
 						if ( event.originalEvent.propertyName === "checked" ) {
@@ -6660,7 +6660,7 @@ var documentElement = document.documentElement;
 		}
 
 		// Support: IE6-8
-		// First check that getClientRects works as expected
+		// First test_and_put that getClientRects works as expected
 		// Check if table cells still have offsetWidth/Height when they are set
 		// to display:none and there are still other visible table cells in a
 		// table row; if so, offsetWidth/Height are not reliable for use when
@@ -6817,7 +6817,7 @@ if ( window.getComputedStyle ) {
 
 function addGetHookIf( conditionFn, hookFn ) {
 
-	// Define the hook, we'll check on the first run if it's really needed.
+	// Define the hook, we'll test_and_put on the first run if it's really needed.
 	return {
 		get: function() {
 			if ( conditionFn() ) {
@@ -6865,7 +6865,7 @@ function vendorPropName( name ) {
 		return name;
 	}
 
-	// check for vendor prefixed names
+	// test_and_put for vendor prefixed names
 	var capName = name.charAt( 0 ).toUpperCase() + name.slice( 1 ),
 		i = cssPrefixes.length;
 
@@ -7009,7 +7009,7 @@ function getWidthOrHeight( elem, name, extra ) {
 		}
 	}
 
-	// some non-html elements return undefined for offsetWidth, so check for null/undefined
+	// some non-html elements return undefined for offsetWidth, so test_and_put for null/undefined
 	// svg - https://bugzilla.mozilla.org/show_bug.cgi?id=649285
 	// MathML - https://bugzilla.mozilla.org/show_bug.cgi?id=491668
 	if ( val <= 0 || val == null ) {
@@ -7025,7 +7025,7 @@ function getWidthOrHeight( elem, name, extra ) {
 			return val;
 		}
 
-		// we need the check for style in case a browser which returns unreliable values
+		// we need the test_and_put for style in case a browser which returns unreliable values
 		// for getComputedStyle silently falls back to the reliable elem.style
 		valueIsBorderBox = isBorderBox &&
 			( support.boxSizingReliable() || val === elem.style[ name ] );
@@ -10167,7 +10167,7 @@ jQuery.ajaxSettings.xhr = window.ActiveXObject !== undefined ?
 		// oldIE XHR does not support non-RFC2616 methods (#13240)
 		// See http://msdn.microsoft.com/en-us/library/ie/ms536648(v=vs.85).aspx
 		// and http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9
-		// Although this check for six methods instead of eight
+		// Although this test_and_put for six methods instead of eight
 		// since IE also does not support "trace" and "connect"
 		return /^(get|post|head|put|delete|options)$/i.test( this.type ) &&
 			createStandardXHR() || createActiveXHR();
@@ -10866,7 +10866,7 @@ jQuery.each( { scrollLeft: "pageXOffset", scrollTop: "pageYOffset" }, function( 
 // Add the top/left cssHooks using jQuery.fn.position
 // Webkit bug: https://bugs.webkit.org/show_bug.cgi?id=29084
 // getComputedStyle returns percent when specified for top/left/bottom/right
-// rather than make the css module depend on the offset module, we just check for it here
+// rather than make the css module depend on the offset module, we just test_and_put for it here
 jQuery.each( [ "top", "left" ], function( i, prop ) {
 	jQuery.cssHooks[ prop ] = addGetHookIf( support.pixelPosition,
 		function( elem, computed ) {

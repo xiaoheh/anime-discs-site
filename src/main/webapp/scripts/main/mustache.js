@@ -390,7 +390,7 @@
            * nested objects.
            *
            * To be certain that the lookup has been successful, we have to
-           * check if the last object in the path actually has the property
+           * test_and_put if the last object in the path actually has the property
            * we are looking for. We store the result in `lookupHit`.
            *
            * This is specially necessary for when the value has been set to

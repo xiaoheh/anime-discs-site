@@ -1,4 +1,5 @@
 var page = {};
+var cache = {};
 var device = {};
 var navbar = {};
 initial_object();
@@ -17,7 +18,6 @@ function active_current_page() {
 
 function initial_object() {
     var $window = $(window);
-    var this_url = location.pathname.substr(1);
 
     page.scroll = function (selector) {
         $window.scrollTop($(selector).offset().top - 51);
@@ -26,16 +26,37 @@ function initial_object() {
         $window.scrollTop($window.scrollTop() - 51);
     };
     page.is_this_page = function (url) {
-        return this_url == url;
+        return this.url() == url;
     };
     page.hash = function () {
         return location.hash;
     };
+    page.url = function () {
+        return location.pathname.substr(1);
+    };
+
+    cache.get_or_create = function (key, func) {
+        if (this[key]) {
+            return this[key];
+        } else {
+            return this[key] = func();
+        }
+    };
+
     device.width = function () {
         return $window.width();
     };
     device.is_small = function () {
         return this.width() < 768;
+    };
+    device.switch = function (func) {
+        var is_small = this.is_small();
+        $window.resize(function () {
+            var small = device.is_small();
+            if (is_small != small) {
+                is_small = func(small);
+            }
+        });
     };
 
     navbar.add_postion = function (id, title) {

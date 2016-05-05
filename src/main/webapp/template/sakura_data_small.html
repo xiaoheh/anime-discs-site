@@ -12,7 +12,11 @@
     }
 
     th.index {
-        width: 50px;
+        width: 40px;
+    }
+
+    td.index span {
+        color: transparent;
     }
 
     th.rank {
@@ -20,11 +24,7 @@
     }
 
     th.cupt {
-        width: 70px;
-    }
-
-    th.tdpt {
-        width: 70px;
+        width: 85px;
     }
 
     th.title {
@@ -35,24 +35,22 @@
 <table class="table table-bordered table-striped" id="{{key}}">
     <caption>
         <span><b>{{title}}</b></span>
-        <span><span class="hidden-xx">上次更新</span> 1小时 22分前</span>
+        <span><span class="hidden-xxs">上次更新</span> 1小时 22分前</span>
     </caption>
     <thead>
     <tr>
-        <th class="index">序号</th>
-        <th class="rank">排名</th>
-        <th class="cupt hidden-xx1">累积PT</th>
-        <th class="tdpt hidden-xx2">日增PT</th>
+        <th class="index">ID</th>
+        <th class="rank">当前/前回</th>
+        <th class="cupt hidden-xxs">累积PT</th>
         <th class="title">碟片标题</th>
     </tr>
     </thead>
     <tbody>
     {{#discs}}
     <tr>
-        <td class="index">{{index}}</td>
-        <td class="rank">{{{rank}}}</td>
-        <td class="cupt hidden-xx1">累积:<br>{{cupt}}</td>
-        <td class="tdpt hidden-xx2">日增:<br>{{tdpt}}</td>
+        <td class="index">{{index}}<span>)</span></td>
+        <td class="rank {{rank_clazz}}">{{{rank}}}</td>
+        <td class="cupt hidden-xxs">{{cupt}} pt</td>
         <td class="title">{{title}}</td>
     </tr>
     {{/discs}}
