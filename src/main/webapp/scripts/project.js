@@ -1,52 +1,50 @@
 var page = {};
+var device = {};
+var navbar = {};
+initial_object();
 
 $(function () {
     active_current_page();
 });
 
 function active_current_page() {
-    var page_url = get_page_url();
     $("#navbar").find("li>a").each(function () {
-        if (page_url == $(this).attr("href")) {
+        if (page.is_this_page($(this).attr("href"))) {
             $(this).parents("li").addClass("active");
         }
     });
 }
 
-function get_page_url() {
-    var text = window.location.toString();
-    if (text.indexOf("?") > 0) {
-        text = text.substr(0, text.indexOf("?"));
-    }
-    if (text.indexOf("#") > 0) {
-        text = text.substr(0, text.indexOf("#"));
-    }
-    if (text.indexOf("/") >= 0) {
-        text = text.substr(text.lastIndexOf("/") + 1);
-    }
-    return text == "" ? "index.jsp" : text;
+function initial_object() {
+    var $window = $(window);
+    var this_url = location.pathname.substr(1);
+
+    page.scroll = function (selector) {
+        $window.scrollTop($(selector).offset().top - 51);
+    };
+    page.fixpos = function () {
+        $window.scrollTop($window.scrollTop() - 51);
+    };
+    page.is_this_page = function (url) {
+        return this_url == url;
+    };
+    page.hash = function () {
+        return location.hash;
+    };
+    device.width = function () {
+        return $window.width();
+    };
+    device.is_small = function () {
+        return this.width() < 768;
+    };
+
+    navbar.add_postion = function (id, title) {
+        $("#postion").find("li").has("a[href='#" + id + "']").remove();
+        var tmpl = '<li><a href="{{hash}}" onclick="fixpos()">{{title}}</a></li>';
+        $(Mustache.render(tmpl, {hash: "#" + id, title: title})).appendTo("#postion");
+    };
 }
 
-function get_page_hash() {
-    var text = window.location.toString();
-    var indexOf = text.lastIndexOf("#");
-    return indexOf > 0 ? text.substr(indexOf + 1) : null;
-}
-
-function scroll_window(hash) {
-    var top = $("#" + hash).offset().top;
-    var fix = hash == 'navbar' ? 60 : 51;
-    $(window).scrollTop(top - fix);
-}
-
-function fix_scroll(size) {
-    setTimeout(function () {
-        $(window).scrollTop(window.scrollY - (size || 51));
-    }, 10);
-}
-
-function add_postion(hash, title) {
-    $("#postion").find("li").has("a[href='#" + hash + "']").remove();
-    var tmpl = '<li><a href="#{{hash}}" onclick="fix_scroll()">{{title}}</a></li>';
-    $(Mustache.render(tmpl, {hash: hash, title: title})).appendTo("#postion");
+function fixpos() {
+    setTimeout(page.fixpos, 10);
 }
