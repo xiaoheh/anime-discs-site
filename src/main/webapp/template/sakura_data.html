@@ -1,0 +1,23 @@
+{{#tables}}
+<table class="table table-bordered table-striped" id="{{key}}">
+    <caption>
+        <b>{{title}}</b>
+    </caption>
+    <thead>
+    <tr>
+        <th>当前/前回</th>
+        <th>累积PT</th>
+        <th>碟片标题</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#discs}}
+    <tr>
+        <td>{{curk}}/{{prrk}}</td>
+        <td>({{cupt}} pt)</td>
+        <td>{{title}}</td>
+    </tr>
+    {{/discs}}
+    </tbody>
+</table>
+{{/tables}}
