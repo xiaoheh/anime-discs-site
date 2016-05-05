@@ -2,7 +2,7 @@
 <html>
 <head>
     <%@ include file="include/meta.jsp" %>
-    <title>Anime Discs - 首页</title>
+    <title>Anime Discs - Sakura数据</title>
     <%@ include file="include/import.jsp" %>
 </head>
 <body>
