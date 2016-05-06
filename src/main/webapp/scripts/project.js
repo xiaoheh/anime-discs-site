@@ -5,11 +5,11 @@ var navbar = {};
 initial_object();
 
 $(function () {
-    active_current_page();
-    register_close_action();
+    update_active_status();
+    handle_aclick_action();
 });
 
-function active_current_page() {
+function update_active_status() {
     $("#navbar").find("li>a").each(function () {
         if (page.url() == $(this).attr("href")) {
             $(this).parents("li").addClass("active");
@@ -17,7 +17,7 @@ function active_current_page() {
     });
 }
 
-function register_close_action() {
+function handle_aclick_action() {
     $("#postion").on("click", "a", function () {
         $(".navbar-collapse").collapse("hide");
     });
@@ -61,9 +61,9 @@ function initial_object() {
     };
 
     navbar.add_postion = function (id, title) {
-        $("#postion").find("li").has("a[href='#" + id + "']").remove();
-        var tmpl = '<li><a href="{{hash}}" onclick="scroll.call(this)">{{title}}</a></li>';
-        $(Mustache.render(tmpl, {hash: "#" + id, title: title})).appendTo("#postion");
+        var tmpl = $("#postion-tmpl").html();
+        var view = {hash: "#" + id, title: title};
+        $(Mustache.render(tmpl, view)).appendTo("#postion");
     };
 }
 

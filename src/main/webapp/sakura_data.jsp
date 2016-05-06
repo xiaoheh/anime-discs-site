@@ -30,7 +30,7 @@
 
     handle_data(view);
     render_page(device.is_small());
-    register_switch();
+    handle_switch_action();
 
     function handle_data(view) {
         $(view.tables).each(function () {
@@ -49,6 +49,7 @@
     }
 
     function render_page(is_small) {
+        is_small = is_small || device.is_small();
         if (is_small) {
             $.get("template/sakura_data_small.html", function (text) {
                 $("#content").html(Mustache.render(text, view));
@@ -58,12 +59,12 @@
                 $("#content").html(Mustache.render(text, view));
             });
         }
+        return is_small;
     }
 
-    function register_switch() {
+    function handle_switch_action() {
         device.switch(function (is_small) {
-            render_page(is_small);
-            return is_small;
+            return render_page(is_small);
         });
     }
 </script>
