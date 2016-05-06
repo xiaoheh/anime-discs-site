@@ -24,14 +24,15 @@
             <input type="text" class="form-control" id="sname" value="{{sname}}">
         </div>
     </form>
-    <button type="submit" class="btn btn-default">提交</button>
+    <button type="button" class="btn btn-primary">提交</button>
+    <button type="button" class="btn btn-default">返回</button>
     <span id="msg"></span>
 </script>
 <script>
     $(function () {
         $.getJSON("get_disc.do", {id: ${param.id}}, function (data) {
             $("#content").html(template("disc-tmpl", data));
-            $("#content").find(":submit").click(function () {
+            $("#content .btn-primary").click(function () {
                 $("#msg").html("提交中...");
                 $.post("update_disc.do", {
                     id: $("#id").val(),
@@ -44,6 +45,9 @@
                         $("#msg").html("提交失败: " + data.error);
                     }
                 });
+            });
+            $("#content .btn-default").click(function () {
+                page.go("${param.src}");
             });
         });
     });

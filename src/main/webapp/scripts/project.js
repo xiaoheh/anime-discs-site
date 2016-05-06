@@ -30,15 +30,25 @@ function initial_object() {
     var $window = $(window);
 
     page.scroll = function (selector) {
-        var pos = $(selector).offset().top;
-        var fix = selector == "#navbar" ? 60 : 51;
-        $window.scrollTop(pos - fix);
+        var $elements = $(selector);
+        if ($elements.size() > 0) {
+            var pos = $elements.offset().top;
+            var fix = selector == "#navbar" ? 60 : 51;
+            $window.scrollTop(pos - fix);
+        }
     };
     page.hash = function () {
         return location.hash;
     };
     page.url = function () {
         return location.pathname.substr(1);
+    };
+    page.go = function (url) {
+        location.replace(url);
+    };
+    page.go_with_src = function (url, data, hash) {
+        data.src = this.url() + (hash || "");
+        this.go(url + "?" + $.param(data));
     };
 
     cache.get_or_create = function (key, func) {
@@ -71,10 +81,18 @@ function initial_object() {
     };
 }
 
+function render(id, data) {
+    return cache.get_or_create(id, function () {
+        return template(id);
+    })(data);
+}
+
 function scroll() {
     setTimeout("page.scroll('" + $(this).attr("href") + "')", 10);
 }
 
 function restore_postion() {
-    page.scroll(page.hash());
+    if (page.hash() != "") {
+        page.scroll(page.hash());
+    }
 }
