@@ -21,6 +21,9 @@ function handle_aclick_action() {
     $("#postion").on("click", "a", function () {
         $(".navbar-collapse").collapse("hide");
     });
+    $("#refresh").click(function () {
+        location.replace(page.url());
+    });
 }
 
 function initial_object() {

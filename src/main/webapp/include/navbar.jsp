@@ -10,7 +10,10 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="index.jsp">Anime Discs</a>
-            <a class="navbar-brand visible-xs float-right">在线人数: ${application.online}</a>
+            <a class="navbar-brand visible-xs float-right">
+                <span class="btn-link" id="refresh">刷新</span>
+                在线<span class="hidden-xxs">人数</span>: ${application.online}
+            </a>
         </div>
         <div class="collapse navbar-collapse" role="navigation">
             <ul class="nav navbar-nav">
