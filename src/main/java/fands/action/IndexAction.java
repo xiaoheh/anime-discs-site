@@ -60,7 +60,11 @@ public class IndexAction extends fands.support.JsonAction {
         JSONObject object = new JSONObject();
         object.put("id", disc.getId());
         object.put("index", index);
-        object.put("sname", disc.getTitle());
+        if (disc.getSname() == null) {
+            object.put("sname", disc.getTitle());
+        } else {
+            object.put("sname", disc.getSname());
+        }
         DiscAmazon amazon = disc.getAmazon();
         if (amazon != null) {
             if (top100) {

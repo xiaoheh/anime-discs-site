@@ -106,7 +106,7 @@ public class SakuraSpeedSpider {
         if (disc == null) {
             disc = new Disc();
             disc.setAsin(asin);
-            disc.setName(name);
+            disc.setJapan(name);
             disc.setTitle(titleOfDisc(name));
             disc.setType(DiscType.valueOfIcon(type));
         }

@@ -14,8 +14,9 @@ import java.util.Date;
 public class Disc extends BaseModel implements Comparable<Disc> {
 
     private String asin;
-    private String name;
     private String title;
+    private String japan;
+    private String sname;
     private DiscType type;
 
     private Anime anime;
@@ -37,21 +38,30 @@ public class Disc extends BaseModel implements Comparable<Disc> {
     }
 
     @Column(length = 500, nullable = false)
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Column(length = 500, nullable = false)
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Column(length = 500, nullable = false)
+    public String getJapan() {
+        return japan;
+    }
+
+    public void setJapan(String japan) {
+        this.japan = japan;
+    }
+
+    @Column(length = 30)
+    public String getSname() {
+        return sname;
+    }
+
+    public void setSname(String sname) {
+        this.sname = sname;
     }
 
     @Column
@@ -131,7 +141,7 @@ public class Disc extends BaseModel implements Comparable<Disc> {
         if (sakura != null && other.sakura != null) {
             return sakura.compareTo(other.sakura);
         } else {
-            return name.compareTo(other.name);
+            return title.compareTo(other.title);
         }
     }
 
