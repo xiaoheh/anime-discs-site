@@ -1,6 +1,7 @@
 package fands.support;
 
 import org.apache.struts2.ServletActionContext;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,4 +17,15 @@ public class JsonAction {
         out.flush();
         out.close();
     }
+
+    protected void responseSuccess() throws IOException {
+        responseJson("\"success\"");
+    }
+
+    protected void responseError(String error) throws IOException {
+        JSONObject object = new JSONObject();
+        object.put("error", error);
+        responseJson(object.toString());
+    }
+
 }

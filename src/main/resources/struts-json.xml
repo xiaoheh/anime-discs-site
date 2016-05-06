@@ -17,5 +17,6 @@
         <action name="error" method="error" class="fands.action.ErrorAction"/>
         <action name="index" method="index" class="fands.action.IndexAction"/>
         <action name="get_disc" method="get" class="fands.action.DiscAction"/>
+        <action name="update_disc" method="update" class="fands.action.DiscAction"/>
     </package>
 </struts>

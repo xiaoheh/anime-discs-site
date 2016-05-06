@@ -10,24 +10,41 @@
 <div id="content"></div>
 <script id="disc-tmpl" type="text/html">
     <form role="form">
+        <input type="hidden" id="id" value="{{id}}">
         <div class="form-group">
             <label for="title">碟片标题</label>
             <input type="text" class="form-control" id="title" value="{{title}}">
         </div>
         <div class="form-group">
             <label for="japan">日文原名</label>
-            <input type="text" class="form-control" id="japan" value="{{japan}}">
+            <input type="text" class="form-control" id="japan" disabled="disabled" value="{{japan}}">
         </div>
         <div class="form-group">
             <label for="sname">简短名称</label>
             <input type="text" class="form-control" id="sname" value="{{sname}}">
         </div>
     </form>
+    <button type="submit" class="btn btn-default">提交</button>
+    <span id="msg"></span>
 </script>
 <script>
     $(function () {
         $.getJSON("get_disc.do", {id: ${param.id}}, function (data) {
             $("#content").html(template("disc-tmpl", data));
+            $("#content").find(":submit").click(function () {
+                $("#msg").html("提交中...");
+                $.post("update_disc.do", {
+                    id: $("#id").val(),
+                    title: $("#title").val(),
+                    sname: $("#sname").val()
+                }, function (data) {
+                    if (data == "success") {
+                        $("#msg").html("提交成功");
+                    } else {
+                        $("#msg").html("提交失败: " + data.error);
+                    }
+                });
+            });
         });
     });
 </script>

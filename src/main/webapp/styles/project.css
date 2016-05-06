@@ -44,3 +44,8 @@ table.table > caption > span {
 table.table > caption > span > b {
     color: black;
 }
+
+/* Form */
+#msg {
+    margin-left: 10px;
+}

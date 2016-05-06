@@ -49,6 +49,7 @@ public class DiscAction extends fands.support.JsonAction {
             disc.setSname(sname);
         }
         dao.update(disc);
+        responseSuccess();
     }
 
 }
