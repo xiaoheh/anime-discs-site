@@ -6,13 +6,20 @@ initial_object();
 
 $(function () {
     active_current_page();
+    register_close_action();
 });
 
 function active_current_page() {
     $("#navbar").find("li>a").each(function () {
-        if (page.is_this_page($(this).attr("href"))) {
+        if (page.url() == $(this).attr("href")) {
             $(this).parents("li").addClass("active");
         }
+    });
+}
+
+function register_close_action() {
+    $("#postion").on("click", "a", function () {
+        $(".navbar-collapse").collapse("hide");
     });
 }
 
@@ -21,12 +28,6 @@ function initial_object() {
 
     page.scroll = function (selector) {
         $window.scrollTop($(selector).offset().top - 51);
-    };
-    page.fixpos = function () {
-        $window.scrollTop($window.scrollTop() - 51);
-    };
-    page.is_this_page = function (url) {
-        return this.url() == url;
     };
     page.hash = function () {
         return location.hash;
@@ -61,11 +62,11 @@ function initial_object() {
 
     navbar.add_postion = function (id, title) {
         $("#postion").find("li").has("a[href='#" + id + "']").remove();
-        var tmpl = '<li><a href="{{hash}}" onclick="fixpos()">{{title}}</a></li>';
+        var tmpl = '<li><a href="{{hash}}" onclick="scroll.call(this)">{{title}}</a></li>';
         $(Mustache.render(tmpl, {hash: "#" + id, title: title})).appendTo("#postion");
     };
 }
 
-function fixpos() {
-    setTimeout(page.fixpos, 10);
+function scroll() {
+    setTimeout("page.scroll('" + $(this).attr("href") + "')", 10);
 }

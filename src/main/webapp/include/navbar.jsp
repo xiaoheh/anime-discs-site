@@ -17,7 +17,7 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">定位<b class="caret"></b></a>
                     <ul id="postion" class="dropdown-menu">
-                        <li><a href="#navbar" onclick="fixpos()">回到顶部</a></li>
+                        <li><a href="#navbar" onclick="scroll.call(this)">回到顶部</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
