@@ -25,13 +25,11 @@ public class IndexAction extends fands.support.JsonAction {
 
     public void index() throws Exception {
         String text = index.update(() -> {
-            JSONObject object = new JSONObject();
             JSONArray array = new JSONArray();
             discService.findLatestDiscList().forEach(discList -> {
                 array.put(buildDiscList(discList));
             });
-            object.put("lists", array);
-            return object.toString();
+            return array.toString();
         });
         responseJson(text);
     }

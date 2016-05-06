@@ -59,7 +59,7 @@
     });
 
     function handle_data(data) {
-        $(data.lists).each(function () {
+        $(data).each(function () {
             navbar.add_postion(this.key, this.title);
         });
     }
@@ -70,14 +70,14 @@
                 return template("tables-tmpl-small");
             });
             post_before_render_small(data);
-            $("#content").html(render(data));
+            $("#content").html(render({lists: data}));
             post_after_render_small();
         } else {
             var render = cache.get_or_create("tables_tmpl", function () {
                 return template("tables-tmpl");
             });
             post_before_render(data);
-            $("#content").html(render(data));
+            $("#content").html(render({lists: data}));
             post_after_render();
         }
     }
