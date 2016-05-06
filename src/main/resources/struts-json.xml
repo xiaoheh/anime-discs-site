@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<!--suppress ALL -->
+<struts>
+    <constant name="struts.devMode" value="true"/>
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+    <constant name="struts.action.extension" value="do"/>
+
+    <package name="json" extends="struts-default">
+        <global-results>
+            <result name="error" type="chain">error</result>
+        </global-results>
+        <global-exception-mappings>
+            <exception-mapping exception="Exception" result="error"/>
+        </global-exception-mappings>
+        <action name="error" method="error" class="fands.action.ErrorAction"/>
+        <action name="index" method="index" class="fands.action.IndexAction"/>
+    </package>
+</struts>
