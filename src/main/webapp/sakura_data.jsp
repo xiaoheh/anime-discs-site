@@ -59,7 +59,9 @@
     });
 
     function handle_data(data) {
-
+        $(data.lists).each(function () {
+            navbar.add_postion(this.key, this.title);
+        });
     }
 
     function render_page(data) {
@@ -85,7 +87,7 @@
     }
 
     function post_after_render_small() {
-
+        restore_postion();
     }
 
     function post_before_render(data) {
@@ -93,15 +95,15 @@
     }
 
     function post_after_render() {
-
+        restore_postion();
     }
 </script>
 <script id="tables-tmpl-small" type="text/html">
-    {{each tables as table}}
-    <table id="{{key}}" class="table table-bordered table-striped">
+    {{each lists as list}}
+    <table id="{{list.key}}" class="table table-bordered table-striped">
         <caption>
-            <span><b>{{table.title}}</b></span>
-            <span><span class="hidden-xxs">上次更新 </span>{{table.time | timeout}}</span>
+            <span><b>{{list.title}}</b></span>
+            <span><span class="hidden-xxs">上次更新 </span>{{list.time | timeout}}</span>
         </caption>
         <thead>
         <tr>
@@ -115,7 +117,7 @@
         </tr>
         </thead>
         <tbody>
-        {{each table.discs as disc index}}
+        {{each list.discs as disc index}}
         {{if index < 30 && disc.arnk < 9999 && disc.curk < 9999 && disc.prrk < 9999}}
         <tr>
             <td data-number="{{index+1}}" class="index hidden-xxm">{{index+1}}</td>

@@ -61,12 +61,15 @@ function initial_object() {
     };
 
     navbar.add_postion = function (id, title) {
-        var tmpl = $("#postion-tmpl").html();
-        var view = {hash: "#" + id, title: title};
-        $(Mustache.render(tmpl, view)).appendTo("#postion");
+        var data = {hash: "#" + id, title: title};
+        $(template("postion-tmpl", data)).appendTo("#postion");
     };
 }
 
 function scroll() {
     setTimeout("page.scroll('" + $(this).attr("href") + "')", 10);
+}
+
+function restore_postion() {
+    page.scroll(page.hash());
 }

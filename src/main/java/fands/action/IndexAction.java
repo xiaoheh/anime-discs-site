@@ -30,7 +30,7 @@ public class IndexAction extends fands.support.JsonAction {
             discService.findLatestDiscList().forEach(discList -> {
                 array.put(buildDiscList(discList));
             });
-            object.put("tables", array);
+            object.put("lists", array);
             return object.toString();
         });
         responseJson(text);

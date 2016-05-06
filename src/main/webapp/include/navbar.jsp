@@ -86,7 +86,7 @@
         </div>
     </div>
 </div>
-<script id="postion-tmpl" type="template">
+<script id="postion-tmpl" type="text/html">
     <li><a href="{{hash}}" onclick="scroll.call(this)">{{title}}</a></li>
 </script>
 <!-- Navbar 结束 -->
