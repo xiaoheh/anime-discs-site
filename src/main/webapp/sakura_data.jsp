@@ -4,7 +4,6 @@
     <%@ include file="include/meta.jsp" %>
     <title>Anime Discs - Sakura数据</title>
     <%@ include file="include/import.jsp" %>
-    <script src="scripts/helper.js"></script>
     <style>
         @media (max-width: 767px) {
             table.table > thead > tr > th.index {

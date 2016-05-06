@@ -11,4 +11,5 @@
     <script src="scripts/main/bootstrap.min.js"></script>
     <script src="scripts/main/template.js"></script>
     <script src="scripts/project.js"></script>
+    <script src="scripts/helper.js"></script>
     <!-- Import 结束 -->
