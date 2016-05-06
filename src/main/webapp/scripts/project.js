@@ -27,7 +27,9 @@ function initial_object() {
     var $window = $(window);
 
     page.scroll = function (selector) {
-        $window.scrollTop($(selector).offset().top - 51);
+        var pos = $(selector).offset().top;
+        var fix = selector == "#navbar" ? 60 : 51;
+        $window.scrollTop(pos - fix);
     };
     page.hash = function () {
         return location.hash;
