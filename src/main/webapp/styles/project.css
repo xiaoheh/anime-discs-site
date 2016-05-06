@@ -15,14 +15,14 @@
 /* 小设备 */
 @media (max-width: 767px) {
     body {
-        padding: 51px 4px 10px 4px;
+        padding: 55px 4px 10px 4px;
     }
 }
 
 /* 大设备 */
 @media (min-width: 768px) {
     body {
-        padding: 51px 9px 40px 9px;
+        padding: 60px 9px 40px 9px;
     }
 }
 
