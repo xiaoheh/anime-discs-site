@@ -4,69 +4,125 @@
     <%@ include file="include/meta.jsp" %>
     <title>Anime Discs - Sakura数据</title>
     <%@ include file="include/import.jsp" %>
+    <script src="scripts/helper.js"></script>
+    <style>
+        @media (max-width: 767px) {
+            table.table > thead > tr > th.index {
+                width: 32px;
+                text-align: center;
+                padding-left: 2px;
+                padding-right: 2px;
+            }
+
+            table.table > thead > tr > th.rank {
+                width: 90px;
+            }
+
+            table.table > thead > tr > th.cupt {
+                width: 81px;
+            }
+
+            table.table > tbody > tr > td {
+                padding-left: 6px;
+                padding-right: 1px;
+            }
+
+            table.table > tbody > tr > td.index {
+                padding-right: 3px;
+                text-align: center;
+            }
+
+            table.table > tbody > tr > td.index span {
+                color: transparent;
+            }
+        }
+    </style>
 </head>
 <body>
 <%@ include file="include/navbar.jsp" %>
 <div id="content"></div>
 <script>
-    var discs = [{
-        amzn: 99, curk: 100, prrk: 100, cupt: 3456, tdpt: 3200, title: "少女与战车 非尼 BD1"
-    }, {
-        amzn: 110, curk: 110, prrk: 120, cupt: 24901, tdpt: 120, title: "少女与战车 尼限 BD1"
-    }, {
-        amzn: 110, curk: 110, prrk: 120, cupt: 999999, tdpt: 120, title: "少女与战车 非尼 DVD1"
-    }, {
-        amzn: 110, curk: 110, prrk: 120, cupt: 2490, tdpt: 120, title: "少女与战车 尼限 DVD1"
-    }, {
-        amzn: 1234, curk: 3000, prrk: 2980, cupt: 203, tdpt: 40, title: "少女与战车 3"
-    }];
-    var view = {
-        tables: [
-            {key: "top_100", title: "日亚实时TOP100", discs: discs},
-            {key: "2016-04", title: "2016年04月新番", discs: discs},
-            {key: "2016-01", title: "2016年01月新番", discs: discs}
-        ]
-    };
-
-    handle_data(view);
-    render_page(device.is_small());
-    handle_switch_action();
-
-    function handle_data(view) {
-        $(view.tables).each(function () {
-            var index = 0;
-            navbar.add_postion(this.key, this.title);
-            $(this.discs).each(function () {
-                this.index = ++index;
-                if (this.amzn == this.curk) {
-                    this.rank = Mustache.render("{{curk}}/{{prrk}}", this);
-                    this.rank_clazz = 'danger';
-                } else {
-                    this.rank = Mustache.render("{{amzn}}/{{curk}}", this);
-                }
+    $(function () {
+        $.getJSON("index.do", function (data) {
+            handle_data(data);
+            render_page(data);
+            device.switch(function () {
+                render_page(data);
             });
         });
+    });
+
+    function handle_data(data) {
+
     }
 
-    function render_page(is_small) {
-        is_small = is_small || device.is_small();
-        if (is_small) {
-            $.get("template/sakura_data_small.html", function (text) {
-                $("#content").html(Mustache.render(text, view));
+    function render_page(data) {
+        if (device.is_small()) {
+            var render = cache.get_or_create("tables_tmpl_small", function () {
+                return template("tables-tmpl-small");
             });
+            post_before_render_small(data);
+            $("#content").html(render(data));
+            post_after_render_small();
         } else {
-            $.get("template/sakura_data.html", function (text) {
-                $("#content").html(Mustache.render(text, view));
+            var render = cache.get_or_create("tables_tmpl", function () {
+                return template("tables-tmpl");
             });
+            post_before_render(data);
+            $("#content").html(render(data));
+            post_after_render();
         }
-        return is_small;
     }
 
-    function handle_switch_action() {
-        device.switch(function (is_small) {
-            return render_page(is_small);
-        });
+    function post_before_render_small(data) {
+
     }
+
+    function post_after_render_small() {
+
+    }
+
+    function post_before_render(data) {
+
+    }
+
+    function post_after_render() {
+
+    }
+</script>
+<script id="tables-tmpl-small" type="text/html">
+    {{each tables as table}}
+    <table id="{{key}}" class="table table-bordered table-striped">
+        <caption>
+            <span><b>{{table.title}}</b></span>
+            <span><span class="hidden-xxs">上次更新 </span>{{table.time | timeout}}</span>
+        </caption>
+        <thead>
+        <tr>
+            <th class="index hidden-xxm">ID</th>
+            <th class="rank">当前/前回</th>
+            <th class="cupt hidden-xxs">累积PT</th>
+            <th class="title">碟片标题</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{each table.discs as disc index}}
+        {{if index < 30 && disc.arnk < 9999 && disc.curk < 9999 && disc.prrk < 9999}}
+        <tr>
+            <td data-number="{{index+1}}" class="index hidden-xxm">{{index+1}}<span>)</span></td>
+            {{if disc.arnk != disc.curk}}
+            <td data-number="{{disc.arnk}}" class="rank danger">{{disc.arnk}}/{{disc.curk}}</td>
+            {{else}}
+            <td data-number="{{disc.curk}}" class="rank">{{disc.curk}}/{{disc.prrk}}</td>
+            {{/if}}
+            <td data-number="{{disc.cupt}}" class="cupt hidden-xxs">{{disc.cupt}} pt</td>
+            <td class="sname"><a href="view_disc.jsp?id={{disc.id}}" target="_blank">{{disc.sname}}</a></td>
+        </tr>
+        {{/if}}
+        {{/each}}
+        </tbody>
+    </table>
+    {{/each}}
 </script>
 </body>
 </html>

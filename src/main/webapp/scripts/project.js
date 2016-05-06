@@ -55,7 +55,7 @@ function initial_object() {
         $window.resize(function () {
             var small = device.is_small();
             if (is_small != small) {
-                is_small = func(small);
+                is_small = func(small) || small;
             }
         });
     };
