@@ -31,3 +31,16 @@
     position: absolute;
     right: 60px;
 }
+
+/* Table */
+table.table {
+    table-layout: fixed;
+}
+
+table.table > caption > span {
+    margin-right: 10px;
+}
+
+table.table > caption > span > b {
+    color: black;
+}
