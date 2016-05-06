@@ -10,9 +10,13 @@
 <div id="content"></div>
 <script>
     var discs = [{
-        amzn: 99, curk: 100, prrk: 100, cupt: 3456, tdpt: 3200, title: "少女与战车 1"
+        amzn: 99, curk: 100, prrk: 100, cupt: 3456, tdpt: 3200, title: "少女与战车 非尼 BD1"
     }, {
-        amzn: 110, curk: 110, prrk: 120, cupt: 2490, tdpt: 120, title: "少女与战车 2"
+        amzn: 110, curk: 110, prrk: 120, cupt: 24901, tdpt: 120, title: "少女与战车 尼限 BD1"
+    }, {
+        amzn: 110, curk: 110, prrk: 120, cupt: 999999, tdpt: 120, title: "少女与战车 非尼 DVD1"
+    }, {
+        amzn: 110, curk: 110, prrk: 120, cupt: 2490, tdpt: 120, title: "少女与战车 尼限 DVD1"
     }, {
         amzn: 1234, curk: 3000, prrk: 2980, cupt: 203, tdpt: 40, title: "少女与战车 3"
     }];
@@ -25,12 +29,13 @@
     };
 
     handle_data(view);
-    render_page();
-    switch_listen();
+    render_page(device.is_small());
+    register_switch();
 
     function handle_data(view) {
         $(view.tables).each(function () {
             var index = 0;
+            navbar.add_postion(this.key, this.title);
             $(this.discs).each(function () {
                 this.index = ++index;
                 if (this.amzn == this.curk) {
@@ -43,21 +48,21 @@
         });
     }
 
-    function render_page() {
-        if (device.is_small()) {
-            $.get("template/sakura_data_small.html", {}, function (tmpl) {
-                $("#content").html(Mustache.render(tmpl, view));
-            }, "text");
+    function render_page(is_small) {
+        if (is_small) {
+            $.get("template/sakura_data_small.html", function (text) {
+                $("#content").html(Mustache.render(text, view));
+            });
         } else {
-            $.get("template/sakura_data.html", {}, function (tmpl) {
-                $("#content").html(Mustache.render(tmpl, view));
-            }, "text");
+            $.get("template/sakura_data.html", function (text) {
+                $("#content").html(Mustache.render(text, view));
+            });
         }
     }
 
-    function switch_listen() {
+    function register_switch() {
         device.switch(function (is_small) {
-            render_page();
+            render_page(is_small);
             return is_small;
         });
     }

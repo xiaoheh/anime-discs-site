@@ -1,6 +1,7 @@
 <style>
     table.table {
         table-layout: fixed;
+        /*font-size: 14px;*/
     }
 
     table.table > caption > span {
@@ -11,24 +12,37 @@
         color: black;
     }
 
-    th.index {
-        width: 40px;
+    table.table > thead > tr > th.index {
+        width: 32px;
+        text-align: center;
+        padding-left: 2px;
+        padding-right: 2px;
     }
 
-    td.index span {
-        color: transparent;
-    }
-
-    th.rank {
+    table.table > thead > tr > th.rank {
         width: 90px;
     }
 
-    th.cupt {
-        width: 85px;
+    table.table > thead > tr > th.cupt {
+        width: 81px;
     }
 
-    th.title {
-        min-width: 200px;
+    table.table > thead > tr > th.title {
+
+    }
+
+    table.table > tbody > tr > td {
+        padding-left: 6px;
+        padding-right: 1px;
+    }
+
+    table.table > tbody > tr > td.index {
+        padding-right: 3px;
+        text-align: center;
+    }
+
+    table.table > tbody > tr > td.index span {
+        color: transparent;
     }
 </style>
 {{#tables}}
@@ -39,7 +53,7 @@
     </caption>
     <thead>
     <tr>
-        <th class="index">ID</th>
+        <th class="index hidden-xxm">ID</th>
         <th class="rank">当前/前回</th>
         <th class="cupt hidden-xxs">累积PT</th>
         <th class="title">碟片标题</th>
@@ -48,7 +62,7 @@
     <tbody>
     {{#discs}}
     <tr>
-        <td class="index">{{index}}<span>)</span></td>
+        <td class="index hidden-xxm">{{index}}<span>)</span></td>
         <td class="rank {{rank_clazz}}">{{{rank}}}</td>
         <td class="cupt hidden-xxs">{{cupt}} pt</td>
         <td class="title">{{title}}</td>
