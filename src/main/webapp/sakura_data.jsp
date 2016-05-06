@@ -15,7 +15,7 @@
             }
 
             table.table > thead > tr > th.rank {
-                width: 90px;
+                width: 88px;
             }
 
             table.table > thead > tr > th.cupt {
@@ -23,16 +23,23 @@
             }
 
             table.table > tbody > tr > td {
-                padding-left: 6px;
-                padding-right: 1px;
+                padding-left: 4px;
+                padding-right: 4px;
             }
 
             table.table > tbody > tr > td.index {
-                padding-right: 3px;
                 text-align: center;
             }
 
-            table.table > tbody > tr > td.index span {
+            table.table > tbody > tr > td.rank {
+                text-align: center;
+            }
+
+            table.table > tbody > tr > td.cupt {
+                text-align: center;
+            }
+
+            table.table > tbody > tr > td span {
                 color: transparent;
             }
         }
@@ -100,8 +107,11 @@
         <thead>
         <tr>
             <th class="index hidden-xxm">ID</th>
+            <th style="width: 0px"></th>
             <th class="rank">当前/前回</th>
+            <th style="width: 0px"></th>
             <th class="cupt hidden-xxs">累积PT</th>
+            <th style="width: 0px"></th>
             <th class="title">碟片标题</th>
         </tr>
         </thead>
@@ -109,13 +119,16 @@
         {{each table.discs as disc index}}
         {{if index < 30 && disc.arnk < 9999 && disc.curk < 9999 && disc.prrk < 9999}}
         <tr>
-            <td data-number="{{index+1}}" class="index hidden-xxm">{{index+1}}<span>)</span></td>
+            <td data-number="{{index+1}}" class="index hidden-xxm">{{index+1}}</td>
+            <td><span>)</span></td>
             {{if disc.arnk != disc.curk}}
-            <td data-number="{{disc.arnk}}" class="rank danger">{{disc.arnk}}/{{disc.curk}}</td>
+            <td data-number="{{disc.arnk}}" class="rank danger">{{disc.arnk | sakura}}/{{disc.curk | sakura}}</td>
             {{else}}
-            <td data-number="{{disc.curk}}" class="rank">{{disc.curk}}/{{disc.prrk}}</td>
+            <td data-number="{{disc.curk}}" class="rank">{{disc.curk | sakura}}/{{disc.prrk | sakura}}</td>
             {{/if}}
-            <td data-number="{{disc.cupt}}" class="cupt hidden-xxs">{{disc.cupt}} pt</td>
+            <td><span>(</span></td>
+            <td data-number="{{disc.cupt}}" class="cupt hidden-xxs">{{disc.cupt | sakura:6}} pt</td>
+            <td><span>)</span></td>
             <td class="sname"><a href="view_disc.jsp?id={{disc.id}}" target="_blank">{{disc.sname}}</a></td>
         </tr>
         {{/if}}

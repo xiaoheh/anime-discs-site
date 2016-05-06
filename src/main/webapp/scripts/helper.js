@@ -46,3 +46,10 @@ template.helper('timeout', function (time) {
     }
 
 });
+
+template.helper('sakura', function (number, width) {
+    width = width | 4;
+    var format = "******";
+    var string = number + "";
+    return format.substring(6 - width, 6 - string.length) + string;
+});

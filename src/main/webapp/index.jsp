@@ -8,5 +8,7 @@
 <body>
 <%@ include file="include/navbar.jsp" %>
 <h4>Welcome to this site!</h4>
+<h4>推荐页面: <a href="sakura_data.jsp">Sakura数据</a></h4>
+
 </body>
 </html>
