@@ -64,7 +64,7 @@ function initial_object() {
             return this.path().substr(1);
         };
         page.go = function (url) {
-            location.replace(url);
+            location.href = url;
         };
         page.go_with_src = function (url, data, hash) {
             data.src = this.url() + (hash || "");
