@@ -91,7 +91,11 @@
     $(function () {
         ajax_update_page();
         device.switch(function () {
-            render_page(cache.data);
+            if (cache.data) {
+                render_page(cache.data);
+            } else {
+                ajax_update_page();
+            }
         });
     });
 
@@ -104,9 +108,9 @@
     }
 
     function refresh() {
-        page.save_postion();
+        postion.save();
         ajax_update_page();
-        page.load_postion();
+        postion.load();
     }
 
     function handle_data(data) {
@@ -121,11 +125,9 @@
         } else {
             $("#content").html(render("tables-tmpl", {lists: data}));
         }
-        post_after_render();
-    }
-
-    function post_after_render() {
-        restore_postion();
+        if (cache.is_first("tohash")) {
+            postion.tohash();
+        }
         handle_view_disc();
     }
 
