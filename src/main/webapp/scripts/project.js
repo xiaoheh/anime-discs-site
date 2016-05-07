@@ -33,8 +33,7 @@ function initial_object() {
         var $elements = $(selector);
         if ($elements.size() > 0) {
             var pos = $elements.offset().top;
-            var fix = selector == "#navbar" ? 60 : 51;
-            $window.scrollTop(pos - fix);
+            $window.scrollTop(pos - 60);
         }
     };
     page.hash = function () {
