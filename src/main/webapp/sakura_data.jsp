@@ -9,7 +9,7 @@
 <%@ include file="include/navbar.jsp" %>
 <div id="content"></div>
 <script id="tables-tmpl-small" type="text/html">
-    {{each lists as list}}
+    {{each lists as list idx}}
     <table id="{{list.key}}" class="table table-bordered table-striped">
         <caption>
             <span><b>{{list.title}}</b></span>
@@ -27,10 +27,10 @@
         </tr>
         </thead>
         <tbody>
-        {{each list.discs as disc index}}
-        {{if index < 30 && disc.arnk < 9999 && disc.curk < 9999 && disc.prrk < 9999}}
-        <tr id="{{list.key+'-'+disc.id}}">
-            <td data-number="{{index+1}}" class="index hidden-xxm">{{index+1}}</td>
+        {{each list.discs as disc idx2}}
+        {{if idx2 < 30 && disc.arnk < 9999 && disc.curk < 9999 && disc.prrk < 9999}}
+        <tr id="row-{{idx+1}}-{{idx2+1}}">
+            <td data-number="{{idx2+1}}" class="index hidden-xxm">{{idx2+1}}</td>
             <td><span>)</span></td>
             {{if disc.arnk != disc.curk}}
             <td data-number="{{disc.arnk}}" class="rank danger">{{disc.arnk | sakura}}/{{disc.curk | sakura}}</td>
@@ -120,9 +120,10 @@
 
     function handle_view_disc() {
         $("td.sname a").click(function () {
-            var hash = "#" + $(this).parents("tr").attr("id");
-            var disc_id = $(this).data("id");
-            page.go_with_src("view_disc.jsp", {id: disc_id}, hash);
+            var id = $(this).data("id");
+            var $tr = $(this).parents("tr");
+            var hash = "#" + $tr.prop("id");
+            page.go_with_src("view_disc.jsp", {id: id}, hash);
         });
     }
 </script>
