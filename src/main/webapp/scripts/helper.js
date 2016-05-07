@@ -31,7 +31,7 @@ template.helper('dateFormat', function (date, format) {
 
 });
 
-template.helper('timeout', function (time) {
+template.helper('fm_timeout', function (time) {
 
     var timeout = new Date().getTime() - time;
 
@@ -47,7 +47,7 @@ template.helper('timeout', function (time) {
 
 });
 
-template.helper('sakura', function (number, width) {
+template.helper('fm_sakura', function (number, width) {
     width = width | 4;
     var format = "******";
     var string = number + "";

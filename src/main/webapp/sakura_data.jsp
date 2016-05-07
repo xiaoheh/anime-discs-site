@@ -13,7 +13,7 @@
     <table id="{{list.key}}" class="table table-bordered table-striped">
         <caption>
             <span><b>{{list.title}}</b></span>
-            <span><span class="hidden-xxs">上次更新 </span>{{list.time | timeout}}</span>
+            <span><span class="hidden-xxs">上次更新 </span>{{list.time | fm_timeout}}</span>
         </caption>
         <thead>
         <tr>
@@ -33,12 +33,12 @@
             <td data-number="{{idx2+1}}" class="index hidden-xxm">{{idx2+1}}</td>
             <td><span>)</span></td>
             {{if disc.arnk != disc.curk}}
-            <td data-number="{{disc.arnk}}" class="rank danger">{{disc.arnk | sakura}}/{{disc.curk | sakura}}</td>
+            <td data-number="{{disc.arnk}}" class="rank danger">{{disc.arnk | fm_sakura}}/{{disc.curk | fm_sakura}}</td>
             {{else}}
-            <td data-number="{{disc.curk}}" class="rank">{{disc.curk | sakura}}/{{disc.prrk | sakura}}</td>
+            <td data-number="{{disc.curk}}" class="rank">{{disc.curk | fm_sakura}}/{{disc.prrk | fm_sakura}}</td>
             {{/if}}
             <td><span>(</span></td>
-            <td data-number="{{disc.cupt}}" class="cupt hidden-xxs">{{disc.cupt | sakura:6}} pt</td>
+            <td data-number="{{disc.cupt}}" class="cupt hidden-xxs">{{disc.cupt | fm_sakura:6}} pt</td>
             <td><span>)</span></td>
             <td class="sname"><a href="#" data-id="{{disc.id}}">{{disc | fm_sname}}</a></td>
         </tr>
