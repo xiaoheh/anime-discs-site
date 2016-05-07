@@ -44,16 +44,16 @@
     });
 
     function update_disc() {
-        $("#msg").html("<span class='text-info'>提交中...</span>");
+        form.info("提交中...");
         $.post("update_disc.do", {
             id: $("#id").val(),
             title: $("#title").val(),
             sname: $("#sname").val()
         }, function (data) {
             if (data == "success") {
-                $("#msg").html("<span class='text-success'>提交成功</span>");
+                form.success("提交成功");
             } else {
-                $("#msg").html("<span class='text-danger'>提交失败: " + data.error + "</span>");
+                form.danger("提交失败: " + data.error);
             }
         });
     }

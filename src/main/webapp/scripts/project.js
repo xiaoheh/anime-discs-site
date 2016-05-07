@@ -1,4 +1,5 @@
 var page = {};
+var form = {};
 var cache = {};
 var device = {};
 var navbar = {};
@@ -58,6 +59,16 @@ function initial_object() {
     };
     page.load_postion = function () {
         $(window).scrollTop(cache["postion"]);
+    };
+
+    form.info = function (msg) {
+        $("#msg").html("<span class='text-info'>" + msg + "</span>");
+    };
+    form.success = function (msg) {
+        $("#msg").html("<span class='text-success'>" + msg + "</span>");
+    };
+    form.danger = function (msg) {
+        $("#msg").html("<span class='text-danger'>" + msg + "</span>");
     };
 
     cache.get_or_create = function (key, func) {
