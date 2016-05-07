@@ -22,7 +22,11 @@ function handle_aclick_action() {
         $(".navbar-collapse").collapse("hide");
     });
     $("#refresh").click(function () {
-        location.replace(page.url());
+        if (typeof (refresh) == "function") {
+            refresh();
+        } else {
+            location.replace(page.url());
+        }
     });
 }
 
@@ -48,6 +52,12 @@ function initial_object() {
     page.go_with_src = function (url, data, hash) {
         data.src = this.url() + (hash || "");
         this.go(url + "?" + $.param(data));
+    };
+    page.save_postion = function () {
+        cache["postion"] = $(window).scrollTop();
+    };
+    page.load_postion = function () {
+        $(window).scrollTop(cache["postion"]);
     };
 
     cache.get_or_create = function (key, func) {
@@ -76,6 +86,7 @@ function initial_object() {
 
     navbar.add_postion = function (id, title) {
         var data = {hash: "#" + id, title: title};
+        $("#postion").find("a[href='" + data.hash + "']").remove();
         $(template("postion-tmpl", data)).appendTo("#postion");
     };
 }

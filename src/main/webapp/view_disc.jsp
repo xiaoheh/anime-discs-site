@@ -35,24 +35,28 @@
         $.getJSON("get_disc.do", {id: ${param.id}}, function (data) {
             $("#content").html(template("disc-tmpl", data));
             $("#content .btn-primary").click(function () {
-                $("#msg").html("提交中...");
-                $.post("update_disc.do", {
-                    id: $("#id").val(),
-                    title: $("#title").val(),
-                    sname: $("#sname").val()
-                }, function (data) {
-                    if (data == "success") {
-                        $("#msg").html("提交成功");
-                    } else {
-                        $("#msg").html("提交失败: " + data.error);
-                    }
-                });
+                update_disc();
             });
             $("#content .btn-default").click(function () {
                 page.go("${param.src}");
             });
         });
     });
+
+    function update_disc() {
+        $("#msg").html("<span class='text-info'>提交中...</span>");
+        $.post("update_disc.do", {
+            id: $("#id").val(),
+            title: $("#title").val(),
+            sname: $("#sname").val()
+        }, function (data) {
+            if (data == "success") {
+                $("#msg").html("<span class='text-success'>提交成功</span>");
+            } else {
+                $("#msg").html("<span class='text-danger'>提交失败: " + data.error + "</span>");
+            }
+        });
+    }
 </script>
 </body>
 </html>

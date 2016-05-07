@@ -18,6 +18,7 @@ public class Disc extends BaseModel implements Comparable<Disc> {
     private String japan;
     private String sname;
     private DiscType type;
+    private boolean amzver;
 
     private Anime anime;
     private Volume volume;
@@ -64,13 +65,22 @@ public class Disc extends BaseModel implements Comparable<Disc> {
         this.sname = sname;
     }
 
-    @Column
+    @Column(nullable = false)
     public DiscType getType() {
         return type;
     }
 
     public void setType(DiscType type) {
         this.type = type;
+    }
+
+    @Column
+    public boolean isAmzver() {
+        return amzver;
+    }
+
+    public void setAmzver(boolean amzver) {
+        this.amzver = amzver;
     }
 
     @ManyToOne

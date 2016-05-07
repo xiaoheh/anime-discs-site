@@ -53,3 +53,21 @@ template.helper('sakura', function (number, width) {
     var string = number + "";
     return format.substring(6 - width, 6 - string.length) + string;
 });
+
+template.helper("fm_sname", function (disc) {
+    var sname = disc.sname + typestr(disc["type"]);
+    return disc["amzver"] ? sname + " 卐" : sname;
+});
+
+function typestr(name) {
+    switch (name) {
+        case "BD":
+            return " ☆";
+        case "DVD":
+            return " △";
+        case "BOX":
+            return " ◎";
+        default:
+            return " ♢";
+    }
+}

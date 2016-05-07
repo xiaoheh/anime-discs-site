@@ -1,5 +1,6 @@
 package fands.support;
 
+import fands.model.disc.DiscType;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
@@ -73,6 +74,19 @@ public abstract class HelpUtil {
             builder.append(String.format(format, 0));
         }
         return timeout % count;
+    }
+
+    public static DiscType typeOfName(String name) {
+        switch (name) {
+            case "★":
+                return DiscType.BD;
+            case "○":
+                return DiscType.DVD;
+            case "◎":
+                return DiscType.BOX;
+            default:
+                return null;
+        }
     }
 
     public static int parseNumber(String number) {

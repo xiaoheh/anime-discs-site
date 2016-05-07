@@ -5,7 +5,6 @@ import fands.model.DiscList;
 import fands.model.Season;
 import fands.model.disc.Disc;
 import fands.model.disc.DiscSakura;
-import fands.model.disc.DiscType;
 import fands.support.Constants;
 import fands.support.HelpUtil;
 import org.apache.commons.lang3.time.DateUtils;
@@ -23,6 +22,7 @@ import java.util.Date;
 import java.util.LinkedList;
 
 import static fands.support.Constants.TOP_100_NAME;
+import static fands.support.HelpUtil.typeOfName;
 
 @Service
 public class SakuraSpeedSpider {
@@ -59,8 +59,9 @@ public class SakuraSpeedSpider {
                     String name = nameOfDisc(tr.child(5).text());
                     String type = tr.child(1).text();
                     Disc disc = getDisc(asin, name, type);
-                    if (!top100) {
-                        disc.setSeason(getSeason(discList.getName()));
+                    if (disc.getSeason() == null && !top100) {
+                        Season season = getOrCreateSeason(discList.getName());
+                        disc.setSeason(season);
                     }
                     dao.saveOrUpdate(disc);
 
@@ -107,8 +108,9 @@ public class SakuraSpeedSpider {
             disc = new Disc();
             disc.setAsin(asin);
             disc.setJapan(name);
+            disc.setAmzver(name.startsWith("【Amazon.co.jp限定】"));
             disc.setTitle(titleOfDisc(name));
-            disc.setType(DiscType.valueOfIcon(type));
+            disc.setType(typeOfName(type));
         }
         return disc;
     }
@@ -122,7 +124,7 @@ public class SakuraSpeedSpider {
         return discSakura;
     }
 
-    private Season getSeason(String name) {
+    private Season getOrCreateSeason(String name) {
         Season season = dao.lookup(Season.class, "name", name);
         if (season == null) {
             season = new Season();

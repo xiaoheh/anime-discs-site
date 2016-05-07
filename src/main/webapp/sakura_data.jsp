@@ -40,7 +40,7 @@
             <td><span>(</span></td>
             <td data-number="{{disc.cupt}}" class="cupt hidden-xxs">{{disc.cupt | sakura:6}} pt</td>
             <td><span>)</span></td>
-            <td class="sname"><a href="#" data-id="{{disc.id}}">{{disc.sname}}</a></td>
+            <td class="sname"><a href="#" data-id="{{disc.id}}">{{disc | fm_sname}}</a></td>
         </tr>
         {{/if}}
         {{/each}}
@@ -89,14 +89,25 @@
 </style>
 <script>
     $(function () {
-        $.getJSON("index.do", function (data) {
-            handle_data(data);
-            render_page(data);
-            device.switch(function () {
-                render_page(data);
-            });
+        ajax_update_page();
+        device.switch(function () {
+            render_page(cache.data);
         });
     });
+
+    function ajax_update_page() {
+        $.getJSON("index.do", function (data) {
+            cache.data = data;
+            handle_data(data);
+            render_page(data);
+        });
+    }
+
+    function refresh() {
+        page.save_postion();
+        ajax_update_page();
+        page.load_postion();
+    }
 
     function handle_data(data) {
         $(data).each(function () {
