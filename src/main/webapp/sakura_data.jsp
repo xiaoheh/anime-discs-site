@@ -108,9 +108,9 @@
     }
 
     function refresh() {
-        postion.save();
+        offset.save();
         ajax_update_page();
-        postion.load();
+        offset.load();
     }
 
     function handle_data(data) {
@@ -126,7 +126,7 @@
             $("#content").html(render("tables-tmpl", {lists: data}));
         }
         if (cache.is_first("tohash")) {
-            postion.tohash();
+            offset.tohash();
         }
         handle_view_disc();
     }

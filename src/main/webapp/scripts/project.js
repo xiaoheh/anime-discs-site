@@ -3,7 +3,7 @@ var form = {};
 var cache = {};
 var device = {};
 var navbar = {};
-var postion = {};
+var offset = {};
 
 $(function () {
     initial_object();
@@ -39,7 +39,7 @@ function render(id, data) {
 }
 
 function scroll() {
-    setTimeout("postion.scroll('" + $(this).attr("href") + "')", 10);
+    setTimeout("offset.scroll('" + $(this).attr("href") + "')", 10);
 }
 
 function initial_object() {
@@ -48,7 +48,7 @@ function initial_object() {
     init_cache();
     init_device();
     init_navbar();
-    init_postion();
+    init_offset();
 
     function init_page() {
         page.hash = function () {
@@ -120,24 +120,24 @@ function initial_object() {
         };
     }
 
-    function init_postion() {
-        postion.scroll = function (selector) {
+    function init_offset() {
+        offset.scroll = function (selector) {
             var $elements = $(selector);
             if ($elements.size() > 0) {
                 var pos = $elements.offset().top;
                 $(window).scrollTop(pos - 60);
             }
         };
-        postion.tohash = function () {
+        offset.tohash = function () {
             if (page.hash() != "") {
                 this.scroll(page.hash());
             }
         };
-        postion.save = function () {
-            cache["postion"] = $(window).scrollTop();
+        offset.save = function () {
+            cache["offset"] = $(window).scrollTop();
         };
-        postion.load = function () {
-            $(window).scrollTop(cache["postion"]);
+        offset.load = function () {
+            $(window).scrollTop(cache["offset"]);
         };
     }
 
