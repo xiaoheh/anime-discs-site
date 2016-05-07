@@ -19,7 +19,7 @@
         <tr>
             <th class="index hidden-xxm">ID</th>
             <th style="width: 0"></th>
-            <th class="rank">当前/前回</th>
+            <th class="rank">排名顺位</th>
             <th style="width: 0"></th>
             <th class="cupt hidden-xxs">累积PT</th>
             <th style="width: 0"></th>
@@ -58,7 +58,7 @@
         }
 
         table.table > thead > tr > th.rank {
-            width: 88px;
+            width: 85px;
         }
 
         table.table > thead > tr > th.cupt {
