@@ -125,8 +125,8 @@
         } else {
             $("#content").html(render("tables-tmpl", {lists: data}));
         }
-        if (cache.is_first("tohash")) {
-            offset.tohash();
+        if (cache.is_first("restore")) {
+            offset.restore();
         }
         handle_view_disc();
     }

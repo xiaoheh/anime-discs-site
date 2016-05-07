@@ -39,7 +39,7 @@ function render(id, data) {
 }
 
 function scroll() {
-    setTimeout("offset.scroll('" + $(this).attr("href") + "')", 10);
+    setTimeout("offset.to_hash('" + $(this).attr("href") + "')", 10);
 }
 
 function initial_object() {
@@ -121,23 +121,28 @@ function initial_object() {
     }
 
     function init_offset() {
-        offset.scroll = function (selector) {
-            var $elements = $(selector);
-            if ($elements.size() > 0) {
-                var pos = $elements.offset().top;
-                $(window).scrollTop(pos - 60);
+        offset.pos = function () {
+            return $(window).scrollTop();
+        };
+        offset.to_pos = function (pos) {
+            $(window).scrollTop(pos);
+        };
+        offset.to_hash = function (selector) {
+            var $elem = $(selector);
+            if ($elem.size() > 0) {
+                this.to_pos($elem.offset().top - 60);
             }
         };
-        offset.tohash = function () {
+        offset.restore = function () {
             if (page.hash() != "") {
-                this.scroll(page.hash());
+                this.to_hash(page.hash());
             }
         };
         offset.save = function () {
-            cache["offset"] = $(window).scrollTop();
+            cache["offset"] = this.pos();
         };
         offset.load = function () {
-            $(window).scrollTop(cache["offset"]);
+            this.to_pos(cache["offset"]);
         };
     }
 
