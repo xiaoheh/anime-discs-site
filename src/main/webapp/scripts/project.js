@@ -20,7 +20,7 @@ function update_active_status() {
 }
 
 function handle_aclick_action() {
-    $("#postion").on("click", "a", function () {
+    $("#nav-mark").on("click", "a", function () {
         $(".navbar-collapse").collapse("hide");
     });
     $("#refresh").click(function () {
@@ -115,8 +115,8 @@ function initial_object() {
     function init_navbar() {
         navbar.add_postion = function (id, title) {
             var data = {hash: "#" + id, title: title};
-            $("#postion").find("a[href='" + data.hash + "']").remove();
-            $(template("postion-tmpl", data)).appendTo("#postion");
+            $("#nav-mark").find("a[href='" + data.hash + "']").remove();
+            $(template("nav-mark-tmpl", data)).appendTo("#nav-mark");
         };
     }
 

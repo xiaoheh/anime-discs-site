@@ -19,7 +19,7 @@
             <ul class="nav navbar-nav">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">定位<b class="caret"></b></a>
-                    <ul id="postion" class="dropdown-menu">
+                    <ul id="nav-mark" class="dropdown-menu">
                         <li><a href="#navbar" onclick="scroll.call(this)">回到顶部</a></li>
                     </ul>
                 </li>
@@ -89,7 +89,7 @@
         </div>
     </div>
 </div>
-<script id="postion-tmpl" type="text/html">
+<script id="nav-mark-tmpl" type="text/html">
     <li><a href="{{hash}}" onclick="scroll.call(this)">{{title}}</a></li>
 </script>
 <!-- Navbar 结束 -->
