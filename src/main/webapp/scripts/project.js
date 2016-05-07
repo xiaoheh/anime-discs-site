@@ -25,7 +25,11 @@ function handle_aclick_action() {
     });
     $("#refresh").click(function () {
         if (typeof (refresh) == "function") {
+            $("#refresh").text("更新中");
             refresh();
+            setTimeout(function () {
+                $("#refresh").text("刷新");
+            }, 200);
         } else {
             page.go(page.href());
         }
