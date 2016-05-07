@@ -27,7 +27,7 @@ function handle_aclick_action() {
         if (typeof (refresh) == "function") {
             refresh();
         } else {
-            page.go(page.path());
+            page.go(page.href());
         }
     });
 }
@@ -51,11 +51,14 @@ function initial_object() {
     init_offset();
 
     function init_page() {
-        page.hash = function () {
-            return location.hash;
+        page.href = function () {
+            return location.href;
         };
         page.path = function () {
             return location.pathname;
+        };
+        page.hash = function () {
+            return location.hash;
         };
         page.url = function () {
             return this.path().substr(1);
