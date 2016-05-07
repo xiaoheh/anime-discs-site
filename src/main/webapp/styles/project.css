@@ -50,6 +50,18 @@ table.table > caption > span > b {
 }
 
 /* Form */
-#msg {
-    margin-left: 10px;
+div.textarea {
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #eee;
+}
+
+.button-group button {
+    margin-right: 10px;
 }

@@ -17,16 +17,18 @@
         </div>
         <div class="form-group">
             <label for="japan">日文原名</label>
-            <input type="text" class="form-control" id="japan" disabled="disabled" value="{{japan}}">
+            <div class="textarea" id="japan">{{japan}}</div>
         </div>
         <div class="form-group">
             <label for="sname">简短名称</label>
             <input type="text" class="form-control" id="sname" value="{{sname}}">
         </div>
     </form>
-    <button type="button" class="btn btn-primary">提交</button>
-    <button type="button" class="btn btn-default">返回</button>
-    <span id="msg"></span>
+    <div class="button-group">
+        <button type="button" class="btn btn-primary">提交</button>
+        <button type="button" class="btn btn-default">返回</button>
+        <span id="msg"></span>
+    </div>
 </script>
 <script>
     $(function () {
