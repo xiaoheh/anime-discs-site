@@ -23,6 +23,21 @@
             <label for="sname">简短名称</label>
             <input type="text" class="form-control" id="sname" value="{{sname}}">
         </div>
+        <div class="form-group">
+            <label for="type">碟片类型</label>
+            <select class="form-control" id="type" disabled="disabled" data-value="{{type}}">
+                <option value="BD">BD</option>
+                <option value="DVD">DVD</option>
+                <option value="BOX">BOX</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="amzver">限定版本</label>
+            <select class="form-control" id="amzver" disabled="disabled" data-value="{{amzver?'1':'2'}}">
+                <option value="1">尼限定</option>
+                <option value="2">非尼限定</option>
+            </select>
+        </div>
     </form>
     <div class="button-group">
         <button type="button" class="btn btn-primary">提交</button>
@@ -33,11 +48,15 @@
 <script>
     $(function () {
         $.getJSON("get_disc.do", {id: ${param.id}}, function (data) {
-            $("#content").html(template("disc-tmpl", data));
-            $("#content .btn-primary").click(function () {
+            var $content = $("#content");
+            $content.html(template("disc-tmpl", data));
+            $content.find("select").each(function () {
+                $(this).val($(this).data("value"));
+            });
+            $content.find(".btn-primary").click(function () {
                 update_disc();
             });
-            $("#content .btn-default").click(function () {
+            $content.find(".btn-default").click(function () {
                 page.go("${param.src}");
             });
         });

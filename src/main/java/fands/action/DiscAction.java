@@ -11,6 +11,8 @@ public class DiscAction extends fands.support.JsonAction {
     private Long id;
     private String title;
     private String sname;
+    private String type;
+    private boolean amzver;
 
     @Autowired
     public void setDao(Dao dao) {
@@ -37,17 +39,23 @@ public class DiscAction extends fands.support.JsonAction {
         object.put("title", disc.getTitle());
         object.put("japan", disc.getJapan());
         object.put("sname", disc.getSname());
+        object.put("amzver", disc.isAmzver());
+        if (disc.getType() != null) {
+            object.put("type", disc.getType().name());
+        }
+        if (disc.getShelves() != null) {
+            object.put("shelves", disc.getShelves().getTime());
+        }
+        if (disc.getRelease() != null) {
+            object.put("release", disc.getRelease().getTime());
+        }
         responseJson(object.toString());
     }
 
     public void update() throws Exception {
         Disc disc = dao.get(Disc.class, id);
-        if (title != null) {
-            disc.setTitle(title);
-        }
-        if (sname != null) {
-            disc.setSname(sname);
-        }
+        disc.setTitle(title == null ? "" : title);
+        disc.setSname(sname);
         dao.update(disc);
         responseSuccess();
     }
