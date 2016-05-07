@@ -76,8 +76,8 @@ public abstract class HelpUtil {
         return timeout % count;
     }
 
-    public static DiscType typeOfName(String name) {
-        switch (name) {
+    public static DiscType parseType(String icon) {
+        switch (icon) {
             case "★":
                 return DiscType.BD;
             case "○":

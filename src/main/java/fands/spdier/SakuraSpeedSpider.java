@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.LinkedList;
 
 import static fands.support.Constants.TOP_100_NAME;
-import static fands.support.HelpUtil.typeOfName;
+import static fands.support.HelpUtil.parseType;
 
 @Service
 public class SakuraSpeedSpider {
@@ -110,7 +110,7 @@ public class SakuraSpeedSpider {
             disc.setJapan(name);
             disc.setAmzver(name.startsWith("【Amazon.co.jp限定】"));
             disc.setTitle(titleOfDisc(name));
-            disc.setType(typeOfName(type));
+            disc.setType(parseType(type));
         }
         return disc;
     }
