@@ -108,9 +108,7 @@
     }
 
     function refresh() {
-        offset.save();
         ajax_update_page();
-        offset.load();
     }
 
     function handle_data(data) {
@@ -120,6 +118,7 @@
     }
 
     function render_page(data) {
+        offset.save();
         if (device.is_small()) {
             $("#content").html(render("tables-tmpl-small", {lists: data}));
         } else {
@@ -127,6 +126,8 @@
         }
         if (cache.is_first("restore")) {
             offset.restore();
+        } else {
+            offset.load();
         }
         handle_view_disc();
     }
