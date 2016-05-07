@@ -28,7 +28,7 @@
         </thead>
         <tbody>
         {{each list.discs as disc idx2}}
-        {{if idx2 < 30 && disc.arnk < 9999 && disc.curk < 9999 && disc.prrk < 9999}}
+        {{if disc.arnk < 9999 && disc.curk < 9999 && disc.prrk < 9999}}
         <tr id="row-{{idx+1}}-{{idx2+1}}">
             <td data-number="{{idx2+1}}" class="index hidden-xxm">{{idx2+1}}</td>
             <td><span>)</span></td>
