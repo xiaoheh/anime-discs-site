@@ -149,3 +149,16 @@ table.table > thead > tr > th.sorter.ascing {
 table.table > thead > tr > th.sorter.descing {
     background-image: url(/images/table-desc.gif);
 }
+
+#profile-body > div {
+    padding: 5px;
+}
+
+#profile-body > label {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#profile-body > div > label {
+    margin: 5px 10px;
+}
