@@ -55,7 +55,7 @@ public class AutoRunner {
     private void addUpdateProxyHostTask() {
         String xicidaili = "http://www.xicidaili.com";
         logger.info("开始更新代理服务器数据");
-        spiderService.getSakura1().add(new SpiderTask(xicidaili, () -> true, document -> {
+        spiderService.getAmazon1().add(new SpiderTask(xicidaili, () -> true, document -> {
             proxyHostSpider.parseDocument(document);
             logger.info("成功更新代理服务器数据");
         }));

@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class SpiderService {
 
-    private static final int SAKURA_MAX_CONNECT_THREAD = 3;
+    private static final int SAKURA_MAX_CONNECT_THREAD = 10;
     private static final int AMAZON_MAX_CONNECT_THREAD = 2;
 
     private Logger logger = LogManager.getLogger(SpiderService.class);
