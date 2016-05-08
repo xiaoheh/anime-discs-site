@@ -58,21 +58,26 @@ function initial_object() {
         page.href = function () {
             return location.href;
         };
+        page.home = function () {
+            return location.origin + "/";
+        };
         page.path = function () {
-            return location.pathname;
+            return this.href().substr(this.home().length);
+        };
+        page.url = function () {
+            return location.pathname.substr(1);
         };
         page.hash = function () {
             return location.hash;
         };
-        page.url = function () {
-            return this.path().substr(1);
+        page.search = function () {
+            return location.search;
         };
         page.go = function (url) {
             location.href = url;
         };
-        page.go_with_src = function (url, data, hash) {
-            data.src = this.url() + (hash || "");
-            this.go(url + "?" + $.param(data));
+        page.back = function () {
+            history.back();
         };
     }
 

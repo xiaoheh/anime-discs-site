@@ -18,11 +18,11 @@
         <thead>
         <tr>
             <th class="index hidden-xxm">ID</th>
-            <th style="width: 0"></th>
+            <th class="index hidden-xxm zero-width"></th>
             <th class="rank">排名</th>
-            <th style="width: 0"></th>
+            <th class="cupt hidden-xxs zero-width"></th>
             <th class="cupt hidden-xxs">累积</th>
-            <th style="width: 0"></th>
+            <th class="cupt hidden-xxs zero-width"></th>
             <th class="title">碟片标题</th>
         </tr>
         </thead>
@@ -30,17 +30,17 @@
         {{each list.discs as disc idx2}}
         {{if disc.arnk < 9999 && disc.curk < 9999 && disc.prrk < 9999}}
         <tr id="row-{{idx+1}}-{{idx2+1}}">
-            <td data-number="{{idx2+1}}" class="index hidden-xxm">{{idx2+1}}</td>
-            <td><span class="transparent">)</span></td>
+            <td class="index hidden-xxm" data-number="{{idx2+1}}">{{idx2+1}}</td>
+            <td class="index hidden-xxm zero-width">)</td>
             {{if disc.arnk != disc.curk}}
-            <td data-number="{{disc.arnk}}" class="rank danger">{{disc.arnk | fm_sakura}}/{{disc.curk | fm_sakura}}</td>
+            <td class="rank danger" data-number="{{disc.arnk}}">{{disc.arnk | fm_sakura}}/{{disc.curk | fm_sakura}}</td>
             {{else}}
-            <td data-number="{{disc.curk}}" class="rank">{{disc.curk | fm_sakura}}/{{disc.prrk | fm_sakura}}</td>
+            <td class="rank" data-number="{{disc.curk}}">{{disc.curk | fm_sakura}}/{{disc.prrk | fm_sakura}}</td>
             {{/if}}
-            <td><span class="transparent">(</span></td>
-            <td data-number="{{disc.cupt}}" class="cupt hidden-xxs">{{disc.cupt | fm_sakura:6}}</td>
-            <td><span class="transparent"> pt)</span></td>
-            <td class="sname"><a href="#" data-id="{{disc.id}}">{{disc.sname}} {{disc | fm_verstr}}</a></td>
+            <td class="cupt hidden-xxs zero-width">(</td>
+            <td class="cupt hidden-xxs" data-number="{{disc.cupt}}">{{disc.cupt | fm_sakura:6}}</td>
+            <td class="cupt hidden-xxs zero-width"> pt)</td>
+            <td class="sname"><a href="view_disc.jsp?id={{disc.id}}">{{disc.sname}} {{disc | fm_verstr}}</a></td>
         </tr>
         {{/if}}
         {{/each}}
@@ -50,6 +50,7 @@
 </script>
 <style>
     @media (max-width: 767px) {
+
         table.table > thead > tr > th.index {
             width: 32px;
             text-align: center;
@@ -65,11 +66,6 @@
             width: 66px;
         }
 
-        table.table > tbody > tr > td {
-            padding-left: 4px;
-            padding-right: 4px;
-        }
-
         table.table > tbody > tr > td.index {
             text-align: center;
         }
@@ -80,10 +76,6 @@
 
         table.table > tbody > tr > td.cupt {
             text-align: center;
-        }
-
-        table.table > tbody > tr > td span.transparent {
-            color: transparent;
         }
     }
 </style>
@@ -129,16 +121,6 @@
         } else {
             offset.load();
         }
-        handle_view_disc();
-    }
-
-    function handle_view_disc() {
-        $("td.sname a").click(function () {
-            var id = $(this).data("id");
-            var $tr = $(this).parents("tr");
-            var hash = "#" + $tr.prop("id");
-            page.go_with_src("view_disc.jsp", {id: id}, hash);
-        });
     }
 </script>
 </body>

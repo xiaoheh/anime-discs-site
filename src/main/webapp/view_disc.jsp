@@ -63,7 +63,7 @@
                 update_disc();
             });
             $content.find(".btn-default").click(function () {
-                page.go("${param.src}");
+                page.back();
             });
         });
     });

@@ -17,6 +17,11 @@
     body {
         padding: 60px 4px 10px 4px;
     }
+
+    table.table > tbody > tr > td {
+        padding-left: 4px;
+        padding-right: 4px;
+    }
 }
 
 /* 大设备 */
@@ -49,6 +54,14 @@ table.table > caption > span > b {
     color: black;
 }
 
+table.table > thead > tr > th.zero-width {
+    width: 0 !important;
+}
+
+table.table > tbody > tr > td.zero-width {
+    color: transparent;
+}
+
 /* Form */
 div.textarea {
     display: block;
@@ -64,4 +77,9 @@ div.textarea {
 
 .button-group button {
     margin-right: 10px;
+}
+
+/* Other */
+.transparent {
+    color: transparent;
 }
