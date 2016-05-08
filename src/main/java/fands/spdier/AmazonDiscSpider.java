@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
 @Service
 public class AmazonDiscSpider {
 
+    private static final Pattern rankPattern = Pattern.compile("DVD \\- ([0-9,]+)位");
+
     private Logger logger = LogManager.getLogger(AmazonDiscSpider.class);
     private Dao dao;
 
@@ -25,18 +27,18 @@ public class AmazonDiscSpider {
     }
 
     public void parseDocument(Disc disc, Document document) {
-        Pattern pattern = Pattern.compile("DVD \\- ([0-9,]+)位");
-        Matcher matcher = pattern.matcher(document.select("#SalesRank").text());
+        dao.refresh(disc);
+        DiscAmazon discAmazon = getDiscAmazon(disc);
+        String text = document.select("#SalesRank").text();
+        Matcher matcher = rankPattern.matcher(text);
         if (matcher.find()) {
             int curk = HelpUtil.parseNumber(matcher.group(1));
-            dao.refresh(disc);
-            DiscAmazon discAmazon = getDiscAmazon(disc);
             discAmazon.setPadt(new Date());
             discAmazon.setPark(curk);
-            dao.saveOrUpdate(discAmazon);
         } else {
-            logger.printf(Level.DEBUG, "未找到Amazon碟片数据, 跳过此碟片: %s", disc.getTitle());
+            logger.printf(Level.DEBUG, "未找到Amazon碟片数据, 跳过此碟片: %s", disc.getAsin());
         }
+        dao.saveOrUpdate(discAmazon);
     }
 
     private DiscAmazon getDiscAmazon(Disc disc) {
