@@ -24,6 +24,7 @@ public class SakuraDiscSpider {
 
     private Pattern rankPattern = Pattern.compile("【(\\d{4}年 \\d{2}月 \\d{2}日 \\d{2}時)\\(.\\)】 ([*,0-9]{7})位");
     private Pattern captPattern = Pattern.compile(":(\\d+)pt\\(残り日数(\\d+)\\)");
+    private Pattern prptPattern = Pattern.compile("【(\\d{4}年 \\d{2}月 \\d{2}日)\\(.\\)】 ([*,0-9]{7})");
     private Pattern cuptPattern = Pattern.compile(":(\\d+)pt");
     private Pattern bookPattern = Pattern.compile("(\\d+)\\(前日(\\d+)\\)");
 
@@ -120,10 +121,18 @@ public class SakuraDiscSpider {
     private int findPrpt(String[] split, Date release) {
         Date japan = DateUtils.addHours(new Date(), 1);
         if (DateUtils.isSameDay(japan, release)) {
-            return parseNumber(split[split.length - 1]);
+            return parsePrpt(split[split.length - 1]);
         } else {
-            return parseNumber(split[split.length - 2]);
+            return parsePrpt(split[split.length - 2]);
         }
+    }
+
+    private int parsePrpt(String text) {
+        Matcher matcher = prptPattern.matcher(text);
+        if (matcher.find()) {
+            return parseNumber(matcher.group(2));
+        }
+        return 0;
     }
 
     private void updateCapt(Document document, DiscSakura discSakura, Date release) {
