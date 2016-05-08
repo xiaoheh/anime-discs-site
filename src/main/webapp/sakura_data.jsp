@@ -21,7 +21,7 @@
             <th style="width: 0"></th>
             <th class="rank">排名</th>
             <th style="width: 0"></th>
-            <th class="cupt hidden-xxs">累积PT</th>
+            <th class="cupt hidden-xxs">累积</th>
             <th style="width: 0"></th>
             <th class="title">碟片标题</th>
         </tr>
@@ -38,8 +38,8 @@
             <td data-number="{{disc.curk}}" class="rank">{{disc.curk | fm_sakura}}/{{disc.prrk | fm_sakura}}</td>
             {{/if}}
             <td><span class="transparent">(</span></td>
-            <td data-number="{{disc.cupt}}" class="cupt hidden-xxs">{{disc.cupt | fm_sakura:6}} pt</td>
-            <td><span class="transparent">)</span></td>
+            <td data-number="{{disc.cupt}}" class="cupt hidden-xxs">{{disc.cupt | fm_sakura:6}}</td>
+            <td><span class="transparent"> pt)</span></td>
             <td class="sname"><a href="#" data-id="{{disc.id}}">{{disc.sname}} {{disc | fm_verstr}}</a></td>
         </tr>
         {{/if}}
@@ -58,11 +58,11 @@
         }
 
         table.table > thead > tr > th.rank {
-            width: 85px;
+            width: 88px;
         }
 
         table.table > thead > tr > th.cupt {
-            width: 81px;
+            width: 66px;
         }
 
         table.table > tbody > tr > td {
@@ -84,10 +84,6 @@
 
         table.table > tbody > tr > td span.transparent {
             color: transparent;
-        }
-
-        table.table > tbody > tr > td span.verstr {
-            font-family: Osaka;
         }
     }
 </style>
