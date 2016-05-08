@@ -82,7 +82,7 @@
         <tbody>
         {{each list.discs as disc idx2}}
         <tr>
-            <td class="index" data-number="{{idx2}}">{{idx2}}</td>
+            <td class="index" data-number="{{idx2+1}}">{{idx2+1}}</td>
             <td class="arnk" data-number="{{disc.arnk}}">
                 <a href="http://www.amazon.co.jp/dp/{{disc.asin}}" target="_blank">{{disc.arnk}}位</a>
             </td>
@@ -100,10 +100,10 @@
             <td class="shelves" data-number="{{disc.shelves}}">{{disc.shelves | dateFormat:"yyyy-MM-dd"}}</td>
             <td class="release" data-number="{{disc.release}}">{{disc.release | dateFormat:"yyyy-MM-dd"}}</td>
             <td class="japan">
-                <a href="view_disc.jsp?id={{disc.id}}" target="_blank">{{disc.japan}}</a>
+                <a href="view_disc.jsp?id={{disc.id}}">{{disc.japan}}</a>
             </td>
             <td class="title">
-                <a href="view_disc.jsp?id={{disc.id}}" target="_blank">{{disc.title}}</a>
+                <a href="view_disc.jsp?id={{disc.id}}">{{disc.title}}</a>
             </td>
         </tr>
         {{/each}}
@@ -198,7 +198,7 @@
     }
 
     function ajax_update_page() {
-        $.getJSON("index.do", function (data) {
+        $.getJSON("sakura.do", function (data) {
             cache.data = data;
             handle_data(data);
             render_page(data);

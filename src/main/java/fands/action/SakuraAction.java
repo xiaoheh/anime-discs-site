@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static fands.support.Constants.TOP_100_NAME;
 
-public class IndexAction extends fands.support.JsonAction {
+public class SakuraAction extends fands.support.JsonAction {
 
     private static Cache<String> index = new Cache<>(3000);
 
@@ -21,7 +21,7 @@ public class IndexAction extends fands.support.JsonAction {
         this.discService = discService;
     }
 
-    public void index() throws Exception {
+    public void get() throws Exception {
         String text = index.update(() -> {
             JSONArray array = new JSONArray();
             discService.findLatestDiscList().forEach(discList -> {
