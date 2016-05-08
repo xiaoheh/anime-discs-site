@@ -38,7 +38,6 @@ public class ProxyService {
         }
         logger.printf(Level.INFO, "成功添加代理服务器: %s:%d",
                 proxyHost.getHost(), proxyHost.getPort());
-        dao.saveOrUpdate(proxyHost);
     }
 
     private boolean isErrorHost(ProxyHost proxyHost) {
@@ -53,6 +52,13 @@ public class ProxyService {
         return false;
     }
 
+    public synchronized void updateProxyHost() {
+        ArrayList<ProxyHost> proxyHosts = new ArrayList<>();
+        proxyHosts.addAll(proxys);
+        proxyHosts.addAll(errors);
+        proxyHosts.forEach(dao::saveOrUpdate);
+    }
+
     public synchronized ProxyHost getProxyHost() {
         ArrayList<ProxyHost> proxyHosts = new ArrayList<>(proxys);
         proxyHosts.removeIf(ph -> !isTimeout(ph.getDate()));
@@ -60,7 +66,6 @@ public class ProxyService {
             return null;
         }
         ProxyHost proxyHost = proxyHosts.get(new Random().nextInt(proxyHosts.size()));
-        dao.saveOrUpdate(proxyHost);
         if (isErrorHost(proxyHost)) {
             proxys.remove(proxyHost);
             errors.add(proxyHost);

@@ -144,9 +144,10 @@ public class SpiderService {
             taskCount.incrementAndGet();
             SpiderTask task = taskList.remove(0);
             connect.execute(() -> {
+                ProxyHost proxyHost = null;
                 try {
                     if (task.getUrl().startsWith("http://rankstker.net/")) {
-                        ProxyHost proxyHost = proxyService.getProxyHost();
+                        proxyHost = proxyService.getProxyHost();
                         if (proxyHost == null) {
                             tryReConnect(taskList, task, null);
                         }
@@ -156,8 +157,14 @@ public class SpiderService {
                     }
                     addExecuteTask(task);
                 } catch (IOException e) {
+                    if (proxyHost != null) {
+                        proxyHost.updateError();
+                    }
                     tryReConnect(taskList, task, e);
                 } catch (Exception e) {
+                    if (proxyHost != null) {
+                        proxyHost.updateError();
+                    }
                     logger.printf(Level.WARN, "connect service throws exception: %s %s", e.getClass(), e.getMessage());
                     logger.debug("connect service throws exception:", e);
                 } finally {
