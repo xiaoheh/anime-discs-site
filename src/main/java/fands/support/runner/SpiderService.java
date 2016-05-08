@@ -40,8 +40,7 @@ public class SpiderService {
     private AtomicInteger amazonRunning = new AtomicInteger(0);
 
     private long startupTimestamp = System.currentTimeMillis();
-    private final Object waitSakura = new Object();
-    private final Object waitAmazon = new Object();
+    private final Object waitObject = new Object();
     private ProxyService proxyService;
 
     @Autowired
@@ -71,25 +70,13 @@ public class SpiderService {
          */
         new Thread(() -> {
             while (true) {
-                synchronized (waitSakura) {
+                synchronized (waitObject) {
                     if (sakuraRunning.get() < SAKURA_MAX_CONNECT_THREAD + 1) {
                         if (trySubmitTask(sakuraRunning, sakuraConnnect, sakura1)) continue;
                         if (trySubmitTask(sakuraRunning, sakuraConnnect, sakura2)) continue;
                         if (trySubmitTask(sakuraRunning, sakuraConnnect, sakura3)) continue;
                         if (trySubmitTask(sakuraRunning, sakuraConnnect, sakura4)) continue;
                     }
-                    try {
-                        waitSakura.wait(1000);
-                    } catch (InterruptedException e) {
-                        logger.warn("调度线程收到意外的中断信号, 已忽略该信号.");
-                    }
-                }
-            }
-        }).start();
-
-        new Thread(() -> {
-            while (true) {
-                synchronized (waitAmazon) {
                     if (amazonRunning.get() < AMAZON_MAX_CONNECT_THREAD + 1) {
                         if (trySubmitTask(amazonRunning, amazonConnnect, amazon1)) continue;
                         if (trySubmitTask(amazonRunning, amazonConnnect, amazon2)) continue;
@@ -97,7 +84,7 @@ public class SpiderService {
                         if (trySubmitTask(amazonRunning, amazonConnnect, amazon4)) continue;
                     }
                     try {
-                        waitAmazon.wait(1000);
+                        waitObject.wait(1000);
                     } catch (InterruptedException e) {
                         logger.warn("调度线程收到意外的中断信号, 已忽略该信号.");
                     }
@@ -138,15 +125,9 @@ public class SpiderService {
         return amazon4;
     }
 
-    public void nodifyWaitSakura() {
-        synchronized (waitSakura) {
-            waitSakura.notify();
-        }
-    }
-
-    public void nodifyWaitAmazon() {
-        synchronized (waitAmazon) {
-            waitAmazon.notify();
+    public void nodifyWaitObject() {
+        synchronized (waitObject) {
+            waitObject.notify();
         }
     }
 
@@ -160,59 +141,42 @@ public class SpiderService {
 
     private boolean trySubmitTask(AtomicInteger taskCount, ExecutorService connect, List<SpiderTask> taskList) {
         if (taskList.size() > 0) {
-            if (taskList.get(0).getUrl().startsWith("http://rankstker.net/")) {
-                ProxyHost proxyHost = proxyService.getProxyHost();
-                if (proxyHost == null) {
-                    waitSakura();
-                    doSubmitTask(taskCount, connect, taskList, proxyHost);
-                    return true;
-                } else {
-                    return true;
+            taskCount.incrementAndGet();
+            SpiderTask task = taskList.remove(0);
+            connect.execute(() -> {
+                try {
+                    if (task.getUrl().startsWith("http://rankstker.net/")) {
+                        ProxyHost proxyHost = proxyService.getProxyHost();
+                        if (proxyHost == null) {
+                            tryReConnect(taskList, task, null);
+                        }
+                        task.doConnect(proxyHost);
+                    } else {
+                        task.doConnect(null);
+                    }
+                    addExecuteTask(task);
+                } catch (IOException e) {
+                    tryReConnect(taskList, task, e);
+                } catch (Exception e) {
+                    logger.printf(Level.WARN, "connect service throws exception: %s %s", e.getClass(), e.getMessage());
+                    logger.debug("connect service throws exception:", e);
+                } finally {
+                    synchronized (waitObject) {
+                        taskCount.decrementAndGet();
+                        waitObject.notify();
+                    }
                 }
-            } else {
-                doSubmitTask(taskCount, connect, taskList, null);
-                return true;
-            }
+            });
+            return true;
         }
         return false;
     }
 
-    private void waitSakura() {
-        synchronized (waitSakura) {
-            try {
-                waitSakura.wait(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void doSubmitTask(AtomicInteger taskCount, ExecutorService connect, List<SpiderTask> taskList, ProxyHost proxyHost) {
-        taskCount.incrementAndGet();
-        SpiderTask task = taskList.remove(0);
-        connect.execute(() -> {
-            try {
-                task.doConnect(proxyHost);
-                addExecuteTask(task);
-            } catch (IOException e) {
-                proxyHost.setError(proxyHost.getError() + 1);
-                tryReConnect(taskList, task, e);
-            } catch (Exception e) {
-                proxyHost.setError(proxyHost.getError() + 1);
-                logger.printf(Level.WARN, "connect service throws exception: %s %s", e.getClass(), e.getMessage());
-                logger.debug("connect service throws exception:", e);
-            } finally {
-                if (task.getUrl().startsWith("http://rankstker.net/")) {
-                    nodifyWaitSakura();
-                } else {
-                    nodifyWaitAmazon();
-                }
-            }
-        });
-    }
-
     private void tryReConnect(List<SpiderTask> taskList, SpiderTask task, IOException e) {
-        if (task.isContinue(e)) {
+        if (e == null) {
+            logger.printf(Level.DEBUG, "暂时没有代理资源, 已安排重试, URL=%s", task.getUrl());
+            taskList.add(task);
+        } else if (task.isContinue(e)) {
             logger.printf(Level.DEBUG, "Connect任务失败, 已安排重试, URL=%s", task.getUrl());
             taskList.add(task);
         } else {

@@ -38,10 +38,13 @@ public class ProxyService {
         }
         logger.printf(Level.INFO, "成功添加代理服务器: %s:%d",
                 proxyHost.getHost(), proxyHost.getPort());
-        dao.save(proxyHost);
+        dao.saveOrUpdate(proxyHost);
     }
 
     private boolean isErrorHost(ProxyHost proxyHost) {
+        if (proxyHost.isBaned()) {
+            return true;
+        }
         if (proxyHost.getError() > 5) {
             if (proxyHost.getRight() < proxyHost.getError() / 5) {
                 return true;
@@ -52,7 +55,7 @@ public class ProxyService {
 
     public synchronized ProxyHost getProxyHost() {
         ArrayList<ProxyHost> proxyHosts = new ArrayList<>(proxys);
-        proxyHosts.removeIf(ph -> isTimeout(ph.getDate()));
+        proxyHosts.removeIf(ph -> !isTimeout(ph.getDate()));
         if (proxyHosts.isEmpty()) {
             return null;
         }
@@ -63,7 +66,6 @@ public class ProxyService {
             errors.add(proxyHost);
             return getProxyHost();
         }
-        proxyHost.setDate(new Date());
         return proxyHost;
     }
 

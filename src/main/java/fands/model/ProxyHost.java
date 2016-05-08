@@ -15,6 +15,7 @@ public class ProxyHost extends BaseModel {
     private int port;
     private int error;
     private int right;
+    private boolean baned;
     private Date date;
 
     public ProxyHost() {
@@ -61,6 +62,15 @@ public class ProxyHost extends BaseModel {
         this.right = right;
     }
 
+    @Column
+    public boolean isBaned() {
+        return baned;
+    }
+
+    public void setBaned(boolean baned) {
+        this.baned = baned;
+    }
+
     @Transient
     public Date getDate() {
         return date;
@@ -68,6 +78,21 @@ public class ProxyHost extends BaseModel {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public void updateRight() {
+        date = new Date();
+        right++;
+    }
+
+    public void updateError() {
+        date = new Date();
+        error++;
+    }
+
+    public void updateBaned() {
+        date = new Date();
+        baned = true;
     }
 
     public boolean equals(Object o) {

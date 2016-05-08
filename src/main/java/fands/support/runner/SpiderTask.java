@@ -48,10 +48,10 @@ public class SpiderTask {
                 connection.setReadTimeout(10000);
                 document = Jsoup.parse(connection.getInputStream(), "Shift-JIS", baseUri);
                 if (document.select("a").first().attr("href").equals("http://www27392u.sakura.ne.jp/")) {
-                    proxyHost.setError(proxyHost.getError() + 100);
+                    proxyHost.updateBaned();
                     throw new RuntimeException("该代理已被封锁");
                 } else {
-                    proxyHost.setRight(proxyHost.getRight() + 1);
+                    proxyHost.updateRight();
                 }
             }
             errors.clear();
