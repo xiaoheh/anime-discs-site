@@ -2,6 +2,7 @@ package fands.support.runner;
 
 import fands.dao.Dao;
 import fands.model.ProxyHost;
+import org.apache.logging.log4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import java.util.*;
 @Service
 public class ProxyService {
 
+    private Logger logger = LogManager.getLogger(ProxyService.class);
     private Set<ProxyHost> proxys = Collections.synchronizedSet(new HashSet<>());
     private Set<ProxyHost> errors = Collections.synchronizedSet(new HashSet<>());
     private Dao dao;
@@ -25,7 +27,7 @@ public class ProxyService {
         dao.findAll(ProxyHost.class).forEach(this::addProxyHost);
     }
 
-    private synchronized void addProxyHost(ProxyHost proxyHost) {
+    public synchronized void addProxyHost(ProxyHost proxyHost) {
         if (errors.contains(proxyHost) || proxys.contains(proxyHost)) {
             return;
         }
@@ -34,6 +36,8 @@ public class ProxyService {
         } else {
             proxys.add(proxyHost);
         }
+        logger.printf(Level.INFO, "成功添加代理服务器: %s:%d",
+                proxyHost.getHost(), proxyHost.getPort());
         dao.save(proxyHost);
     }
 
