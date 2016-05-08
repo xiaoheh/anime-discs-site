@@ -1,6 +1,7 @@
 var page = {};
 var form = {};
 var cache = {};
+var table = {};
 var device = {};
 var navbar = {};
 var offset = {};
@@ -24,15 +25,7 @@ function handle_aclick_action() {
         $(".navbar-collapse").collapse("hide");
     });
     $("#refresh").click(function () {
-        if (typeof (refresh) == "function") {
-            $("#refresh").text("更新中");
-            refresh();
-            setTimeout(function () {
-                $("#refresh").text("刷新");
-            }, 200);
-        } else {
-            page.go(page.href());
-        }
+        navbar.refresh();
     });
 }
 
@@ -50,6 +43,7 @@ function initial_object() {
     init_page();
     init_form();
     init_cache();
+    init_table();
     init_device();
     init_navbar();
     init_offset();
@@ -106,6 +100,23 @@ function initial_object() {
         };
     }
 
+    function init_table() {
+        var tables, status;
+        table.sorter = function (selector) {
+            tables = [];
+            $(selector).each(function () {
+                tables.push(this);
+                tablesorter(this);
+            });
+        };
+        table.save_status = function () {
+            status = save_status(tables);
+        };
+        table.load_status = function () {
+            load_status(status);
+        };
+    }
+
     function init_device() {
         device.width = function () {
             return $(window).width();
@@ -125,10 +136,29 @@ function initial_object() {
     }
 
     function init_navbar() {
+        var refresh_func;
+
+        function do_refresh() {
+            $("#refresh").text("更新中");
+            refresh_func();
+            setTimeout(function () {
+                $("#refresh").text("刷新");
+            }, 200);
+        }
+
         navbar.add_postion = function (id, title) {
             var data = {hash: "#" + id, title: title};
             $("#nav-mark").find("a[href='" + data.hash + "']").remove();
             $(template("nav-mark-tmpl", data)).appendTo("#nav-mark");
+        };
+        navbar.refresh = function (func) {
+            if (func) {
+                refresh_func = func;
+            } else if (refresh_func) {
+                do_refresh();
+            } else {
+                page.go(page.href());
+            }
         };
     }
 

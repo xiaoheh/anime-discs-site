@@ -4,13 +4,15 @@
     <%@ include file="include/meta.jsp" %>
     <title>Anime Discs - Sakura数据</title>
     <%@ include file="include/import.jsp" %>
+    <link href="styles/table.css" rel="stylesheet"/>
+    <script src="scripts/table.js"></script>
 </head>
 <body>
 <%@ include file="include/navbar.jsp" %>
 <div id="content"></div>
 <script id="tables-tmpl-small" type="text/html">
     {{each lists as list idx}}
-    <table id="{{list.key}}" class="table table-bordered table-striped">
+    <table id="{{list.key}}" class="table sorter table-bordered table-striped">
         <caption>
             <span><b>{{list.title}}</b></span>
             <span><span class="hidden-xxs">上次更新 </span>{{list.time | fm_timeout}}</span>
@@ -19,11 +21,11 @@
         <tr>
             <th class="index hidden-xxm">ID</th>
             <th class="index hidden-xxm zero-width"></th>
-            <th class="rank">排名</th>
+            <th class="rank sorter">排名</th>
             <th class="cupt hidden-xxs zero-width"></th>
-            <th class="cupt hidden-xxs">累积</th>
+            <th class="cupt hidden-xxs sorter">累积</th>
             <th class="cupt hidden-xxs zero-width"></th>
-            <th class="title">碟片标题</th>
+            <th class="sname sorter">碟片标题</th>
         </tr>
         </thead>
         <tbody>
@@ -48,47 +50,12 @@
     </table>
     {{/each}}
 </script>
-<style>
-    @media (max-width: 767px) {
-
-        table.table > thead > tr > th.index {
-            width: 32px;
-            text-align: center;
-            padding-left: 2px;
-            padding-right: 2px;
-        }
-
-        table.table > thead > tr > th.rank {
-            width: 88px;
-        }
-
-        table.table > thead > tr > th.cupt {
-            width: 66px;
-        }
-
-        table.table > tbody > tr > td.index {
-            text-align: center;
-        }
-
-        table.table > tbody > tr > td.rank {
-            text-align: center;
-        }
-
-        table.table > tbody > tr > td.cupt {
-            text-align: center;
-        }
-    }
-</style>
 <script>
+
     $(function () {
         ajax_update_page();
-        device.switch(function () {
-            if (cache.data) {
-                render_page(cache.data);
-            } else {
-                ajax_update_page();
-            }
-        });
+        handle_switch_action();
+        handle_refresh_action();
     });
 
     function ajax_update_page() {
@@ -99,9 +66,6 @@
         });
     }
 
-    function refresh() {
-        ajax_update_page();
-    }
 
     function handle_data(data) {
         $(data).each(function () {
@@ -110,12 +74,38 @@
     }
 
     function render_page(data) {
-        offset.save();
+        post_before_render();
         if (device.is_small()) {
             $("#content").html(render("tables-tmpl-small", {lists: data}));
         } else {
             $("#content").html(render("tables-tmpl", {lists: data}));
         }
+        post_after_render();
+    }
+
+    function handle_switch_action() {
+        device.switch(function () {
+            if (cache.data) {
+                render_page(cache.data);
+            } else {
+                ajax_update_page();
+            }
+        });
+    }
+
+    function handle_refresh_action() {
+        navbar.refresh(ajax_update_page);
+    }
+
+    function post_before_render() {
+        table.save_status();
+        offset.save();
+    }
+
+    function post_after_render() {
+        table.sorter("table.table.sorter");
+        table.load_status();
+        offset.load();
         if (cache.is_first("restore")) {
             offset.restore();
         } else {

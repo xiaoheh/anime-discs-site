@@ -1,0 +1,82 @@
+/* iPhone6 以下隐藏 */
+@media (max-width: 359px) {
+
+}
+
+/* iPhone6+ 以下隐藏 */
+@media (max-width: 398px) {
+
+}
+
+/* 小设备 */
+@media (max-width: 767px) {
+
+    table.table > thead > tr > th.index {
+        width: 32px;
+        text-align: center;
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    table.table > thead > tr > th.rank {
+        width: 88px;
+    }
+
+    table.table > thead > tr > th.cupt {
+        width: 66px;
+    }
+
+    table.table > tbody > tr > td {
+        padding-left: 4px;
+        padding-right: 4px;
+        text-align: center;
+    }
+
+    table.table > tbody > tr > td.sname {
+        text-align: left;
+        word-break: break-all;
+    }
+
+}
+
+/* 大设备 */
+@media (min-width: 768px) {
+
+}
+
+table.table {
+    table-layout: fixed;
+}
+
+table.table > caption > span {
+    margin-right: 10px;
+}
+
+table.table > caption > span > b {
+    color: black;
+}
+
+table.table > thead > tr > th {
+    padding-left: 18px;
+}
+
+table.table > thead > tr > th.zero-width {
+    width: 0 !important;
+}
+
+table.table > tbody > tr > td.zero-width {
+    color: transparent;
+}
+
+table.table > thead > tr > th.sorter {
+    background: url(/images/table-normal.gif) no-repeat center left;
+    cursor: pointer;
+}
+
+table.table > thead > tr > th.sorter.ascing {
+    background-image: url(/images/table-asc.gif);
+}
+
+table.table > thead > tr > th.sorter.descing {
+    background-image: url(/images/table-desc.gif);
+}

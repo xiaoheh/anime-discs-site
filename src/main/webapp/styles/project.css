@@ -17,11 +17,6 @@
     body {
         padding: 60px 4px 10px 4px;
     }
-
-    table.table > tbody > tr > td {
-        padding-left: 4px;
-        padding-right: 4px;
-    }
 }
 
 /* 大设备 */
@@ -39,27 +34,6 @@
 
 #refresh {
     margin-right: 5px;
-}
-
-/* Table */
-table.table {
-    table-layout: fixed;
-}
-
-table.table > caption > span {
-    margin-right: 10px;
-}
-
-table.table > caption > span > b {
-    color: black;
-}
-
-table.table > thead > tr > th.zero-width {
-    width: 0 !important;
-}
-
-table.table > tbody > tr > td.zero-width {
-    color: transparent;
 }
 
 /* Form */
