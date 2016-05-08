@@ -101,7 +101,7 @@ function initial_object() {
     }
 
     function init_table() {
-        var tables, status;
+        var tables, status, show_profile;
         table.sorter = function (selector) {
             tables = [];
             $(selector).each(function () {
@@ -115,6 +115,13 @@ function initial_object() {
         table.load_status = function () {
             load_status(status);
         };
+        table.show_pro = function (func) {
+            if (func) {
+                show_profile = func;
+            } else if (show_profile) {
+                show_profile();
+            }
+        }
     }
 
     function init_device() {

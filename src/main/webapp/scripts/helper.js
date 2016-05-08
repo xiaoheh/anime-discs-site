@@ -38,11 +38,23 @@ template.helper('fm_timeout', function (time) {
     if (timeout >= 3600000) {
         var m = timeout % 3600000;
         var h = Math.floor(timeout / 3600000);
-        return h + "小时 " + Math.floor(m / 60000) + "分";
+        return h + "小时 " + fm_mas(m);
     } else {
+        return fm_mas(timeout);
+    }
+
+    function fm_mas(timeout) {
         var s = timeout % 60000;
         var m = Math.floor(timeout / 60000);
-        return m + "分 " + Math.floor(s / 1000) + "秒";
+        return fm_num(m) + "分 " + fm_num(Math.floor(s / 1000)) + "秒";
+    }
+
+    function fm_num(num) {
+        if (num < 10) {
+            return "0" + num;
+        } else {
+            return "" + num;
+        }
     }
 
 });

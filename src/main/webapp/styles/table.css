@@ -42,6 +42,75 @@
 /* 大设备 */
 @media (min-width: 768px) {
 
+    table.table {
+        font-size: 14px;
+    }
+
+    table.table th {
+        text-align: left;
+        padding-left: 20px !important;
+    }
+
+    table.table th.index {
+        width: 60px;
+    }
+
+    table.table th.arnk {
+        width: 85px;
+    }
+
+    table.table th.atot {
+        width: 85px;
+    }
+
+    table.table th.srnk {
+        width: 155px;
+    }
+
+    table.table th.cupt {
+        width: 95px;
+    }
+
+    table.table th.tapt {
+        width: 75px;
+    }
+
+    table.table th.sday {
+        width: 85px;
+    }
+
+    table.table th.capt {
+        width: 85px;
+    }
+
+    table.table th.stot {
+        width: 85px;
+    }
+
+    table.table th.cubk {
+        width: 100px;
+    }
+
+    table.table th.shelves {
+        width: 90px;
+    }
+
+    table.table th.release {
+        width: 90px;
+    }
+
+    table.table td {
+        text-align: center;
+    }
+
+    table.table td.japan {
+        text-align: left;
+    }
+
+    table.table td.title {
+        text-align: left;
+    }
+
 }
 
 table.table {

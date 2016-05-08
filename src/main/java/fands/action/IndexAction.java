@@ -8,8 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import static fands.support.Constants.TOP_100_NAME;
 
 public class IndexAction extends fands.support.JsonAction {
@@ -46,20 +44,20 @@ public class IndexAction extends fands.support.JsonAction {
     }
 
     private JSONArray buildDiscs(DiscList discList) {
-        AtomicInteger count = new AtomicInteger(0);
         boolean top100 = TOP_100_NAME.equals(discList.getName());
-
         JSONArray array = new JSONArray();
         discService.getDiscsOfDiscList(discList).forEach(disc -> {
-            array.put(buildDisc(disc, count.incrementAndGet(), top100));
+            array.put(buildDisc(disc, top100));
         });
         return array;
     }
 
-    private JSONObject buildDisc(Disc disc, int index, boolean top100) {
+    private JSONObject buildDisc(Disc disc, boolean top100) {
         JSONObject object = new JSONObject();
         object.put("id", disc.getId());
-        object.put("index", index);
+        object.put("asin", disc.getAsin());
+        object.put("title", disc.getTitle());
+        object.put("japan", disc.getJapan());
         object.put("dvdver", disc.isDvdver());
         object.put("boxver", disc.isBoxver());
         object.put("amzver", disc.isAmzver());
@@ -68,15 +66,23 @@ public class IndexAction extends fands.support.JsonAction {
         } else {
             object.put("sname", disc.getSname());
         }
+        if (disc.getShelves() != null) {
+            object.put("shelves", disc.getShelves().getTime());
+        }
+        if (disc.getRelease() != null) {
+            object.put("release", disc.getRelease().getTime());
+        }
         DiscAmazon amazon = disc.getAmazon();
         if (amazon != null) {
             if (top100) {
                 if (amazon.getSpdt() != null) {
                     object.put("arnk", amazon.getSprk());
+                    object.put("amdt", amazon.getSpdt().getTime());
                 }
             } else {
                 if (amazon.getPadt() != null) {
                     object.put("arnk", amazon.getPark());
+                    object.put("amdt", amazon.getPadt().getTime());
                 }
             }
         }
@@ -88,6 +94,11 @@ public class IndexAction extends fands.support.JsonAction {
             }
             if (sakura.getPadt() != null) {
                 object.put("cupt", sakura.getCupt());
+                object.put("capt", sakura.getCapt());
+                object.put("tapt", sakura.getTapt());
+                object.put("sday", sakura.getSday());
+                object.put("cubk", sakura.getCubk());
+                object.put("skdt", sakura.getPadt().getTime());
             }
         }
         return object;

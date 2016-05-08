@@ -1,3 +1,59 @@
+function render_profile(quick) {
+    var data = {quick: quick, hidden: scan_hidden()};
+    $("#profile-body").html(template("profile-tmpl", data));
+    handle_quick_action();
+    handle_hidden_action();
+    restore_checked();
+
+    function scan_hidden() {
+        var hidden = [];
+        $("table").first().find("th").each(function () {
+            hidden.push({
+                clazz: $(this).prop("class").split(" ")[0],
+                title: $(this).text()
+            });
+        });
+        return hidden;
+    }
+
+    function handle_quick_action() {
+        $("#div-quick").find("button").click(function () {
+            apply_checked($(this).data("checked").split(","));
+        });
+    }
+
+    function handle_hidden_action() {
+        $("#div-hidden").find(":checkbox").click(function () {
+            $("table").find("tr ." + $(this).data("class")).toggle();
+            save_checked_status();
+        });
+    }
+
+    function save_checked_status() {
+        var checked = [];
+        $("#div-hidden").find(":checked").each(function () {
+            checked.push($(this).data("class"));
+        });
+        $.cookie(page.url() + "-checked", checked.join("-"), {expires: 7});
+    }
+
+    function restore_checked() {
+        if ($.cookie(page.url() + "-checked")) {
+            apply_checked($.cookie(page.url() + "-checked").split("-"));
+        } else {
+            $("#div-quick").find("button").first().click();
+        }
+    }
+
+    function apply_checked(checked) {
+        $("#div-hidden").find(":checkbox").each(function () {
+            if ($(this).prop("checked") != checked.indexOf($(this).data("class")) > -1) {
+                $(this).click();
+            }
+        });
+    }
+}
+
 function tablesorter(table) {
 
     var $table = $(table);

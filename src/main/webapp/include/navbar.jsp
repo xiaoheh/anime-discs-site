@@ -16,7 +16,7 @@
             </a>
         </div>
         <div class="collapse navbar-collapse" role="navigation">
-            <ul class="nav navbar-nav">
+            <ul id="nav-body" class="nav navbar-nav">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">定位<b class="caret"></b></a>
                     <ul id="nav-mark" class="dropdown-menu">
