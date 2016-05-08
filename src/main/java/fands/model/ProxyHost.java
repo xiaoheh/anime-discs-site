@@ -1,5 +1,6 @@
 package fands.model;
 
+import fands.support.BaseModel;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -8,7 +9,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "proxy_host")
-public class ProxyHost {
+public class ProxyHost extends BaseModel {
 
     private String host;
     private int port;
