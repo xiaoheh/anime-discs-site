@@ -1,0 +1,76 @@
+package fands.support.runner;
+
+import fands.dao.Dao;
+import fands.model.ProxyHost;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import java.util.*;
+
+@Service
+public class ProxyService {
+
+    private Set<ProxyHost> proxys = Collections.synchronizedSet(new HashSet<>());
+    private Set<ProxyHost> errors = Collections.synchronizedSet(new HashSet<>());
+    private Dao dao;
+
+    @Autowired
+    public void setDao(Dao dao) {
+        this.dao = dao;
+    }
+
+    @PostConstruct
+    public void initProxys() {
+        dao.findAll(ProxyHost.class).forEach(this::addProxyHost);
+    }
+
+    private synchronized void addProxyHost(ProxyHost proxyHost) {
+        if (errors.contains(proxyHost) || proxys.contains(proxyHost)) {
+            return;
+        }
+        if (isErrorHost(proxyHost)) {
+            errors.add(proxyHost);
+        } else {
+            proxys.add(proxyHost);
+        }
+        dao.save(proxyHost);
+    }
+
+    private boolean isErrorHost(ProxyHost proxyHost) {
+        if (proxyHost.getError() > 5) {
+            if (proxyHost.getRight() < proxyHost.getError() / 5) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public synchronized ProxyHost getProxyHost() {
+        ArrayList<ProxyHost> proxyHosts = new ArrayList<>(proxys);
+        proxyHosts.removeIf(ph -> isTimeout(ph.getDate()));
+        if (proxyHosts.isEmpty()) {
+            return null;
+        }
+        ProxyHost proxyHost = proxyHosts.get(new Random().nextInt(proxyHosts.size()));
+        if (isErrorHost(proxyHost)) {
+            proxys.remove(proxyHost);
+            errors.add(proxyHost);
+            return getProxyHost();
+        }
+        proxyHost.setDate(new Date());
+        return proxyHost;
+    }
+
+    private boolean isTimeout(Date date) {
+        return date == null || date.getTime() + 15000 < System.currentTimeMillis();
+    }
+
+    public Set<ProxyHost> getProxys() {
+        return proxys;
+    }
+
+    public Set<ProxyHost> getErrors() {
+        return errors;
+    }
+}

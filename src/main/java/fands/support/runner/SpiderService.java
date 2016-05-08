@@ -1,10 +1,13 @@
 package fands.support.runner;
 
+import fands.model.ProxyHost;
 import fands.support.HelpUtil;
 import org.apache.logging.log4j.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -37,9 +40,17 @@ public class SpiderService {
     private AtomicInteger amazonRunning = new AtomicInteger(0);
 
     private long startupTimestamp = System.currentTimeMillis();
-    private final Object waitObject = new Object();
+    private final Object waitSakura = new Object();
+    private final Object waitAmazon = new Object();
+    private ProxyService proxyService;
 
-    public SpiderService() {
+    @Autowired
+    public void setProxyService(ProxyService proxyService) {
+        this.proxyService = proxyService;
+    }
+
+    @PostConstruct
+    public void initSpiderService() {
         logger.info("爬虫服务已启动...");
 
         /**
@@ -47,6 +58,8 @@ public class SpiderService {
          */
         newTimerSchedule(0, 30, () -> {
             String timeout = HelpUtil.formatTimeout(startupTimestamp);
+            logger.printf(Level.INFO, "(%s): proxy service proxys: %d, errors: %d",
+                    timeout, proxyService.getProxys().size(), proxyService.getErrors().size());
             logger.printf(Level.INFO, "(%s): schedule sakura task1: %d, task2: %d, task3: %d, task4: %d",
                     timeout, sakura1.size(), sakura2.size(), sakura3.size(), sakura4.size());
             logger.printf(Level.INFO, "(%s): schedule amazon task1: %d, task2: %d, task3: %d, task4: %d",
@@ -58,13 +71,25 @@ public class SpiderService {
          */
         new Thread(() -> {
             while (true) {
-                synchronized (waitObject) {
+                synchronized (waitSakura) {
                     if (sakuraRunning.get() < SAKURA_MAX_CONNECT_THREAD + 1) {
                         if (trySubmitTask(sakuraRunning, sakuraConnnect, sakura1)) continue;
                         if (trySubmitTask(sakuraRunning, sakuraConnnect, sakura2)) continue;
                         if (trySubmitTask(sakuraRunning, sakuraConnnect, sakura3)) continue;
                         if (trySubmitTask(sakuraRunning, sakuraConnnect, sakura4)) continue;
                     }
+                    try {
+                        waitSakura.wait(1000);
+                    } catch (InterruptedException e) {
+                        logger.warn("调度线程收到意外的中断信号, 已忽略该信号.");
+                    }
+                }
+            }
+        }).start();
+
+        new Thread(() -> {
+            while (true) {
+                synchronized (waitAmazon) {
                     if (amazonRunning.get() < AMAZON_MAX_CONNECT_THREAD + 1) {
                         if (trySubmitTask(amazonRunning, amazonConnnect, amazon1)) continue;
                         if (trySubmitTask(amazonRunning, amazonConnnect, amazon2)) continue;
@@ -72,7 +97,7 @@ public class SpiderService {
                         if (trySubmitTask(amazonRunning, amazonConnnect, amazon4)) continue;
                     }
                     try {
-                        waitObject.wait(1000);
+                        waitAmazon.wait(1000);
                     } catch (InterruptedException e) {
                         logger.warn("调度线程收到意外的中断信号, 已忽略该信号.");
                     }
@@ -113,9 +138,15 @@ public class SpiderService {
         return amazon4;
     }
 
-    public void nodifyWaitObject() {
-        synchronized (waitObject) {
-            waitObject.notify();
+    public void nodifyWaitSakura() {
+        synchronized (waitSakura) {
+            waitSakura.notify();
+        }
+    }
+
+    public void nodifyWaitAmazon() {
+        synchronized (waitAmazon) {
+            waitAmazon.notify();
         }
     }
 
@@ -129,27 +160,55 @@ public class SpiderService {
 
     private boolean trySubmitTask(AtomicInteger taskCount, ExecutorService connect, List<SpiderTask> taskList) {
         if (taskList.size() > 0) {
-            taskCount.incrementAndGet();
-            SpiderTask task = taskList.remove(0);
-            connect.execute(() -> {
-                try {
-                    task.doConnect();
-                    addExecuteTask(task);
-                } catch (IOException e) {
-                    tryReConnect(taskList, task, e);
-                } catch (Exception e) {
-                    logger.printf(Level.WARN, "connect service throws exception: %s %s", e.getClass(), e.getMessage());
-                    logger.debug("connect service throws exception:", e);
-                } finally {
-                    synchronized (waitObject) {
-                        taskCount.decrementAndGet();
-                        waitObject.notify();
-                    }
+            if (taskList.get(0).getUrl().startsWith("http://rankstker.net/")) {
+                ProxyHost proxyHost = proxyService.getProxyHost();
+                if (proxyHost == null) {
+                    waitSakura();
+                    doSubmitTask(taskCount, connect, taskList, proxyHost);
+                    return true;
+                } else {
+                    return true;
                 }
-            });
-            return true;
+            } else {
+                doSubmitTask(taskCount, connect, taskList, null);
+                return true;
+            }
         }
         return false;
+    }
+
+    private void waitSakura() {
+        synchronized (waitSakura) {
+            try {
+                waitSakura.wait(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void doSubmitTask(AtomicInteger taskCount, ExecutorService connect, List<SpiderTask> taskList, ProxyHost proxyHost) {
+        taskCount.incrementAndGet();
+        SpiderTask task = taskList.remove(0);
+        connect.execute(() -> {
+            try {
+                task.doConnect(proxyHost);
+                addExecuteTask(task);
+            } catch (IOException e) {
+                proxyHost.setError(proxyHost.getError() + 1);
+                tryReConnect(taskList, task, e);
+            } catch (Exception e) {
+                proxyHost.setError(proxyHost.getError() + 1);
+                logger.printf(Level.WARN, "connect service throws exception: %s %s", e.getClass(), e.getMessage());
+                logger.debug("connect service throws exception:", e);
+            } finally {
+                if (task.getUrl().startsWith("http://rankstker.net/")) {
+                    nodifyWaitSakura();
+                } else {
+                    nodifyWaitAmazon();
+                }
+            }
+        });
     }
 
     private void tryReConnect(List<SpiderTask> taskList, SpiderTask task, IOException e) {

@@ -35,36 +35,6 @@ public class AutoRunner {
     private SakuraDiscSpider sakuraDiscSpider;
     private AmazonDiscSpider amazonDiscSpider;
 
-    @Autowired
-    public void setDiscService(DiscService discService) {
-        this.discService = discService;
-    }
-
-    @Autowired
-    public void setSpiderService(SpiderService spiderService) {
-        this.spiderService = spiderService;
-    }
-
-    @Autowired
-    public void setSakuraSpeedSpider(SakuraSpeedSpider sakuraSpeedSpider) {
-        this.sakuraSpeedSpider = sakuraSpeedSpider;
-    }
-
-    @Autowired
-    public void setAmazonSpeedSpider(AmazonSpeedSpider amazonSpeedSpider) {
-        this.amazonSpeedSpider = amazonSpeedSpider;
-    }
-
-    @Autowired
-    public void setSakuraDiscSpider(SakuraDiscSpider sakuraDiscSpider) {
-        this.sakuraDiscSpider = sakuraDiscSpider;
-    }
-
-    @Autowired
-    public void setAmazonDiscSpider(AmazonDiscSpider amazonDiscSpider) {
-        this.amazonDiscSpider = amazonDiscSpider;
-    }
-
     @PostConstruct
     public void startAutoRunner() {
         /**
@@ -86,6 +56,7 @@ public class AutoRunner {
             sakuraSpeedSpider.parseDocument(document);
             logger.info("成功更新Sakura速报数据");
         }));
+        spiderService.nodifyWaitSakura();
     }
 
     private void addUpdateAmazonSpeedTask() {
@@ -98,18 +69,21 @@ public class AutoRunner {
                 logger.printf(Level.INFO, "成功更新Amazon速报数据(%02d - %02d)", start, start + 19);
             }));
         }
+        spiderService.nodifyWaitAmazon();
     }
 
     private void addUpdateSakuraHotTask(int second) {
         DiscList discList = discService.getLatestDiscList();
         discList.setDiscs(discService.getDiscsOfDiscList(discList, 10));
         addSakuraDiscTask("Sakura(Hot)", second, spiderService.getSakura2(), discList);
+        spiderService.nodifyWaitSakura();
     }
 
     private void addUpdateAmazonHotTask(int second) {
         DiscList discList = discService.getLatestDiscList();
         discList.setDiscs(discService.getDiscsOfDiscList(discList, 10));
         addAmazonDiscTask("Amazon(Hot)", second, spiderService.getAmazon2(), discList);
+        spiderService.nodifyWaitAmazon();
     }
 
     private void addUpdateSakuraExtTask(int second) {
@@ -117,6 +91,7 @@ public class AutoRunner {
             discList.setDiscs(discService.getDiscsOfDiscList(discList));
             addSakuraDiscTask("Sakura(Ext)", second, spiderService.getSakura3(), discList);
         });
+        spiderService.nodifyWaitSakura();
     }
 
     private void addUpdateAmazonExtTask(int second) {
@@ -124,18 +99,21 @@ public class AutoRunner {
             discList.setDiscs(discService.getDiscsOfDiscList(discList));
             addAmazonDiscTask("Amazon(Ext)", second, spiderService.getAmazon3(), discList);
         });
+        spiderService.nodifyWaitAmazon();
     }
 
     private void addUpdateSakuraAllTask(int second) {
         DiscList discList = Constants.ALL_DISCS;
         discList.setDiscs(discService.findAllDiscs());
         addSakuraDiscTask("Sakura(All)", second, spiderService.getSakura4(), discList);
+        spiderService.nodifyWaitSakura();
     }
 
     private void addUpdateAmazonAllTask(int second) {
         DiscList discList = Constants.ALL_DISCS;
         discList.setDiscs(discService.findAllDiscs());
         addAmazonDiscTask("Amazon(All)", second, spiderService.getAmazon4(), discList);
+        spiderService.nodifyWaitAmazon();
     }
 
     private void addSakuraDiscTask(String name, int second, List<SpiderTask> taskList, DiscList discList) {
@@ -201,9 +179,38 @@ public class AutoRunner {
         new Timer(true).schedule(new TimerTask() {
             public void run() {
                 runnable.run();
-                spiderService.nodifyWaitObject();
             }
         }, delay * 1000, period * 1000);
+    }
+
+    @Autowired
+    public void setDiscService(DiscService discService) {
+        this.discService = discService;
+    }
+
+    @Autowired
+    public void setSpiderService(SpiderService spiderService) {
+        this.spiderService = spiderService;
+    }
+
+    @Autowired
+    public void setSakuraSpeedSpider(SakuraSpeedSpider sakuraSpeedSpider) {
+        this.sakuraSpeedSpider = sakuraSpeedSpider;
+    }
+
+    @Autowired
+    public void setAmazonSpeedSpider(AmazonSpeedSpider amazonSpeedSpider) {
+        this.amazonSpeedSpider = amazonSpeedSpider;
+    }
+
+    @Autowired
+    public void setSakuraDiscSpider(SakuraDiscSpider sakuraDiscSpider) {
+        this.sakuraDiscSpider = sakuraDiscSpider;
+    }
+
+    @Autowired
+    public void setAmazonDiscSpider(AmazonDiscSpider amazonDiscSpider) {
+        this.amazonDiscSpider = amazonDiscSpider;
     }
 
 }

@@ -1,11 +1,13 @@
 package fands.support.runner;
 
+import fands.model.ProxyHost;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
+import java.net.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -28,12 +30,25 @@ public class SpiderTask {
         this.errors = new LinkedList<>();
     }
 
-    public void doConnect() throws IOException {
+    public void doConnect(ProxyHost proxyHost) throws IOException {
         if (test.get()) {
-            document = Jsoup.connect(url)
-                    .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/601.5.17 (KHTML, like Gecko) Version/9.1 Safari/601.5.17")
-                    .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
-                    .get();
+            if (proxyHost == null) {
+                document = Jsoup.connect(url)
+                        .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/601.5.17 (KHTML, like Gecko) Version/9.1 Safari/601.5.17")
+                        .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+                        .get();
+            } else {
+                InetSocketAddress addr = new InetSocketAddress(proxyHost.getHost(), proxyHost.getPort());
+                Proxy proxy = new Proxy(Proxy.Type.HTTP, addr);
+                String baseUri = "http://rankstker.net/";
+                URLConnection connection = new URL(url).openConnection(proxy);
+                connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/601.5.17 (KHTML, like Gecko) Version/9.1 Safari/601.5.17");
+                connection.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+                connection.setConnectTimeout(10000);
+                connection.setReadTimeout(10000);
+                document = Jsoup.parse(connection.getInputStream(), "Shift-JIS", baseUri);
+                proxyHost.setRight(proxyHost.getRight() + 1);
+            }
             errors.clear();
         }
     }
