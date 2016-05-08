@@ -57,6 +57,7 @@ public class ProxyService {
             return null;
         }
         ProxyHost proxyHost = proxyHosts.get(new Random().nextInt(proxyHosts.size()));
+        dao.saveOrUpdate(proxyHost);
         if (isErrorHost(proxyHost)) {
             proxys.remove(proxyHost);
             errors.add(proxyHost);
