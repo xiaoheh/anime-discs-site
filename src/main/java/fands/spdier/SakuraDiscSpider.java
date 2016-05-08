@@ -22,15 +22,12 @@ import static fands.support.HelpUtil.parseNumber;
 @Service
 public class SakuraDiscSpider {
 
-    private Pattern sakuraRank = Pattern.compile("【(\\d{4}年 \\d{2}月 \\d{2}日 \\d{2}時)\\(.\\)】 ([*,0-9]{7})位");
-    private Pattern sakuraPont = Pattern.compile("【(\\d{4}年 \\d{2}月 \\d{2}日)\\(.\\)】 ([*,0-9]{7})");
-    private Pattern sakuraCapt = Pattern.compile(":(\\d+)pt\\(残り日数(\\d+)\\)");
-    private Pattern sakuraCupt = Pattern.compile(":(\\d+)pt");
-    private Pattern sakuraBook = Pattern.compile("(\\d+)\\(前日(\\d+)\\)");
+    private Pattern rankPattern = Pattern.compile("【(\\d{4}年 \\d{2}月 \\d{2}日 \\d{2}時)\\(.\\)】 ([*,0-9]{7})位");
+    private Pattern captPattern = Pattern.compile(":(\\d+)pt\\(残り日数(\\d+)\\)");
+    private Pattern cuptPattern = Pattern.compile(":(\\d+)pt");
+    private Pattern bookPattern = Pattern.compile("(\\d+)\\(前日(\\d+)\\)");
 
-    private SimpleDateFormat rankDateFormat = new SimpleDateFormat("yyyy年 MM月 dd日 HH時");
-    private SimpleDateFormat pontDateFormat = new SimpleDateFormat("yyyy年 MM月 dd日");
-    private SimpleDateFormat discDateFormat = new SimpleDateFormat("yyyy年MM月dd日");
+    private SimpleDateFormat discFormat = new SimpleDateFormat("yyyy年MM月dd日");
 
 
     private Logger logger = LogManager.getLogger(SakuraDiscSpider.class);
@@ -55,57 +52,90 @@ public class SakuraDiscSpider {
         discSakura.setPadt(new Date());
 
         if (needUpdateRank(discSakura.getSpdt())) {
-            String rankText = document.select("#rankdatatab textarea").text();
-            Matcher rankMatcher = sakuraRank.matcher(rankText);
-            discSakura.setSpdt(new Date());
-            while (rankMatcher.find()) {
-                discSakura.setPrrk(discSakura.getCurk());
-                discSakura.setCurk(parseNumber(rankMatcher.group(2)));
-            }
+            updateRank(document, discSakura);
         }
+        updateBook(document, discSakura);
+        updateCupt(document, discSakura);
+        updatePrpt(document, discSakura, disc.getRelease());
+        updateCapt(document, discSakura, disc.getRelease());
 
-        Elements select = document.select("#newdatatab font[color=blue]");
-        String cubkText = select.get(select.size() - 1).text();
-        Matcher bookMatcher = sakuraBook.matcher(cubkText);
-        if (bookMatcher.find()) {
-            discSakura.setCubk(Integer.parseInt(bookMatcher.group(1)));
-            discSakura.setPrbk(Integer.parseInt(bookMatcher.group(2)));
+        dao.saveOrUpdate(discSakura);
+    }
+
+    private void updateRank(Document document, DiscSakura discSakura) {
+        String text = document.select("#rankdatatab textarea").text();
+        String[] split = text.split("\n");
+        if (split.length == 0) {
+            discSakura.setPrrk(0);
+            discSakura.setCurk(0);
+        } else if (split.length == 1) {
+            discSakura.setPrrk(0);
+            discSakura.setCurk(findRank(split[0]));
+        } else {
+            discSakura.setPrrk(findRank(split[split.length - 2]));
+            discSakura.setCurk(findRank(split[split.length - 1]));
+        }
+    }
+
+    private int findRank(String input) {
+        Matcher matcher = rankPattern.matcher(input);
+        return matcher.find() ? parseNumber(matcher.group(2)) : 0;
+    }
+
+    private void updateBook(Document document, DiscSakura discSakura) {
+        Elements elements = document.select("#newdatatab font[color=blue]");
+        String text = elements.get(elements.size() - 1).text();
+        Matcher matcher = bookPattern.matcher(text);
+        if (matcher.find()) {
+            discSakura.setCubk(Integer.parseInt(matcher.group(1)));
+            discSakura.setPrbk(Integer.parseInt(matcher.group(2)));
         } else {
             discSakura.setCubk(-1);
             discSakura.setPrbk(-1);
         }
+    }
 
-        String cuptText = document.select("#newdatatab font[color=red]").get(1).text();
-        Matcher cuptMatcher = sakuraCupt.matcher(cuptText);
-        if (cuptMatcher.find()) {
-            discSakura.setCupt(Integer.parseInt(cuptMatcher.group(1)));
+    private void updateCupt(Document document, DiscSakura discSakura) {
+        String text = document.select("#newdatatab font[color=red]").get(1).text();
+        Matcher matcher = cuptPattern.matcher(text);
+        if (matcher.find()) {
+            discSakura.setCupt(Integer.parseInt(matcher.group(1)));
         } else {
             discSakura.setCupt(-1);
         }
+    }
 
-        String prptText = document.select("#ptdatatab textarea").text();
-        Matcher ptptMatcher = sakuraPont.matcher(prptText);
-        Date prevRelease = DateUtils.addDays(disc.getRelease(), -1);
-        Date prevToday = DateUtils.addHours(new Date(), -24);
-        discSakura.setPrpt(-1);
-        while (ptptMatcher.find()) {
-            Date date = parsePontDate(ptptMatcher.group(1));
-            if (DateUtils.isSameDay(date, prevRelease) || DateUtils.isSameDay(date, prevToday)) {
-                discSakura.setPrpt(parseNumber(ptptMatcher.group(2)));
-            }
+    private void updatePrpt(Document document, DiscSakura discSakura, Date release) {
+        String text = document.select("#ptdatatab textarea").text();
+        String[] split = text.split("\n");
+        if (split.length == 0) {
+            discSakura.setPrpt(-1);
+        } else if (split.length == 1) {
+            discSakura.setPrpt(0);
+        } else {
+            discSakura.setPrpt(findPrpt(split, release));
         }
+    }
 
-        String captText = document.select("#newdatatab font[color=red]").get(2).text();
-        Matcher captMatcher = sakuraCapt.matcher(captText);
-        if (captMatcher.find()) {
-            discSakura.setCapt(Integer.parseInt(captMatcher.group(1)));
-            discSakura.setSday(Integer.parseInt(captMatcher.group(2)));
+    private int findPrpt(String[] split, Date release) {
+        Date japan = DateUtils.addHours(new Date(), 1);
+        if (DateUtils.isSameDay(japan, release)) {
+            return parseNumber(split[split.length - 1]);
+        } else {
+            return parseNumber(split[split.length - 2]);
+        }
+    }
+
+    private void updateCapt(Document document, DiscSakura discSakura, Date release) {
+        String text = document.select("#newdatatab font[color=red]").get(2).text();
+        Matcher matcher = captPattern.matcher(text);
+        if (matcher.find()) {
+            discSakura.setCapt(parseNumber(matcher.group(1)));
+            discSakura.setSday(parseNumber(matcher.group(2)));
         } else {
             discSakura.setCapt(-1);
-            discSakura.setSday(getSday(disc.getRelease()));
+            discSakura.setSday(getSday(release));
         }
-
-        dao.saveOrUpdate(discSakura);
     }
 
     private boolean needUpdateRank(Date date) {
@@ -113,9 +143,10 @@ public class SakuraDiscSpider {
         return date == null || date.compareTo(needUpdate) < 0;
     }
 
-    private int getSday(Date date) {
-        long millis = date.getTime() - System.currentTimeMillis();
-        return (int) (millis / 1000 / 3600 / 24);
+    private int getSday(Date release) {
+        long currentTime = System.currentTimeMillis();
+        long releaseTime = release.getTime() + 3600000L;
+        return (int) ((releaseTime - currentTime) / 86400000L);
     }
 
     private DiscSakura getDiscSakura(Disc disc) {
@@ -127,27 +158,9 @@ public class SakuraDiscSpider {
         return discSakura;
     }
 
-    private Date parseRankDate(String dateText) {
-        try {
-            return rankDateFormat.parse(dateText);
-        } catch (ParseException e) {
-            logger.warn("不能解析该日期, 错误信息为: " + e.getMessage(), e);
-            throw new RuntimeException(e);
-        }
-    }
-
     private Date parseDiscDate(String dateText) {
         try {
-            return discDateFormat.parse(dateText);
-        } catch (ParseException e) {
-            logger.warn("不能解析该日期, 错误信息为: " + e.getMessage(), e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    private Date parsePontDate(String dateText) {
-        try {
-            return pontDateFormat.parse(dateText);
+            return discFormat.parse(dateText);
         } catch (ParseException e) {
             logger.warn("不能解析该日期, 错误信息为: " + e.getMessage(), e);
             throw new RuntimeException(e);

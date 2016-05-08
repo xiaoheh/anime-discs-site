@@ -49,6 +49,7 @@ public class SakuraSpeedSpider {
         DiscList discList = getDiscList(table.parent().id());
         if (!updateText.equals("更新中")) {
             Date updateTime = parseUpdateTime(updateText);
+            Date speedDate = new Date();
             if (discList.getDate() == null || discList.getDate().compareTo(updateTime) < 0) {
                 discList.setDate(updateTime);
                 discList.setDiscs(new LinkedList<>());
@@ -69,7 +70,7 @@ public class SakuraSpeedSpider {
                     String[] sakuraRank = tr.child(0).text().split("/");
                     discSakura.setCurk(HelpUtil.parseNumber(sakuraRank[0]));
                     discSakura.setPrrk(HelpUtil.parseNumber(sakuraRank[1]));
-                    discSakura.setSpdt(updateTime);
+                    discSakura.setSpdt(speedDate);
                     dao.saveOrUpdate(discSakura);
 
                     discList.getDiscs().add(disc);
