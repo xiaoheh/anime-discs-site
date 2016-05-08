@@ -43,7 +43,7 @@ public class ProxyHost extends BaseModel {
         this.port = port;
     }
 
-    @Column
+    @Column(name = "error_number")
     public int getError() {
         return error;
     }
@@ -52,7 +52,7 @@ public class ProxyHost extends BaseModel {
         this.error = error;
     }
 
-    @Column
+    @Column(name = "right_number")
     public int getRight() {
         return right;
     }
