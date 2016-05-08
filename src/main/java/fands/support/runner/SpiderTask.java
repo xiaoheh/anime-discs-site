@@ -38,23 +38,31 @@ public class SpiderTask {
                         .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
                         .get();
             } else {
-                InetSocketAddress addr = new InetSocketAddress(proxyHost.getHost(), proxyHost.getPort());
-                Proxy proxy = new Proxy(Proxy.Type.HTTP, addr);
-                String baseUri = "http://rankstker.net/";
-                URLConnection connection = new URL(url).openConnection(proxy);
-                connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/601.5.17 (KHTML, like Gecko) Version/9.1 Safari/601.5.17");
-                connection.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-                connection.setConnectTimeout(10000);
-                connection.setReadTimeout(10000);
-                document = Jsoup.parse(connection.getInputStream(), "Shift-JIS", baseUri);
-                if (document.select("a").first().attr("href").equals("http://www27392u.sakura.ne.jp/")) {
-                    proxyHost.updateBaned();
-                    throw new RuntimeException("该代理已被封锁");
-                } else {
-                    proxyHost.updateRight();
-                }
+                URLConnection connection = buildConnection(proxyHost);
+                document = Jsoup.parse(connection.getInputStream(), "Shift-JIS", url);
+                checkProxyStauts(proxyHost);
             }
             errors.clear();
+        }
+    }
+
+    private URLConnection buildConnection(ProxyHost proxyHost) throws IOException {
+        InetSocketAddress addr = new InetSocketAddress(proxyHost.getHost(), proxyHost.getPort());
+        Proxy proxy = new Proxy(Proxy.Type.HTTP, addr);
+        URLConnection connection = new URL(url).openConnection(proxy);
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/601.5.17 (KHTML, like Gecko) Version/9.1 Safari/601.5.17");
+        connection.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+        connection.setConnectTimeout(10000);
+        connection.setReadTimeout(10000);
+        return connection;
+    }
+
+    private void checkProxyStauts(ProxyHost proxyHost) {
+        if (document.select("a").first().attr("href").equals("http://www27392u.sakura.ne.jp/")) {
+            proxyHost.updateBaned();
+            throw new RuntimeException("该代理已被封锁: " + proxyHost.getHost());
+        } else {
+            proxyHost.updateRight();
         }
     }
 
