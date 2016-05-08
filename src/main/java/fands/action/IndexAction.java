@@ -60,7 +60,8 @@ public class IndexAction extends fands.support.JsonAction {
         JSONObject object = new JSONObject();
         object.put("id", disc.getId());
         object.put("index", index);
-        object.put("type", disc.getType().name());
+        object.put("dvdver", disc.isDvdver());
+        object.put("boxver", disc.isBoxver());
         object.put("amzver", disc.isAmzver());
         if (disc.getSname() == null) {
             object.put("sname", disc.getTitle());

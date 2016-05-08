@@ -24,15 +24,21 @@
             <input type="text" class="form-control" id="sname" value="{{sname}}">
         </div>
         <div class="form-group">
-            <label for="type">碟片类型</label>
-            <select class="form-control" id="type" disabled="disabled" data-value="{{type}}">
-                <option value="BD">BD</option>
-                <option value="DVD">DVD</option>
-                <option value="BOX">BOX</option>
+            <label for="dvdver">碟片类型</label>
+            <select class="form-control" id="dvdver" disabled="disabled" data-value="{{dvdver?'1':'2'}}">
+                <option value="1">DVD</option>
+                <option value="2">Blu-ray</option>
             </select>
         </div>
         <div class="form-group">
-            <label for="amzver">限定版本</label>
+            <label for="boxver">分卷类型</label>
+            <select class="form-control" id="boxver" disabled="disabled" data-value="{{boxver?'1':'2'}}">
+                <option value="1">BOX</option>
+                <option value="2">非BOX</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="amzver">限定类型</label>
             <select class="form-control" id="amzver" disabled="disabled" data-value="{{amzver?'1':'2'}}">
                 <option value="1">尼限定</option>
                 <option value="2">非尼限定</option>

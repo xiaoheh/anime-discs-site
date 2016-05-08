@@ -19,7 +19,7 @@
         <tr>
             <th class="index hidden-xxm">ID</th>
             <th style="width: 0"></th>
-            <th class="rank">排名顺位</th>
+            <th class="rank">排名</th>
             <th style="width: 0"></th>
             <th class="cupt hidden-xxs">累积PT</th>
             <th style="width: 0"></th>
@@ -31,16 +31,16 @@
         {{if disc.arnk < 9999 && disc.curk < 9999 && disc.prrk < 9999}}
         <tr id="row-{{idx+1}}-{{idx2+1}}">
             <td data-number="{{idx2+1}}" class="index hidden-xxm">{{idx2+1}}</td>
-            <td><span>)</span></td>
+            <td><span class="transparent">)</span></td>
             {{if disc.arnk != disc.curk}}
             <td data-number="{{disc.arnk}}" class="rank danger">{{disc.arnk | fm_sakura}}/{{disc.curk | fm_sakura}}</td>
             {{else}}
             <td data-number="{{disc.curk}}" class="rank">{{disc.curk | fm_sakura}}/{{disc.prrk | fm_sakura}}</td>
             {{/if}}
-            <td><span>(</span></td>
+            <td><span class="transparent">(</span></td>
             <td data-number="{{disc.cupt}}" class="cupt hidden-xxs">{{disc.cupt | fm_sakura:6}} pt</td>
-            <td><span>)</span></td>
-            <td class="sname"><a href="#" data-id="{{disc.id}}">{{disc | fm_sname}}</a></td>
+            <td><span class="transparent">)</span></td>
+            <td class="sname"><a href="#" data-id="{{disc.id}}">{{disc.sname}} {{disc | fm_verstr}}</a></td>
         </tr>
         {{/if}}
         {{/each}}
@@ -82,8 +82,12 @@
             text-align: center;
         }
 
-        table.table > tbody > tr > td span {
+        table.table > tbody > tr > td span.transparent {
             color: transparent;
+        }
+
+        table.table > tbody > tr > td span.verstr {
+            font-family: Osaka;
         }
     }
 </style>

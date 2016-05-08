@@ -1,61 +1,12 @@
 package fands.support;
 
-import fands.model.disc.DiscType;
 import org.springframework.stereotype.Service;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.function.Function;
 
 @Service
 public abstract class HelpUtil {
-
-    private static ThreadLocal<DecimalFormat> numberFormat = ThreadLocal.withInitial(() -> {
-        return new DecimalFormat("###,###");
-    });
-
-    private static ThreadLocal<SimpleDateFormat> updateFormat = ThreadLocal.withInitial(() -> {
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    });
-
-    private final static ThreadLocal<SimpleDateFormat> discFormat = ThreadLocal.withInitial(() -> {
-        return new SimpleDateFormat("yyyy/MM/dd");
-    });
-
-
-    public static String formatNumber(String format, int number) {
-        return number == -1 ? "无数据" : String.format(format, formatNumber(number));
-    }
-
-    private static String formatNumber(int number) {
-        return numberFormat.get().format(number);
-    }
-
-    public static String formatSakura(String format, int number, int width) {
-        return number == -1 ? "无数据" : String.format(format, formatSakura(number, width));
-    }
-
-    private static String formatSakura(int number, int width) {
-        String string = formatNumber(number);
-        StringBuilder builder = new StringBuilder(width);
-        builder.append("***,***", 7 - width, 7 - string.length());
-        builder.append(string);
-        return builder.toString();
-    }
-
-    public static String formatUpdate(Date date) {
-        return updateFormat.get().format(date);
-    }
-
-    public static String formatDisc(Date date) {
-        return discFormat.get().format(date);
-    }
-
-    public static String formatTimeout(Date date) {
-        return date == null ? "从未更新" : formatTimeout(date.getTime());
-    }
 
     public static String formatTimeout(long timestamp) {
         long timeout = System.currentTimeMillis() - timestamp;
@@ -74,19 +25,6 @@ public abstract class HelpUtil {
             builder.append(String.format(format, 0));
         }
         return timeout % count;
-    }
-
-    public static DiscType parseType(String icon) {
-        switch (icon) {
-            case "★":
-                return DiscType.BD;
-            case "○":
-                return DiscType.DVD;
-            case "◎":
-                return DiscType.BOX;
-            default:
-                return null;
-        }
     }
 
     public static int parseNumber(String number) {
@@ -115,14 +53,6 @@ public abstract class HelpUtil {
 
     public static <T> T findNotNull(T... values) {
         return Arrays.stream(values).filter(t -> t != null).findFirst().orElse(null);
-    }
-
-    public static RuntimeException newError(String format, Object... args) {
-        return new RuntimeException(String.format(format, args));
-    }
-
-    public static RuntimeException newError(Throwable cause, String format, Object... args) {
-        return new RuntimeException(String.format(format, args), cause);
     }
 
 }

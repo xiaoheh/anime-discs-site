@@ -54,20 +54,14 @@ template.helper('fm_sakura', function (number, width) {
     return format.substring(6 - width, 6 - string.length) + string;
 });
 
-template.helper("fm_sname", function (disc) {
-    var sname = disc.sname + typestr(disc["type"]);
-    return disc["amzver"] ? sname + " 卐" : sname;
-});
-
-function typestr(name) {
-    switch (name) {
-        case "BD":
-            return " ☆";
-        case "DVD":
-            return " △";
-        case "BOX":
-            return " ◎";
-        default:
-            return " ♢";
+template.helper("fm_verstr", function (disc) {
+    function typestr(disc) {
+        if (disc["dvdver"]) {
+            return disc["boxver"] ? "▲" : "△";
+        } else {
+            return disc["boxver"] ? "★" : "☆";
+        }
     }
-}
+
+    return disc["amzver"] ? typestr(disc) + " 卐" : typestr(disc);
+});

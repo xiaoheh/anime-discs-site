@@ -17,7 +17,9 @@ public class Disc extends BaseModel implements Comparable<Disc> {
     private String title;
     private String japan;
     private String sname;
-    private DiscType type;
+
+    private boolean dvdver;
+    private boolean boxver;
     private boolean amzver;
 
     private Anime anime;
@@ -65,13 +67,22 @@ public class Disc extends BaseModel implements Comparable<Disc> {
         this.sname = sname;
     }
 
-    @Column(nullable = false)
-    public DiscType getType() {
-        return type;
+    @Column
+    public boolean isDvdver() {
+        return dvdver;
     }
 
-    public void setType(DiscType type) {
-        this.type = type;
+    public void setDvdver(boolean dvdver) {
+        this.dvdver = dvdver;
+    }
+
+    @Column
+    public boolean isBoxver() {
+        return boxver;
+    }
+
+    public void setBoxver(boolean boxver) {
+        this.boxver = boxver;
     }
 
     @Column

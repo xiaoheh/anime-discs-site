@@ -22,12 +22,11 @@ import java.util.Date;
 import java.util.LinkedList;
 
 import static fands.support.Constants.TOP_100_NAME;
-import static fands.support.HelpUtil.parseType;
 
 @Service
 public class SakuraSpeedSpider {
 
-    private SimpleDateFormat updateTimeFormat = new SimpleDateFormat("yyyy年M月d日 H時m分s秒");
+    private SimpleDateFormat updateFormat = new SimpleDateFormat("yyyy年M月d日 H時m分s秒");
 
     private Logger logger = LogManager.getLogger(SakuraSpeedSpider.class);
     private Dao dao;
@@ -49,31 +48,14 @@ public class SakuraSpeedSpider {
         DiscList discList = getDiscList(table.parent().id());
         if (!updateText.equals("更新中")) {
             Date updateTime = parseUpdateTime(updateText);
-            Date speedDate = new Date();
-            if (discList.getDate() == null || discList.getDate().compareTo(updateTime) < 0) {
+            if (needUpdate(discList, updateTime)) {
                 discList.setDate(updateTime);
                 discList.setDiscs(new LinkedList<>());
                 boolean top100 = TOP_100_NAME.equals(discList.getName());
+                Season season = top100 ? null : getOrCreateSeason(discList);
 
                 table.select("tr").stream().skip(1).forEach(tr -> {
-                    String asin = tr.child(5).child(0).attr("href").substring(11);
-                    String name = nameOfDisc(tr.child(5).text());
-                    String type = tr.child(1).text();
-                    Disc disc = getDisc(asin, name, type);
-                    if (disc.getSeason() == null && !top100) {
-                        Season season = getOrCreateSeason(discList.getName());
-                        disc.setSeason(season);
-                    }
-                    dao.saveOrUpdate(disc);
-
-                    DiscSakura discSakura = getDiscSakura(disc);
-                    String[] sakuraRank = tr.child(0).text().split("/");
-                    discSakura.setCurk(HelpUtil.parseNumber(sakuraRank[0]));
-                    discSakura.setPrrk(HelpUtil.parseNumber(sakuraRank[1]));
-                    discSakura.setSpdt(speedDate);
-                    dao.saveOrUpdate(discSakura);
-
-                    discList.getDiscs().add(disc);
+                    discList.getDiscs().add(updateDisc(season, tr));
                 });
 
                 dao.saveOrUpdate(discList);
@@ -89,6 +71,27 @@ public class SakuraSpeedSpider {
         }
     }
 
+    private boolean needUpdate(DiscList discList, Date updateTime) {
+        return discList.getDate() == null || discList.getDate().compareTo(updateTime) < 0;
+    }
+
+    private Disc updateDisc(Season season, Element tr) {
+        String asin = tr.child(5).child(0).attr("href").substring(11);
+        String name = nameOfDisc(tr.child(5).text());
+        String type = tr.child(1).text();
+
+        Disc disc = getDisc(asin, name, type, season);
+        dao.saveOrUpdate(disc);
+
+        DiscSakura discSakura = getDiscSakura(disc);
+        String[] sakuraRank = tr.child(0).text().split("/");
+        discSakura.setCurk(HelpUtil.parseNumber(sakuraRank[0]));
+        discSakura.setPrrk(HelpUtil.parseNumber(sakuraRank[1]));
+        discSakura.setSpdt(new Date());
+        dao.saveOrUpdate(discSakura);
+        return disc;
+    }
+
     private DiscList getDiscList(String name) {
         if (name == null || name.isEmpty()) {
             DiscList discList = dao.lookup(DiscList.class, "name", Constants.TOP_100_NAME);
@@ -98,22 +101,38 @@ public class SakuraSpeedSpider {
         if (discList == null) {
             discList = new DiscList();
             discList.setName(name);
-            discList.setTitle(name.substring(0, 4) + "年" + name.substring(5) + "月新番");
+            discList.setTitle(titleOfList(name));
         }
         return discList;
     }
 
-    private Disc getDisc(String asin, String name, String type) {
+    private String titleOfList(String name) {
+        return name.substring(0, 4) + "年" + name.substring(5) + "月新番";
+    }
+
+    private Disc getDisc(String asin, String name, String type, Season season) {
         Disc disc = dao.lookup(Disc.class, "asin", asin);
         if (disc == null) {
             disc = new Disc();
             disc.setAsin(asin);
             disc.setJapan(name);
-            disc.setAmzver(name.startsWith("【Amazon.co.jp限定】"));
             disc.setTitle(titleOfDisc(name));
-            disc.setType(parseType(type));
+            disc.setAmzver(isAmzver(name));
+            if (type.equals("◎")) {
+                disc.setBoxver(true);
+                disc.setDvdver(!name.contains("Blu-ray"));
+            } else {
+                disc.setDvdver(type.equals("○"));
+            }
+            if (season != null) {
+                disc.setSeason(season);
+            }
         }
         return disc;
+    }
+
+    private boolean isAmzver(String name) {
+        return name.startsWith("【Amazon.co.jp限定】");
     }
 
     private DiscSakura getDiscSakura(Disc disc) {
@@ -125,11 +144,11 @@ public class SakuraSpeedSpider {
         return discSakura;
     }
 
-    private Season getOrCreateSeason(String name) {
-        Season season = dao.lookup(Season.class, "name", name);
+    private Season getOrCreateSeason(DiscList discList) {
+        Season season = dao.lookup(Season.class, "name", discList.getName());
         if (season == null) {
             season = new Season();
-            season.setName(name);
+            season.setName(discList.getTitle());
             dao.save(season);
         }
         return season;
@@ -137,7 +156,7 @@ public class SakuraSpeedSpider {
 
     private Date parseUpdateTime(String dateText) {
         try {
-            Date date = updateTimeFormat.parse(dateText);
+            Date date = updateFormat.parse(dateText);
             return DateUtils.addHours(date, -1);
         } catch (ParseException e) {
             logger.warn("不能解析该日期, 错误信息为: " + e.getMessage(), e);
@@ -154,7 +173,7 @@ public class SakuraSpeedSpider {
     private String titleOfDisc(String discName) {
         discName = discName.replace("【Blu-ray】", " [Blu-ray]");
         discName = discName.replace("【DVD】", " [DVD]");
-        if (discName.startsWith("【Amazon.co.jp限定】")) {
+        if (isAmzver(discName)) {
             discName = discName.substring(16).trim() + "【尼限定】";
         }
         discName = discName.replaceAll("\\s+", " ");

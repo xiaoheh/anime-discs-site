@@ -39,10 +39,9 @@ public class DiscAction extends fands.support.JsonAction {
         object.put("title", disc.getTitle());
         object.put("japan", disc.getJapan());
         object.put("sname", disc.getSname());
+        object.put("dvdver", disc.isDvdver());
+        object.put("boxver", disc.isBoxver());
         object.put("amzver", disc.isAmzver());
-        if (disc.getType() != null) {
-            object.put("type", disc.getType().name());
-        }
         if (disc.getShelves() != null) {
             object.put("shelves", disc.getShelves().getTime());
         }
