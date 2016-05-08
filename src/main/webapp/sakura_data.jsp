@@ -51,12 +51,33 @@
     {{/each}}
 </script>
 <script>
-
     $(function () {
-        ajax_update_page();
         handle_switch_action();
         handle_refresh_action();
+        handle_pageshow_action();
     });
+
+    function handle_switch_action() {
+        device.switch(function () {
+            if (cache.data) {
+                render_page(cache.data);
+            } else {
+                ajax_update_page();
+            }
+        });
+    }
+
+    function handle_refresh_action() {
+        navbar.refresh(ajax_update_page);
+    }
+
+    function handle_pageshow_action() {
+        $("body").get(0).onpageshow = function () {
+            setTimeout(function () {
+                navbar.refresh();
+            }, 10);
+        };
+    }
 
     function ajax_update_page() {
         $.getJSON("index.do", function (data) {
@@ -65,7 +86,6 @@
             render_page(data);
         });
     }
-
 
     function handle_data(data) {
         $(data).each(function () {
@@ -81,20 +101,6 @@
             $("#content").html(render("tables-tmpl", {lists: data}));
         }
         post_after_render();
-    }
-
-    function handle_switch_action() {
-        device.switch(function () {
-            if (cache.data) {
-                render_page(cache.data);
-            } else {
-                ajax_update_page();
-            }
-        });
-    }
-
-    function handle_refresh_action() {
-        navbar.refresh(ajax_update_page);
     }
 
     function post_before_render() {
