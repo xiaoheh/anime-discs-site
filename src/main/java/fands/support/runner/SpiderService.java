@@ -71,17 +71,17 @@ public class SpiderService {
         new Thread(() -> {
             while (true) {
                 synchronized (waitObject) {
-                    if (sakuraRunning.get() < SAKURA_MAX_CONNECT_THREAD + 1) {
-                        if (trySubmitTask(sakuraRunning, sakuraConnnect, sakura1)) continue;
-                        if (trySubmitTask(sakuraRunning, sakuraConnnect, sakura2)) continue;
-                        if (trySubmitTask(sakuraRunning, sakuraConnnect, sakura3)) continue;
-                        if (trySubmitTask(sakuraRunning, sakuraConnnect, sakura4)) continue;
-                    }
                     if (amazonRunning.get() < AMAZON_MAX_CONNECT_THREAD + 1) {
                         if (trySubmitTask(amazonRunning, amazonConnnect, amazon1)) continue;
                         if (trySubmitTask(amazonRunning, amazonConnnect, amazon2)) continue;
                         if (trySubmitTask(amazonRunning, amazonConnnect, amazon3)) continue;
                         if (trySubmitTask(amazonRunning, amazonConnnect, amazon4)) continue;
+                    }
+                    if (sakuraRunning.get() < SAKURA_MAX_CONNECT_THREAD + 1) {
+                        if (trySubmitTask(sakuraRunning, sakuraConnnect, sakura1)) continue;
+                        if (trySubmitTask(sakuraRunning, sakuraConnnect, sakura2)) continue;
+                        if (trySubmitTask(sakuraRunning, sakuraConnnect, sakura3)) continue;
+                        if (trySubmitTask(sakuraRunning, sakuraConnnect, sakura4)) continue;
                     }
                     try {
                         waitObject.wait(1000);
