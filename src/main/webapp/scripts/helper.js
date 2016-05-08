@@ -77,3 +77,8 @@ template.helper("fm_verstr", function (disc) {
 
     return disc["amzver"] ? typestr(disc) + " 卐" : typestr(disc);
 });
+
+template.helper("fm_checked", function (quick) {
+    alert
+    return quick.checked.join(",");
+});

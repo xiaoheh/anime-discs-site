@@ -131,7 +131,7 @@
     <div id="div-quick">
         {{each quick as q}}
         <label>
-            <button class="button" data-checked="{{q.checked}}">{{q.title}}</button>
+            <button class="button" data-checked="{{q.checked.join(',')}}">{{q.title}}</button>
         </label>
         {{/each}}
     </div>
@@ -239,7 +239,7 @@
         if (!device.is_small()) {
             render_profile([
                 {title: "默认中文模式", checked: ["index", "arnk", "srnk", "cupt", "title"]},
-                {title: "默认日文模式", checked: ["index", "arnk", "srnk", "cupt", "name"]},
+                {title: "默认日文模式", checked: ["index", "arnk", "srnk", "cupt", "japan"]},
                 {title: "Sakura标准模式", checked: ["index", "srnk", "cupt", "cubk", "release", "title"]},
                 {title: "Sakura预测模式", checked: ["index", "srnk", "cupt", "tapt", "sday", "capt", "release", "title"]},
                 {title: "Sakura精简模式", checked: ["srnk", "title"]},
