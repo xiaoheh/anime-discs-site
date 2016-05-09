@@ -6,7 +6,6 @@ import fands.model.Season;
 import fands.model.disc.Disc;
 import fands.model.disc.DiscSakura;
 import fands.support.Constants;
-import fands.support.HelpUtil;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.logging.log4j.*;
 import org.jsoup.nodes.Document;
@@ -22,11 +21,13 @@ import java.util.Date;
 import java.util.LinkedList;
 
 import static fands.support.Constants.TOP_100_NAME;
+import static fands.support.HelpUtil.parseNumber;
 
 @Service
 public class SakuraSpeedSpider {
 
     private SimpleDateFormat updateFormat = new SimpleDateFormat("yyyy年M月d日 H時m分s秒");
+    private SimpleDateFormat releaseFormat = new SimpleDateFormat("yyyy/MM/dd");
 
     private Logger logger = LogManager.getLogger(SakuraSpeedSpider.class);
     private Dao dao;
@@ -79,14 +80,17 @@ public class SakuraSpeedSpider {
         String asin = tr.child(5).child(0).attr("href").substring(11);
         String name = nameOfDisc(tr.child(5).text());
         String type = tr.child(1).text();
+        Date date = parseReleaseDate(tr.child(4).text());
 
-        Disc disc = getDisc(asin, name, type, season);
+        Disc disc = getDisc(asin, name, type, date, season);
         dao.saveOrUpdate(disc);
 
         DiscSakura discSakura = getDiscSakura(disc);
         String[] sakuraRank = tr.child(0).text().split("/");
-        discSakura.setCurk(HelpUtil.parseNumber(sakuraRank[0]));
-        discSakura.setPrrk(HelpUtil.parseNumber(sakuraRank[1]));
+        discSakura.setCurk(parseNumber(sakuraRank[0]));
+        discSakura.setPrrk(parseNumber(sakuraRank[1]));
+        discSakura.setCupt(parseNumber(tr.child(2).text()));
+        discSakura.setCubk(parseNumber(tr.child(3).text()));
         discSakura.setSpdt(new Date());
         dao.saveOrUpdate(discSakura);
         return disc;
@@ -110,13 +114,14 @@ public class SakuraSpeedSpider {
         return name.substring(0, 4) + "年" + name.substring(5) + "月新番";
     }
 
-    private Disc getDisc(String asin, String name, String type, Season season) {
+    private Disc getDisc(String asin, String name, String type, Date date, Season season) {
         Disc disc = dao.lookup(Disc.class, "asin", asin);
         if (disc == null) {
             disc = new Disc();
             disc.setAsin(asin);
             disc.setJapan(name);
             disc.setTitle(titleOfDisc(name));
+            disc.setRelease(date);
             disc.setAmzver(isAmzver(name));
             if (type.equals("◎")) {
                 disc.setBoxver(true);
@@ -157,6 +162,16 @@ public class SakuraSpeedSpider {
     private Date parseUpdateTime(String dateText) {
         try {
             Date date = updateFormat.parse(dateText);
+            return DateUtils.addHours(date, -1);
+        } catch (ParseException e) {
+            logger.warn("不能解析该日期, 错误信息为: " + e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Date parseReleaseDate(String dateText) {
+        try {
+            Date date = releaseFormat.parse(dateText);
             return DateUtils.addHours(date, -1);
         } catch (ParseException e) {
             logger.warn("不能解析该日期, 错误信息为: " + e.getMessage(), e);
