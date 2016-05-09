@@ -89,4 +89,5 @@ public class ProxyService {
     public Set<ProxyHost> getErrors() {
         return errors;
     }
+    
 }
