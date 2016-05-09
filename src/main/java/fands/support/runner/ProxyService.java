@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProxyService {
@@ -53,25 +54,28 @@ public class ProxyService {
     }
 
     public synchronized void updateProxyHost() {
-        ArrayList<ProxyHost> proxyHosts = new ArrayList<>();
-        proxyHosts.addAll(proxys);
-        proxyHosts.addAll(errors);
-        proxyHosts.forEach(dao::saveOrUpdate);
+        List<ProxyHost> errorList = proxys.stream()
+                .filter(this::isErrorHost)
+                .collect(Collectors.toList());
+        proxys.removeAll(errorList);
+        errors.addAll(errorList);
+        proxys.forEach(dao::saveOrUpdate);
+        errors.forEach(dao::saveOrUpdate);
     }
 
-    public synchronized ProxyHost getProxyHost() {
-        ArrayList<ProxyHost> proxyHosts = new ArrayList<>(proxys);
-        proxyHosts.removeIf(ph -> !isTimeout(ph.getDate()));
-        if (proxyHosts.isEmpty()) {
+    public synchronized ProxyHost getProxyHost(int errorCount) {
+        List<ProxyHost> list = proxys.stream()
+                .filter(ph -> isTimeout(ph.getDate()))
+                .filter(ph -> !isErrorHost(ph))
+                .sorted((o1, o2) -> o2.getRight() - o1.getRight())
+                .collect(Collectors.toList());
+        if (list.isEmpty()) {
             return null;
         }
-        ProxyHost proxyHost = proxyHosts.get(new Random().nextInt(proxyHosts.size()));
-        if (isErrorHost(proxyHost)) {
-            proxys.remove(proxyHost);
-            errors.add(proxyHost);
-            return getProxyHost();
-        }
-        return proxyHost;
+        int range = list.size() / (errorCount + 1);
+        int index = new Random().nextInt(range);
+        logger.printf(Level.DEBUG, "获取代理: range: %d, index: %d", range, index);
+        return list.get(index);
     }
 
     private boolean isTimeout(Date date) {

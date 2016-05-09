@@ -79,6 +79,10 @@ public class SpiderTask {
         return url;
     }
 
+    public List<Throwable> getErrors() {
+        return errors;
+    }
+
     public boolean equals(Object object) {
         if (object == this) {
             return true;

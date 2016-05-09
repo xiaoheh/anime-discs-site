@@ -147,7 +147,7 @@ public class SpiderService {
                 ProxyHost proxyHost = null;
                 try {
                     if (task.getUrl().startsWith("http://rankstker.net/")) {
-                        proxyHost = proxyService.getProxyHost();
+                        proxyHost = proxyService.getProxyHost(task.getErrors().size());
                         if (proxyHost == null) {
                             tryReConnect(taskList, task, null);
                         }
