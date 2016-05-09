@@ -36,12 +36,12 @@
             <td class="index hidden-xxm" data-number="{{idx2+1}}">{{idx2+1}}</td>
             <td class="index hidden-xxm zero-width">)</td>
             {{if disc.arnk != disc.curk}}
-            <td class="rank danger" data-number="{{disc.arnk}}">{{disc.arnk | fm_sakura}}/{{disc.curk | fm_sakura}}</td>
+            <td class="rank danger" data-number="{{disc.arnk}}">{{disc.arnk | fm_star}}/{{disc.curk | fm_star}}</td>
             {{else}}
-            <td class="rank" data-number="{{disc.curk}}">{{disc.curk | fm_sakura}}/{{disc.prrk | fm_sakura}}</td>
+            <td class="rank" data-number="{{disc.curk}}">{{disc.curk | fm_star}}/{{disc.prrk | fm_star}}</td>
             {{/if}}
             <td class="cupt hidden-xxs zero-width">(</td>
-            <td class="cupt hidden-xxs" data-number="{{disc.cupt}}">{{disc.cupt | fm_sakura:6}}</td>
+            <td class="cupt hidden-xxs" data-number="{{disc.cupt}}">{{disc.cupt | fm_star:6}}</td>
             <td class="cupt hidden-xxs zero-width"> pt)</td>
             <td class="sname"><a href="view_disc.jsp?id={{disc.id}}">{{disc.sname}} {{disc | fm_verstr}}</a></td>
         </tr>
@@ -57,7 +57,7 @@
         <caption>
             <span><b>{{list.title}}</b></span>
             {{if list.time}}
-            <span>更新时间: {{list.time | dateFormat:"yyyy-MM-dd hh:mm:ss"}}</span>
+            <span>更新时间: {{list.time | fm_date:"yyyy-MM-dd hh:mm:ss"}}</span>
             <span>(距离现在 {{list.time | fm_timeout}})</span>
             {{/if}}
         </caption>
@@ -84,21 +84,20 @@
         <tr>
             <td class="index" data-number="{{idx2+1}}">{{idx2+1}}</td>
             <td class="arnk" data-number="{{disc.arnk}}">
-                <a href="http://www.amazon.co.jp/dp/{{disc.asin}}" target="_blank">{{disc.arnk}}位</a>
+                <a href="http://www.amazon.co.jp/dp/{{disc.asin}}" target="_blank">{{disc.arnk | fm_number}}位</a>
             </td>
             <td class="atot" data-number="{{disc.amdt}}">{{disc.amdt | fm_timeout}}</td>
-            <td class="srnk" data-number="{{disc.curk}}">
-                <a href="http://rankstker.net/show.cgi?n={{disc.asin}}" target="_blank">
-                    {{disc.curk | fm_sakura:6}}位/{{disc.prrk | fm_sakura:6}}位</a>
+            <td class="srnk" data-number="{{disc.curk}}"><a href="http://rankstker.net/show.cgi?n={{disc.asin}}"
+                   target="_blank">{{disc.curk | fm_sakura:6}}位/{{disc.prrk | fm_sakura:6}}位</a>
             </td>
             <td class="cupt" data-number="{{disc.cupt}}">{{disc.cupt | fm_sakura:6}} pt</td>
-            <td class="capt" data-number="{{disc.capt}}">{{disc.capt | fm_sakura:6}} pt</td>
-            <td class="tapt" data-number="{{disc.tapt}}">{{disc.tapt | fm_sakura:4}} pt</td>
+            <td class="capt" data-number="{{disc.capt}}">{{disc.capt | fm_number}} pt</td>
+            <td class="tapt" data-number="{{disc.tapt}}">{{disc.tapt | fm_number}} pt</td>
             <td class="sday" data-number="{{disc.sday}}">{{disc.sday}}天</td>
             <td class="cubk" data-number="{{disc.cubk}}">{{disc.cubk | fm_sakura:4}}预约</td>
             <td class="stot" data-number="{{disc.skdt}}">{{disc.skdt | fm_timeout}}</td>
-            <td class="shelves" data-number="{{disc.shelves}}">{{disc.shelves | dateFormat:"yyyy-MM-dd"}}</td>
-            <td class="release" data-number="{{disc.release}}">{{disc.release | dateFormat:"yyyy-MM-dd"}}</td>
+            <td class="shelves" data-number="{{disc.shelves}}">{{disc.shelves | fm_date:"yyyy-MM-dd"}}</td>
+            <td class="release" data-number="{{disc.release}}">{{disc.release | fm_date:"yyyy-MM-dd"}}</td>
             <td class="japan">
                 <a href="view_disc.jsp?id={{disc.id}}">{{disc.japan}}</a>
             </td>
