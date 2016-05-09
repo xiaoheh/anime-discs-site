@@ -34,31 +34,20 @@ public class AutoRunner {
     private AmazonSpeedSpider amazonSpeedSpider;
     private SakuraDiscSpider sakuraDiscSpider;
     private AmazonDiscSpider amazonDiscSpider;
-    private ProxyHostSpider proxyHostSpider;
 
     @PostConstruct
     public void startAutoRunner() {
         /**
          * 任务添加线程
          */
-        newTimerSchedule("Sakura速报", 2, 60, this::addUpdateProxyHostTask);
         newTimerSchedule("Sakura速报", 5, 60, this::addUpdateSakuraSpeedTask);
-        newTimerSchedule("Sakura碟片", 10, 240, () -> addUpdateSakuraHotTask(120));
-        newTimerSchedule("Sakura碟片", 12, 900, () -> addUpdateSakuraExtTask(450));
-        newTimerSchedule("Sakura碟片", 14, 1800, () -> addUpdateSakuraAllTask(900));
+//        newTimerSchedule("Sakura碟片", 10, 240, () -> addUpdateSakuraHotTask(120));
+//        newTimerSchedule("Sakura碟片", 12, 900, () -> addUpdateSakuraExtTask(450));
+//        newTimerSchedule("Sakura碟片", 14, 1800, () -> addUpdateSakuraAllTask(900));
         newTimerSchedule("Amazon速报", 16, 60, this::addUpdateAmazonSpeedTask);
         newTimerSchedule("Amazon碟片", 18, 60, () -> addUpdateAmazonHotTask(30));
         newTimerSchedule("Amazon碟片", 20, 180, () -> addUpdateAmazonExtTask(90));
         newTimerSchedule("Amazon碟片", 22, 1800, () -> addUpdateAmazonAllTask(900));
-    }
-
-    private void addUpdateProxyHostTask() {
-        String xicidaili = "http://www.xicidaili.com";
-        logger.info("开始更新代理服务器数据");
-        spiderService.getAmazon1().add(new SpiderTask(xicidaili, () -> true, document -> {
-            proxyHostSpider.parseDocument(document);
-            logger.info("成功更新代理服务器数据");
-        }));
     }
 
     private void addUpdateSakuraSpeedTask() {
@@ -215,11 +204,6 @@ public class AutoRunner {
     @Autowired
     public void setAmazonDiscSpider(AmazonDiscSpider amazonDiscSpider) {
         this.amazonDiscSpider = amazonDiscSpider;
-    }
-
-    @Autowired
-    public void setProxyHostSpider(ProxyHostSpider proxyHostSpider) {
-        this.proxyHostSpider = proxyHostSpider;
     }
 
 }

@@ -11,8 +11,6 @@ public class DiscAction extends fands.support.JsonAction {
     private Long id;
     private String title;
     private String sname;
-    private String type;
-    private boolean amzver;
 
     @Autowired
     public void setDao(Dao dao) {

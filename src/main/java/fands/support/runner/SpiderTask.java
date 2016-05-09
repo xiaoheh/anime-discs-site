@@ -1,13 +1,11 @@
 package fands.support.runner;
 
-import fands.model.ProxyHost;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
-import java.net.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -30,39 +28,13 @@ public class SpiderTask {
         this.errors = new LinkedList<>();
     }
 
-    public void doConnect(ProxyHost proxyHost) throws IOException {
+    public void doConnect() throws IOException {
         if (test.get()) {
-            if (proxyHost == null) {
-                document = Jsoup.connect(url)
-                        .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/601.5.17 (KHTML, like Gecko) Version/9.1 Safari/601.5.17")
-                        .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
-                        .get();
-            } else {
-                URLConnection connection = buildConnection(proxyHost);
-                document = Jsoup.parse(connection.getInputStream(), "Shift-JIS", url);
-                checkProxyStauts(proxyHost);
-            }
+            document = Jsoup.connect(url)
+                    .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/601.5.17 (KHTML, like Gecko) Version/9.1 Safari/601.5.17")
+                    .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+                    .get();
             errors.clear();
-        }
-    }
-
-    private URLConnection buildConnection(ProxyHost proxyHost) throws IOException {
-        InetSocketAddress addr = new InetSocketAddress(proxyHost.getHost(), proxyHost.getPort());
-        Proxy proxy = new Proxy(Proxy.Type.HTTP, addr);
-        URLConnection connection = new URL(url).openConnection(proxy);
-//        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/601.5.17 (KHTML, like Gecko) Version/9.1 Safari/601.5.17");
-//        connection.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-        connection.setConnectTimeout(10000);
-        connection.setReadTimeout(10000);
-        return connection;
-    }
-
-    private void checkProxyStauts(ProxyHost proxyHost) {
-        if (document.select("a").first().attr("href").equals("http://www27392u.sakura.ne.jp/")) {
-            proxyHost.updateBaned();
-            throw new RuntimeException("该代理已被封锁: " + proxyHost.getHost());
-        } else {
-            proxyHost.updateRight();
         }
     }
 

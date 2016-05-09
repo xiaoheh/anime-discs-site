@@ -1,9 +1,7 @@
 package fands.support.runner;
 
-import fands.model.ProxyHost;
 import fands.support.HelpUtil;
 import org.apache.logging.log4j.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class SpiderService {
 
-    private static final int SAKURA_MAX_CONNECT_THREAD = 10;
+    private static final int SAKURA_MAX_CONNECT_THREAD = 2;
     private static final int AMAZON_MAX_CONNECT_THREAD = 2;
 
     private Logger logger = LogManager.getLogger(SpiderService.class);
@@ -41,12 +39,6 @@ public class SpiderService {
 
     private long startupTimestamp = System.currentTimeMillis();
     private final Object waitObject = new Object();
-    private ProxyService proxyService;
-
-    @Autowired
-    public void setProxyService(ProxyService proxyService) {
-        this.proxyService = proxyService;
-    }
 
     @PostConstruct
     public void initSpiderService() {
@@ -57,8 +49,6 @@ public class SpiderService {
          */
         newTimerSchedule(0, 30, () -> {
             String timeout = HelpUtil.formatTimeout(startupTimestamp);
-            logger.printf(Level.INFO, "(%s): proxy service proxys: %d, errors: %d",
-                    timeout, proxyService.getProxys().size(), proxyService.getErrors().size());
             logger.printf(Level.INFO, "(%s): schedule sakura task1: %d, task2: %d, task3: %d, task4: %d",
                     timeout, sakura1.size(), sakura2.size(), sakura3.size(), sakura4.size());
             logger.printf(Level.INFO, "(%s): schedule amazon task1: %d, task2: %d, task3: %d, task4: %d",
@@ -144,27 +134,12 @@ public class SpiderService {
             taskCount.incrementAndGet();
             SpiderTask task = taskList.remove(0);
             connect.execute(() -> {
-                ProxyHost proxyHost = null;
                 try {
-                    if (task.getUrl().startsWith("http://rankstker.net/")) {
-                        proxyHost = proxyService.getProxyHost(task.getErrors().size());
-                        if (proxyHost == null) {
-                            tryReConnect(taskList, task, null);
-                        }
-                        task.doConnect(proxyHost);
-                    } else {
-                        task.doConnect(null);
-                    }
+                    task.doConnect();
                     addExecuteTask(task);
                 } catch (IOException e) {
-                    if (proxyHost != null) {
-                        proxyHost.updateError();
-                    }
                     tryReConnect(taskList, task, e);
                 } catch (Exception e) {
-                    if (proxyHost != null) {
-                        proxyHost.updateError();
-                    }
                     logger.printf(Level.WARN, "connect service throws exception: %s %s", e.getClass(), e.getMessage());
                     logger.debug("connect service throws exception:", e);
                 } finally {
