@@ -90,9 +90,6 @@ public class SakuraDiscSpider {
         if (matcher.find()) {
             discSakura.setCubk(Integer.parseInt(matcher.group(1)));
             discSakura.setPrbk(Integer.parseInt(matcher.group(2)));
-        } else {
-            discSakura.setCubk(-1);
-            discSakura.setPrbk(-1);
         }
     }
 
@@ -101,17 +98,13 @@ public class SakuraDiscSpider {
         Matcher matcher = cuptPattern.matcher(text);
         if (matcher.find()) {
             discSakura.setCupt(Integer.parseInt(matcher.group(1)));
-        } else {
-            discSakura.setCupt(-1);
         }
     }
 
     private void updatePrpt(Document document, DiscSakura discSakura, Date release) {
         String text = document.select("#ptdatatab textarea").text();
         String[] split = text.split("\n");
-        if (split.length == 0) {
-            discSakura.setPrpt(-1);
-        } else if (split.length == 1) {
+        if (split.length < 2) {
             discSakura.setPrpt(0);
         } else {
             discSakura.setPrpt(findPrpt(split, release));
@@ -131,8 +124,9 @@ public class SakuraDiscSpider {
         Matcher matcher = prptPattern.matcher(text);
         if (matcher.find()) {
             return parseNumber(matcher.group(2));
+        } else {
+            return 0;
         }
-        return 0;
     }
 
     private void updateCapt(Document document, DiscSakura discSakura, Date release) {
@@ -142,7 +136,6 @@ public class SakuraDiscSpider {
             discSakura.setCapt(parseNumber(matcher.group(1)));
             discSakura.setSday(parseNumber(matcher.group(2)));
         } else {
-            discSakura.setCapt(-1);
             discSakura.setSday(getSday(release));
         }
     }
