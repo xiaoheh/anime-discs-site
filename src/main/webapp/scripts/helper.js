@@ -68,13 +68,9 @@ template.helper('fm_star', function (number, width) {
 
 function fm_star(number, width) {
     width = width || 4;
-    var nodata = "无数据";
     var zerofm = "------";
     var format = "******";
-    if (!number || number < 0) {
-        return nodata;
-    }
-    if (number == 0) {
+    if (!number || number <= 0) {
         return zerofm.substr(zerofm.length - width, width);
     }
     var string = number + "";
@@ -111,13 +107,9 @@ template.helper('fm_sakura', function (number, width) {
 function fm_sakura(number, width) {
     width = width || 4;
     width = width > 3 ? width + 1 : width;
-    var nodata = "无数据";
     var zerofm = "---,---";
     var format = "***,***";
-    if (!number || number < 0) {
-        return nodata;
-    }
-    if (number == 0) {
+    if (!number || number <= 0) {
         return zerofm.substr(zerofm.length - width, width);
     }
     var string = fm_number(number, "###,###");
