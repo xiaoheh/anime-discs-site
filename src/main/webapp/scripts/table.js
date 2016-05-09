@@ -7,7 +7,7 @@ function render_profile(quick) {
 
     function scan_hidden() {
         var hidden = [];
-        $("table").first().find("th").each(function () {
+        $("table").first().find("th").not(".zero-width").each(function () {
             hidden.push({
                 clazz: $(this).prop("class").split(" ")[0],
                 title: $(this).text()

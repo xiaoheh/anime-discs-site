@@ -64,14 +64,19 @@
         <thead>
         <tr>
             <th class="index sorter">序号</th>
+            <th class="index zero-width"></th>
             <th class="arnk sorter">Amazon</th>
             <th class="atot sorter">更新时间</th>
             <th class="srnk sorter">当前/前回</th>
+            <th class="cupt zero-width"></th>
             <th class="cupt sorter">累积PT</th>
+            <th class="cupt zero-width"></th>
             <th class="capt sorter">预测PT</th>
             <th class="tapt sorter">新增PT</th>
             <th class="sday sorter">剩余天数</th>
+            <th class="cubk zero-width"></th>
             <th class="cubk sorter">Nico预约</th>
+            <th class="cubk zero-width"></th>
             <th class="stot sorter">更新时间</th>
             <th class="shelves sorter">上架日期</th>
             <th class="release sorter">发售日期</th>
@@ -83,6 +88,7 @@
         {{each list.discs as disc idx2}}
         <tr>
             <td class="index" data-number="{{idx2+1}}">{{idx2+1}}</td>
+            <td class="index zero-width">)</td>
             <td class="arnk" data-number="{{disc.arnk}}">
                 <a href="http://www.amazon.co.jp/dp/{{disc.asin}}" target="_blank">{{disc.arnk | fm_number}}位</a>
             </td>
@@ -90,14 +96,18 @@
             <td class="srnk" data-number="{{disc.curk}}"><a href="http://rankstker.net/show.cgi?n={{disc.asin}}"
                    target="_blank">{{disc.curk | fm_sakura:6}}位/{{disc.prrk | fm_sakura:6}}位</a>
             </td>
+            <td class="cupt zero-width">(</td>
             <td class="cupt" data-number="{{disc.cupt}}">{{disc.cupt | fm_sakura:6}} pt</td>
+            <td class="cupt zero-width">)</td>
             <td class="capt" data-number="{{disc.capt}}">{{disc.capt | fm_number}} pt</td>
             <td class="tapt" data-number="{{disc.tapt}}">{{disc.tapt | fm_number}} pt</td>
             <td class="sday" data-number="{{disc.sday}}">{{disc.sday}}天</td>
-            <td class="cubk" data-number="{{disc.cubk}}">{{disc.cubk | fm_sakura:4}}预约</td>
+            <td class="cubk zero-width">[</td>
+            <td class="cubk" data-number="{{disc.cubk}}">{{disc.cubk | fm_sakura:4}} 预约</td>
+            <td class="cubk zero-width">]</td>
             <td class="stot" data-number="{{disc.skdt}}">{{disc.skdt | fm_timeout}}</td>
-            <td class="shelves" data-number="{{disc.shelves}}">{{disc.shelves | fm_date:"yyyy-MM-dd"}}</td>
-            <td class="release" data-number="{{disc.release}}">{{disc.release | fm_date:"yyyy-MM-dd"}}</td>
+            <td class="shelves" data-number="{{disc.shelves}}">{{disc.shelves | fm_date:"yyyy/MM/dd"}}</td>
+            <td class="release" data-number="{{disc.release}}">{{disc.release | fm_date:"yyyy/MM/dd"}}</td>
             <td class="japan">
                 <a href="view_disc.jsp?id={{disc.id}}">{{disc.japan}}</a>
             </td>
