@@ -79,7 +79,7 @@ public class ProxyService {
     }
 
     private boolean isTimeout(Date date) {
-        return date == null || date.getTime() + 15000 < System.currentTimeMillis();
+        return date == null || date.getTime() + 60000 < System.currentTimeMillis();
     }
 
     public Set<ProxyHost> getProxys() {
