@@ -7,4 +7,10 @@
     <constant name="struts.action.extension" value="do"/>
 
     <include file="struts-json.xml"/>
+
+    <package name="default" extends="struts-default">
+        <action name="index" class="fands.action.IndexAction">
+            <result type="redirect">/sakura_data.jsp</result>
+        </action>
+    </package>
 </struts>

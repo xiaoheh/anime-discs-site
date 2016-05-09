@@ -43,8 +43,8 @@ public class AutoRunner {
          */
         newTimerSchedule("Sakura速报", 2, 60, this::addUpdateProxyHostTask);
         newTimerSchedule("Sakura速报", 5, 60, this::addUpdateSakuraSpeedTask);
-        newTimerSchedule("Sakura碟片", 10, 120, () -> addUpdateSakuraHotTask(60));
-        newTimerSchedule("Sakura碟片", 12, 300, () -> addUpdateSakuraExtTask(150));
+        newTimerSchedule("Sakura碟片", 10, 240, () -> addUpdateSakuraHotTask(120));
+        newTimerSchedule("Sakura碟片", 12, 900, () -> addUpdateSakuraExtTask(450));
         newTimerSchedule("Sakura碟片", 14, 1800, () -> addUpdateSakuraAllTask(900));
         newTimerSchedule("Amazon速报", 16, 60, this::addUpdateAmazonSpeedTask);
         newTimerSchedule("Amazon碟片", 18, 60, () -> addUpdateAmazonHotTask(30));

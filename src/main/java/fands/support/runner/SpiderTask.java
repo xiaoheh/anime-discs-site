@@ -50,8 +50,8 @@ public class SpiderTask {
         InetSocketAddress addr = new InetSocketAddress(proxyHost.getHost(), proxyHost.getPort());
         Proxy proxy = new Proxy(Proxy.Type.HTTP, addr);
         URLConnection connection = new URL(url).openConnection(proxy);
-        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/601.5.17 (KHTML, like Gecko) Version/9.1 Safari/601.5.17");
-        connection.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+//        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/601.5.17 (KHTML, like Gecko) Version/9.1 Safari/601.5.17");
+//        connection.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
         connection.setConnectTimeout(10000);
         connection.setReadTimeout(10000);
         return connection;
