@@ -48,7 +48,7 @@ public class SakuraSpeedSpider {
     private void updateDiscList(Element table, String updateText) {
         DiscList discList = getDiscList(table.parent().id());
         if (!updateText.equals("更新中")) {
-            Date updateTime = parseUpdateTime(updateText);
+            Date updateTime = DateUtils.addHours(parseDate(updateFormat, updateText), -1);
             if (needUpdate(discList, updateTime)) {
                 discList.setDate(updateTime);
                 discList.setDiscs(new LinkedList<>());
@@ -80,7 +80,11 @@ public class SakuraSpeedSpider {
         String asin = tr.child(5).child(0).attr("href").substring(11);
         String name = nameOfDisc(tr.child(5).text());
         String type = tr.child(1).text();
-        Date date = parseReleaseDate(tr.child(4).text());
+        String dateText = tr.child(4).text();
+        if (dateText.length() == 8) {
+            dateText += "20";
+        }
+        Date date = parseDate(releaseFormat, dateText);
 
         Disc disc = getDisc(asin, name, type, date, season);
         dao.saveOrUpdate(disc);
@@ -159,20 +163,9 @@ public class SakuraSpeedSpider {
         return season;
     }
 
-    private Date parseUpdateTime(String dateText) {
+    private Date parseDate(SimpleDateFormat dateFormat, String dateText) {
         try {
-            Date date = updateFormat.parse(dateText);
-            return DateUtils.addHours(date, -1);
-        } catch (ParseException e) {
-            logger.warn("不能解析该日期, 错误信息为: " + e.getMessage(), e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    private Date parseReleaseDate(String dateText) {
-        try {
-            Date date = releaseFormat.parse(dateText);
-            return DateUtils.addHours(date, -1);
+            return dateFormat.parse(dateText);
         } catch (ParseException e) {
             logger.warn("不能解析该日期, 错误信息为: " + e.getMessage(), e);
             throw new RuntimeException(e);
