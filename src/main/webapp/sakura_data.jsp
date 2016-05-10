@@ -43,7 +43,9 @@
             <td class="cupt hidden-xxs zero-width">(</td>
             <td class="cupt hidden-xxs" data-number="{{disc.cupt}}">{{disc.cupt | fm_star:6}}</td>
             <td class="cupt hidden-xxs zero-width"> pt)</td>
-            <td class="sname"><a href="view_disc.jsp?id={{disc.id}}">{{disc.sname}} {{disc | fm_verstr}}</a></td>
+            <td class="sname">
+                <a href="${param.admin?"edit":"view"}_disc.jsp?id={{disc.id}}">{{disc.sname}} {{disc | fm_verstr}}</a>
+            </td>
         </tr>
         {{/if}}
         {{/each}}
@@ -89,23 +91,22 @@
                 <a href="http://www.amazon.co.jp/dp/{{disc.asin}}" target="_blank">{{disc.arnk | fm_number}}位</a>
             </td>
             <td class="atot" data-number="{{disc.amdt}}">{{disc.amdt | fm_timeout}}</td>
-            <td class="srnk" data-number="{{disc.curk}}"><a href="http://rankstker.net/show.cgi?n={{disc.asin}}"
-                                                            target="_blank">{{disc.curk | fm_sakura:6}}位/{{disc.prrk |
-                fm_sakura:6}}位</a>
+            <td class="srnk" data-number="{{disc.curk}}">
+                <a href="http://rankstker.net/show.cgi?n={{disc.asin}}" target="_blank">{{disc | fm_srnk}}</a>
             </td>
             <td class="cupt zero-width">(</td>
-            <td class="cupt" data-number="{{disc.cupt}}">{{disc.cupt | fm_sakura:6}} pt</td>
+            <td class="cupt" data-number="{{disc.cupt}}">{{disc.cupt | fm_sakura}} pt</td>
             <td class="cupt zero-width">)</td>
             <td class="sday" data-number="{{disc.sday}}">{{disc.sday}}天</td>
             <td class="cubk zero-width">[</td>
-            <td class="cubk" data-number="{{disc.cubk}}">{{disc.cubk | fm_sakura:4}} 预约</td>
+            <td class="cubk" data-number="{{disc.cubk}}">{{disc.cubk | fm_number}} 预约</td>
             <td class="cubk zero-width">]</td>
             <td class="release" data-number="{{disc.release}}">{{disc.release | fm_date:"yyyy/MM/dd"}}</td>
             <td class="japan">
-                <a href="view_disc.jsp?id={{disc.id}}">{{disc.japan}}</a>
+                <a href="${param.admin?"edit":"view"}_disc.jsp?id={{disc.id}}">{{disc.japan}}</a>
             </td>
             <td class="title">
-                <a href="view_disc.jsp?id={{disc.id}}">{{disc.title}}</a>
+                <a href="${param.admin?"edit":"view"}_disc.jsp?id={{disc.id}}">{{disc.title}}</a>
             </td>
         </tr>
         {{/each}}

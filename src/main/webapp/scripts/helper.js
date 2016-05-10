@@ -62,25 +62,6 @@ function fm_timeout(time) {
     }
 }
 
-template.helper('fm_star', function (number, width) {
-    return fm_star(number, width);
-});
-
-function fm_star(number, width) {
-    width = width || 4;
-    var zerofm = "------";
-    var format = "******";
-    if (!number || number <= 0) {
-        return zerofm.substr(zerofm.length - width, width);
-    }
-    var string = number + "";
-    return format.substr(format.length - width, width - string.length) + string;
-}
-
-template.helper("fm_number", function (number, format) {
-    return fm_number(number, format);
-});
-
 function fm_number(number, format) {
     format = format || "###,###";
     var result = "";
@@ -105,7 +86,7 @@ template.helper('fm_sakura', function (number, width) {
 });
 
 function fm_sakura(number, width) {
-    width = width || 4;
+    width = width || 6;
     width = width > 3 ? width + 1 : width;
     var zerofm = "---,---";
     var format = "***,***";
@@ -116,9 +97,29 @@ function fm_sakura(number, width) {
     return format.substr(format.length - width, width - string.length) + string;
 }
 
+template.helper('fm_star', function (number, width) {
+    return fm_star(number, width);
+});
+
+function fm_star(number, width) {
+    width = width || 4;
+    var zerofm = "------";
+    var format = "******";
+    if (!number || number <= 0) {
+        return zerofm.substr(zerofm.length - width, width);
+    }
+    var string = number + "";
+    return format.substr(format.length - width, width - string.length) + string;
+}
+
+template.helper("fm_number", function (number, format) {
+    return fm_number(number, format);
+});
+
 template.helper("fm_verstr", function (disc) {
     return fm_verstr(disc);
 });
+
 
 function fm_verstr(disc) {
     return disc["amzver"] ? fm_type(disc) + " 卐" : fm_type(disc);
@@ -134,4 +135,12 @@ function fm_type(disc) {
     } else {
         return disc["boxver"] ? "★" : "☆";
     }
+}
+
+template.helper("fm_srnk", function (disc) {
+    return fm_srnk(disc);
+});
+
+function fm_srnk(disc) {
+    return fm_sakura(disc["curk"]) + "位/" + fm_sakura(disc["prrk"]) + "位";
 }
