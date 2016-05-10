@@ -13,7 +13,7 @@
         <input type="hidden" id="id" value="{{id}}">
         <div class="form-group">
             <label for="title">碟片标题</label>
-            <input type="text" class="form-control" id="title" disabled="disabled" value="{{title}}">
+            <input type="text" class="form-control" id="title" value="{{title}}">
         </div>
         <div class="form-group">
             <label for="japan">日文原名</label>
@@ -21,7 +21,7 @@
         </div>
         <div class="form-group">
             <label for="sname">简短名称</label>
-            <input type="text" class="form-control" id="sname" disabled="disabled" value="{{sname}}">
+            <input type="text" class="form-control" id="sname" value="{{sname}}">
         </div>
         <div class="form-group">
             <label for="dvdver">碟片类型</label>
@@ -46,6 +46,7 @@
         </div>
     </form>
     <div class="button-group">
+        <button type="button" class="btn btn-primary">提交</button>
         <button type="button" class="btn btn-default">返回</button>
         <span id="msg"></span>
     </div>
@@ -58,11 +59,29 @@
             $content.find("select").each(function () {
                 $(this).val($(this).data("value"));
             });
+            $content.find(".btn-primary").click(function () {
+                update_disc();
+            });
             $content.find(".btn-default").click(function () {
                 page.back();
             });
         });
     });
+
+    function update_disc() {
+        form.info("提交中...");
+        $.post("update_disc.do", {
+            id: $("#id").val(),
+            title: $("#title").val(),
+            sname: $("#sname").val()
+        }, function (data) {
+            if (data == "success") {
+                form.success("提交成功");
+            } else {
+                form.danger("提交失败: " + data.error);
+            }
+        });
+    }
 </script>
 </body>
 </html>
