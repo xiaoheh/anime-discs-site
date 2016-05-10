@@ -71,14 +71,10 @@
             <th class="cupt zero-width"></th>
             <th class="cupt sorter">累积PT</th>
             <th class="cupt zero-width"></th>
-            <th class="capt sorter">预测PT</th>
-            <th class="tapt sorter">新增PT</th>
             <th class="sday sorter">剩余天数</th>
             <th class="cubk zero-width"></th>
             <th class="cubk sorter">Nico预约</th>
             <th class="cubk zero-width"></th>
-            <th class="stot sorter">更新时间</th>
-            <th class="shelves sorter">上架日期</th>
             <th class="release sorter">发售日期</th>
             <th class="japan sorter">日文原名</th>
             <th class="title sorter">碟片标题</th>
@@ -94,19 +90,16 @@
             </td>
             <td class="atot" data-number="{{disc.amdt}}">{{disc.amdt | fm_timeout}}</td>
             <td class="srnk" data-number="{{disc.curk}}"><a href="http://rankstker.net/show.cgi?n={{disc.asin}}"
-                   target="_blank">{{disc.curk | fm_sakura:6}}位/{{disc.prrk | fm_sakura:6}}位</a>
+                                                            target="_blank">{{disc.curk | fm_sakura:6}}位/{{disc.prrk |
+                fm_sakura:6}}位</a>
             </td>
             <td class="cupt zero-width">(</td>
             <td class="cupt" data-number="{{disc.cupt}}">{{disc.cupt | fm_sakura:6}} pt</td>
             <td class="cupt zero-width">)</td>
-            <td class="capt" data-number="{{disc.capt}}">{{disc.capt | fm_number}} pt</td>
-            <td class="tapt" data-number="{{disc.tapt}}">{{disc.tapt | fm_number}} pt</td>
             <td class="sday" data-number="{{disc.sday}}">{{disc.sday}}天</td>
             <td class="cubk zero-width">[</td>
             <td class="cubk" data-number="{{disc.cubk}}">{{disc.cubk | fm_sakura:4}} 预约</td>
             <td class="cubk zero-width">]</td>
-            <td class="stot" data-number="{{disc.skdt}}">{{disc.skdt | fm_timeout}}</td>
-            <td class="shelves" data-number="{{disc.shelves}}">{{disc.shelves | fm_date:"yyyy/MM/dd"}}</td>
             <td class="release" data-number="{{disc.release}}">{{disc.release | fm_date:"yyyy/MM/dd"}}</td>
             <td class="japan">
                 <a href="view_disc.jsp?id={{disc.id}}">{{disc.japan}}</a>
@@ -249,10 +242,7 @@
             render_profile([
                 {title: "默认中文模式", checked: ["index", "arnk", "srnk", "cupt", "title"]},
                 {title: "默认日文模式", checked: ["index", "arnk", "srnk", "cupt", "japan"]},
-                {title: "Sakura标准模式", checked: ["index", "srnk", "cupt", "cubk", "release", "title"]},
-                {title: "Sakura预测模式", checked: ["index", "srnk", "cupt", "tapt", "sday", "capt", "release", "title"]},
-                {title: "Sakura精简模式", checked: ["srnk", "title"]},
-                {title: "Amazon精简模式", checked: ["arnk", "title"]}
+                {title: "Sakura标准模式", checked: ["index", "srnk", "cupt", "cubk", "release", "title"]}
             ]);
             $("table.table>tbody>tr").each(function () {
                 var $td1 = $(this).find("td.arnk");

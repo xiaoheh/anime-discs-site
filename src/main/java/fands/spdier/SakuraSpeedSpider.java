@@ -96,8 +96,15 @@ public class SakuraSpeedSpider {
         discSakura.setCupt(parseNumber(tr.child(2).text()));
         discSakura.setCubk(parseNumber(tr.child(3).text()));
         discSakura.setSpdt(new Date());
+        discSakura.setSday(getSday(date));
         dao.saveOrUpdate(discSakura);
         return disc;
+    }
+
+    private int getSday(Date release) {
+        long currentTime = System.currentTimeMillis();
+        long releaseTime = release.getTime() - 3600000L;
+        return (int) ((releaseTime - currentTime) / 86400000L);
     }
 
     private DiscList getDiscList(String name) {

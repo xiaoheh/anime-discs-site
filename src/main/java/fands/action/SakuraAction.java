@@ -66,9 +66,6 @@ public class SakuraAction extends fands.support.JsonAction {
         } else {
             object.put("sname", disc.getSname());
         }
-        if (disc.getShelves() != null) {
-            object.put("shelves", disc.getShelves().getTime());
-        }
         if (disc.getRelease() != null) {
             object.put("release", disc.getRelease().getTime());
         }
@@ -88,18 +85,11 @@ public class SakuraAction extends fands.support.JsonAction {
         }
         DiscSakura sakura = disc.getSakura();
         if (sakura != null) {
-            if (sakura.getSpdt() != null) {
-                object.put("curk", sakura.getCurk());
-                object.put("prrk", sakura.getPrrk());
-            }
-            if (sakura.getPadt() != null) {
-                object.put("cupt", sakura.getCupt());
-                object.put("capt", sakura.getCapt());
-                object.put("tapt", sakura.getTapt());
-                object.put("sday", sakura.getSday());
-                object.put("cubk", sakura.getCubk());
-                object.put("skdt", sakura.getPadt().getTime());
-            }
+            object.put("curk", sakura.getCurk());
+            object.put("prrk", sakura.getPrrk());
+            object.put("cupt", sakura.getCupt());
+            object.put("cubk", sakura.getCubk());
+            object.put("sday", sakura.getSday());
         }
         return object;
     }
