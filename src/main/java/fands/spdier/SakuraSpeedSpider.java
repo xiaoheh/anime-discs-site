@@ -82,7 +82,7 @@ public class SakuraSpeedSpider {
         String type = tr.child(1).text();
         String dateText = tr.child(4).text();
         if (dateText.length() == 8) {
-            dateText += "20";
+            dateText = "20" + dateText;
         }
         Date date = parseDate(releaseFormat, dateText);
 
