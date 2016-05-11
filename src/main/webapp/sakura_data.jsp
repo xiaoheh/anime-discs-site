@@ -36,9 +36,13 @@
             <td class="index hidden-xxm" data-number="{{idx2+1}}">{{idx2+1}}</td>
             <td class="index hidden-xxm zero-width">)</td>
             {{if disc.arnk != disc.curk}}
-            <td class="rank danger" data-number="{{disc.arnk}}">{{disc.arnk | fm_star}}/{{disc.curk | fm_star}}</td>
+            <td class="rank danger" data-number="{{disc.arnk}}">
+                <a href="http://rankstker.net/show.cgi?n={{disc.asin}}" target="_blank">{{disc | fm_dirk}}</a>
+            </td>
             {{else}}
-            <td class="rank" data-number="{{disc.curk}}">{{disc.curk | fm_star}}/{{disc.prrk | fm_star}}</td>
+            <td class="rank" data-number="{{disc.curk}}">
+                <a href="http://rankstker.net/show.cgi?n={{disc.asin}}" target="_blank">{{disc | fm_eqrk}}</a>
+            </td>
             {{/if}}
             <td class="cupt hidden-xxs zero-width">(</td>
             <td class="cupt hidden-xxs" data-number="{{disc.cupt}}">{{disc.cupt | fm_star:6}}</td>

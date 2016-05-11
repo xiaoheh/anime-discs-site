@@ -144,3 +144,19 @@ template.helper("fm_srnk", function (disc) {
 function fm_srnk(disc) {
     return fm_sakura(disc["curk"]) + "位/" + fm_sakura(disc["prrk"]) + "位";
 }
+
+template.helper("fm_dirk", function (disc) {
+    return fm_dirk(disc);
+});
+
+function fm_dirk(disc) {
+    return fm_star(disc["arnk"]) + "/" + fm_star(disc["curk"]);
+}
+
+template.helper("fm_eqrk", function (disc) {
+    return fm_eqrk(disc);
+});
+
+function fm_eqrk(disc) {
+    return fm_star(disc["curk"]) + "/" + fm_star(disc["prrk"]);
+}
