@@ -3,7 +3,7 @@ package fands.support;
 public class Cache<T> {
 
     private long timeout;
-    private long update;
+    private long invalid;
     private T value;
 
     public Cache(long timeout) {
@@ -11,9 +11,9 @@ public class Cache<T> {
     }
 
     public synchronized T update(Supplier<T> supplier) throws Exception {
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - update > timeout) {
-            update = currentTime;
+        long current = System.currentTimeMillis();
+        if (value == null || current > invalid) {
+            invalid = current + timeout;
             value = supplier.get();
         }
         return value;
