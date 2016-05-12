@@ -36,6 +36,9 @@ template.helper('fm_timeout', function (time) {
 
 function fm_timeout(time) {
     var timeout = new Date().getTime() - time;
+    if (timeout < 0) {
+        return "--分 --秒";
+    }
     if (timeout >= 3600000) {
         return fm_hour(timeout) + " " + fm_hour_end(timeout);
     } else {
