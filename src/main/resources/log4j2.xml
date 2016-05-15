@@ -3,8 +3,8 @@
     <Properties>
         <property name="LEVEL">INFO</property>
         <property name="PATTERN">%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n</property>
-        <property name="DIRNAME">log</property>
-        <property name="FILENAME">anime-discs</property>
+        <property name="DIRNAME">record</property>
+        <property name="FILENAME">webapp</property>
         <property name="FILESIZE">2M</property>
         <property name="FILECOUNT">100</property>
     </Properties>

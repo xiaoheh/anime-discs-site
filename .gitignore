@@ -1,12 +1,5 @@
-# other files ignore
-/*
-
-# ignore files
-!.gitignore
-
-# source files
-!src
-!pom.xml
-
-# setup
-!install
+.idea
+*.iml
+*.log
+target
+backup
