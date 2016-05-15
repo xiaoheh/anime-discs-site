@@ -97,7 +97,7 @@ public class SakuraAction extends BaseAction {
                 object.put("date4", rank.getPadt4().getTime());
             }
             if (rank.getPadt5() != null) {
-                object.put("rank6", rank.getPark5());
+                object.put("rank5", rank.getPark5());
                 object.put("date5", rank.getPadt5().getTime());
             }
         }

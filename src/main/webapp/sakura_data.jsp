@@ -276,7 +276,7 @@
                 {title: "Sakura标准模式", checked: ["index", "srnk", "cupt", "cubk", "release", "title"]},
                 {
                     title: "Amazon排名模式",
-                    checked: ["index", "arnk", "srnk", "title", "rank1", "date1", "rank2", "date2", "rank3", "date3"]
+                    checked: ["index", "arnk", "srnk", "title", "rank1", "rank2", "rank3", "rank4", "rank5"]
                 }
             ]);
             $("table.table>tbody>tr").each(function () {
