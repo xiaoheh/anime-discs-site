@@ -166,4 +166,18 @@ public class Disc extends BaseModel implements Comparable<Disc> {
         }
     }
 
+    public static String titleOfDisc(String discName) {
+        discName = discName.replace("【Blu-ray】", " [Blu-ray]");
+        discName = discName.replace("【DVD】", " [DVD]");
+        if (isAmzver(discName)) {
+            discName = discName.substring(16).trim() + "【尼限定】";
+        }
+        discName = discName.replaceAll("\\s+", " ");
+        return discName;
+    }
+
+    public static boolean isAmzver(String japan) {
+        return japan.startsWith("【Amazon.co.jp限定】");
+    }
+
 }

@@ -2,7 +2,6 @@ package com.animediscs.model;
 
 import com.animediscs.model.disc.Disc;
 import com.animediscs.support.BaseModel;
-import com.animediscs.support.Constants;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -57,9 +56,18 @@ public class DiscList extends BaseModel implements Comparable<DiscList> {
 
     public int compareTo(DiscList other) {
         Assert.notNull(other);
-        if (Constants.TOP_100_NAME.equals(name)) return -1;
-        if (Constants.TOP_100_NAME.equals(other.name)) return 1;
+        if ("top_100".equals(name)) return -1;
+        if ("top_100".equals(other.name)) return 1;
         return other.name.compareTo(name);
+    }
+
+    @Transient
+    public boolean isBeforeUpdate(Date date) {
+        return this.date == null || this.date.compareTo(date) < 0;
+    }
+
+    public static String titleOfSeason(String key) {
+        return key.substring(0, 4) + "年" + key.substring(5) + "月新番";
     }
 
 }

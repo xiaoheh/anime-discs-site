@@ -9,7 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class SakuraAction extends JsonAction {
+public class SakuraAction extends BaseAction {
 
     private static Cache<String> index = new Cache<>(3000);
 
@@ -43,7 +43,7 @@ public class SakuraAction extends JsonAction {
     }
 
     private JSONArray buildDiscs(DiscList discList) {
-        boolean top100 = Constants.TOP_100_NAME.equals(discList.getName());
+        boolean top100 = "top_100".equals(discList.getName());
         JSONArray array = new JSONArray();
         discService.getDiscsOfDiscList(discList).forEach(disc -> {
             array.put(buildDisc(disc, top100));

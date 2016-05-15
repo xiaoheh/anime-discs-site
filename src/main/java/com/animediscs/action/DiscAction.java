@@ -2,13 +2,13 @@ package com.animediscs.action;
 
 import com.animediscs.dao.Dao;
 import com.animediscs.model.disc.Disc;
-import com.animediscs.support.JsonAction;
+import com.animediscs.support.BaseAction;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.SimpleDateFormat;
 
-public class DiscAction extends JsonAction {
+public class DiscAction extends BaseAction {
 
     private ThreadLocal<SimpleDateFormat> sdf = ThreadLocal.withInitial(() -> {
         return new SimpleDateFormat("yyyy/MM/dd");

@@ -23,6 +23,13 @@ public class DiscService {
     }
 
     @Transactional
+    public DiscList getLatestDiscList() {
+        return dao.findAll(DiscList.class).stream()
+                .filter(this::isLatest).sorted()
+                .skip(1).findFirst().orElse(null);
+    }
+
+    @Transactional
     public List<DiscList> findLatestDiscList() {
         return dao.findAll(DiscList.class).stream()
                 .filter(this::isLatest).sorted()
@@ -30,10 +37,10 @@ public class DiscService {
     }
 
     @Transactional
-    public DiscList getLatestDiscList() {
+    public List<DiscList> findLatestDiscExtList() {
         return dao.findAll(DiscList.class).stream()
                 .filter(this::isLatest).sorted()
-                .skip(1).findFirst().get();
+                .skip(1).collect(Collectors.toList());
     }
 
     @Transactional
