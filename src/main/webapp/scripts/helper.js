@@ -182,3 +182,18 @@ function is_timeout(time) {
         return new Date().getTime() - time > 7200000;
     return false;
 }
+
+template.helper('fm_rtmout', function (time) {
+    return fm_rtmout(time);
+});
+
+function fm_rtmout(time) {
+    if (!time) {
+        return "无数据";
+    }
+    var timeout = new Date().getTime() - time;
+    if (timeout < 0) {
+        return "0小时前";
+    }
+    return Math.floor(timeout / 360000) / 10 + "时";
+}
