@@ -1,8 +1,5 @@
-package com.animediscs.model.disc;
+package com.animediscs.model;
 
-import com.animediscs.model.Anime;
-import com.animediscs.model.Season;
-import com.animediscs.model.volume.Volume;
 import com.animediscs.support.BaseModel;
 import org.springframework.util.Assert;
 
@@ -13,6 +10,8 @@ import java.util.Date;
 @Table(name = "disc")
 public class Disc extends BaseModel implements Comparable<Disc> {
 
+    private Anime anime;
+
     private String asin;
     private String title;
     private String japan;
@@ -22,14 +21,18 @@ public class Disc extends BaseModel implements Comparable<Disc> {
     private boolean boxver;
     private boolean amzver;
 
-    private Anime anime;
-    private Volume volume;
-    private Season season;
-
-    private Date shelves;
     private Date release;
+    private DiscRank rank;
     private DiscSakura sakura;
-    private DiscAmazon amazon;
+
+    @ManyToOne
+    public Anime getAnime() {
+        return anime;
+    }
+
+    public void setAnime(Anime anime) {
+        this.anime = anime;
+    }
 
     @Column(length = 20, nullable = false, unique = true)
     public String getAsin() {
@@ -94,42 +97,6 @@ public class Disc extends BaseModel implements Comparable<Disc> {
         this.amzver = amzver;
     }
 
-    @ManyToOne
-    public Anime getAnime() {
-        return anime;
-    }
-
-    public void setAnime(Anime anime) {
-        this.anime = anime;
-    }
-
-    @ManyToOne
-    public Volume getVolume() {
-        return volume;
-    }
-
-    public void setVolume(Volume volume) {
-        this.volume = volume;
-    }
-
-    @ManyToOne
-    public Season getSeason() {
-        return season;
-    }
-
-    public void setSeason(Season season) {
-        this.season = season;
-    }
-
-    @Column(name = "shelves_date")
-    public Date getShelves() {
-        return shelves;
-    }
-
-    public void setShelves(Date shelves) {
-        this.shelves = shelves;
-    }
-
     @Column(name = "release_date")
     public Date getRelease() {
         return release;
@@ -140,21 +107,21 @@ public class Disc extends BaseModel implements Comparable<Disc> {
     }
 
     @OneToOne(mappedBy = "disc")
+    public DiscRank getRank() {
+        return rank;
+    }
+
+    public void setRank(DiscRank rank) {
+        this.rank = rank;
+    }
+
+    @OneToOne(mappedBy = "disc")
     public DiscSakura getSakura() {
         return sakura;
     }
 
     public void setSakura(DiscSakura sakura) {
         this.sakura = sakura;
-    }
-
-    @OneToOne(mappedBy = "disc")
-    public DiscAmazon getAmazon() {
-        return amazon;
-    }
-
-    public void setAmazon(DiscAmazon amazon) {
-        this.amazon = amazon;
     }
 
     public int compareTo(Disc other) {

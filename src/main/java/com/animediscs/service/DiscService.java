@@ -1,8 +1,8 @@
 package com.animediscs.service;
 
 import com.animediscs.dao.Dao;
+import com.animediscs.model.Disc;
 import com.animediscs.model.DiscList;
-import com.animediscs.model.disc.Disc;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

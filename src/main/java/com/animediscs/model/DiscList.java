@@ -1,6 +1,5 @@
 package com.animediscs.model;
 
-import com.animediscs.model.disc.Disc;
 import com.animediscs.support.BaseModel;
 import org.springframework.util.Assert;
 
@@ -56,8 +55,6 @@ public class DiscList extends BaseModel implements Comparable<DiscList> {
 
     public int compareTo(DiscList other) {
         Assert.notNull(other);
-        if ("top_100".equals(name)) return -1;
-        if ("top_100".equals(other.name)) return 1;
         return other.name.compareTo(name);
     }
 

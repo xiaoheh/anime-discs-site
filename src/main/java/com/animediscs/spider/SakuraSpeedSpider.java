@@ -1,9 +1,7 @@
 package com.animediscs.spider;
 
 import com.animediscs.dao.Dao;
-import com.animediscs.model.DiscList;
-import com.animediscs.model.disc.Disc;
-import com.animediscs.model.disc.DiscSakura;
+import com.animediscs.model.*;
 import com.animediscs.runner.SpiderService;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.logging.log4j.*;
@@ -16,8 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 
+import static com.animediscs.model.Disc.*;
 import static com.animediscs.model.DiscList.titleOfSeason;
-import static com.animediscs.model.disc.Disc.*;
 import static com.animediscs.util.Parser.*;
 
 @Service
@@ -76,7 +74,6 @@ public class SakuraSpeedSpider {
             discSakura.setPrrk(parseNumber(sakuraRank[1]));
             discSakura.setCupt(parseNumber(tr.child(2).text()));
             discSakura.setCubk(parseNumber(tr.child(3).text()));
-            discSakura.setSpdt(new Date());
             discSakura.setSday(getSday(disc));
             dao.saveOrUpdate(discSakura);
             discs.add(disc);

@@ -1,4 +1,4 @@
-package com.animediscs.model.disc;
+package com.animediscs.model;
 
 import com.animediscs.support.BaseModel;
 import org.springframework.util.Assert;

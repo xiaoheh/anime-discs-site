@@ -1,7 +1,7 @@
 package com.animediscs.action;
 
 import com.animediscs.dao.Dao;
-import com.animediscs.model.disc.Disc;
+import com.animediscs.model.Disc;
 import com.animediscs.support.BaseAction;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;

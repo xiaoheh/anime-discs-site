@@ -1,9 +1,7 @@
 package com.animediscs.spider;
 
 import com.animediscs.dao.Dao;
-import com.animediscs.model.DiscList;
-import com.animediscs.model.disc.Disc;
-import com.animediscs.model.disc.DiscAmazon;
+import com.animediscs.model.*;
 import com.animediscs.runner.SpiderService;
 import com.animediscs.service.DiscService;
 import com.animediscs.support.Constants;
@@ -113,32 +111,50 @@ public class AmazonDiscSpider {
     }
 
     private void updateDiscAmazon(Disc disc, Document document) {
-        dao.refresh(disc);
-        DiscAmazon discAmazon = getDiscAmazon(disc);
+        DiscRank discRank = getDiscAmazon(disc);
+        if (discRank.getId() != null) {
+            dao.refresh(discRank);
+        }
         String text = document.select("#SalesRank").text();
         Matcher matcher = pattern.matcher(text);
         if (matcher.find()) {
             int curk = parseNumber(matcher.group(1));
-            discAmazon.setPadt(new Date());
-            discAmazon.setPark(curk);
+            discRank.setPadt(new Date());
+            discRank.setPark(curk);
+            if (discRank.getPark() != discRank.getPark1()) {
+                pushRank(discRank);
+            }
         } else {
             logger.printf(Level.DEBUG, "未找到Amazon排名数据, 跳过此碟片: %s", disc.getAsin());
         }
-        dao.saveOrUpdate(discAmazon);
+        dao.saveOrUpdate(discRank);
     }
 
-    private DiscAmazon getDiscAmazon(Disc disc) {
-        DiscAmazon discAmazon = disc.getAmazon();
-        if (discAmazon == null) {
-            discAmazon = new DiscAmazon();
-            discAmazon.setDisc(disc);
+    private void pushRank(DiscRank discRank) {
+        discRank.setPadt5(discRank.getPadt4());
+        discRank.setPadt4(discRank.getPadt3());
+        discRank.setPadt3(discRank.getPadt2());
+        discRank.setPadt2(discRank.getPadt1());
+        discRank.setPadt1(discRank.getPadt());
+        discRank.setPark5(discRank.getPark4());
+        discRank.setPark4(discRank.getPark3());
+        discRank.setPark3(discRank.getPark2());
+        discRank.setPark2(discRank.getPark1());
+        discRank.setPark1(discRank.getPark());
+    }
+
+    private DiscRank getDiscAmazon(Disc disc) {
+        DiscRank discRank = disc.getRank();
+        if (discRank == null) {
+            discRank = new DiscRank();
+            discRank.setDisc(disc);
         }
-        return discAmazon;
+        return discRank;
     }
 
     private Supplier<Boolean> needUpdate(Disc disc, int second) {
         return () -> {
-            Date date = nullSafeGet(disc.getAmazon(), DiscAmazon::getPadt);
+            Date date = nullSafeGet(disc.getRank(), DiscRank::getPadt);
             return date == null || date.compareTo(DateUtils.addSeconds(new Date(), -second)) < 0;
         };
     }

@@ -1,10 +1,9 @@
 package com.animediscs.action;
 
-import com.animediscs.model.DiscList;
-import com.animediscs.model.disc.*;
+import com.animediscs.model.*;
 import com.animediscs.service.DiscService;
+import com.animediscs.support.BaseAction;
 import com.animediscs.support.Cache;
-import com.animediscs.support.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,17 +67,17 @@ public class SakuraAction extends BaseAction {
         if (disc.getRelease() != null) {
             object.put("release", disc.getRelease().getTime());
         }
-        DiscAmazon amazon = disc.getAmazon();
-        if (amazon != null) {
+        DiscRank rank = disc.getRank();
+        if (rank != null) {
             if (top100) {
-                if (amazon.getSpdt() != null) {
-                    object.put("arnk", amazon.getSprk());
-                    object.put("amdt", amazon.getSpdt().getTime());
+                if (rank.getSpdt() != null) {
+                    object.put("arnk", rank.getSprk());
+                    object.put("amdt", rank.getSpdt().getTime());
                 }
             } else {
-                if (amazon.getPadt() != null) {
-                    object.put("arnk", amazon.getPark());
-                    object.put("amdt", amazon.getPadt().getTime());
+                if (rank.getPadt() != null) {
+                    object.put("arnk", rank.getPark());
+                    object.put("amdt", rank.getPadt().getTime());
                 }
             }
         }

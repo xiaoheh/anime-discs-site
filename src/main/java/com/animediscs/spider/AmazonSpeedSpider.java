@@ -1,8 +1,8 @@
 package com.animediscs.spider;
 
 import com.animediscs.dao.Dao;
-import com.animediscs.model.disc.Disc;
-import com.animediscs.model.disc.DiscAmazon;
+import com.animediscs.model.Disc;
+import com.animediscs.model.DiscRank;
 import com.animediscs.runner.SpiderService;
 import org.apache.logging.log4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,20 +47,20 @@ public class AmazonSpeedSpider {
     private void updateDiscAmazon(String asin, String rank) {
         Disc disc = dao.lookup(Disc.class, "asin", asin);
         if (disc != null) {
-            DiscAmazon discAmazon = getDiscAmazon(disc);
-            discAmazon.setSpdt(new Date());
-            discAmazon.setSprk(Integer.parseInt(rank));
-            dao.saveOrUpdate(discAmazon);
+            DiscRank discRank = getDiscAmazon(disc);
+            discRank.setSpdt(new Date());
+            discRank.setSprk(Integer.parseInt(rank));
+            dao.saveOrUpdate(discRank);
         }
     }
 
-    private DiscAmazon getDiscAmazon(Disc disc) {
-        DiscAmazon discAmazon = disc.getAmazon();
-        if (discAmazon == null) {
-            discAmazon = new DiscAmazon();
-            discAmazon.setDisc(disc);
+    private DiscRank getDiscAmazon(Disc disc) {
+        DiscRank discRank = disc.getRank();
+        if (discRank == null) {
+            discRank = new DiscRank();
+            discRank.setDisc(disc);
         }
-        return discAmazon;
+        return discRank;
     }
 
 }

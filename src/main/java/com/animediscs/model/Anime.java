@@ -9,21 +9,12 @@ import javax.persistence.*;
 @Table(name = "anime")
 public class Anime extends BaseModel implements Comparable<Anime> {
 
-    private String name;
     private Season season;
-    private Series series;
-    private Production production;
+    private String japan;
+    private String title;
+    private String sname;
 
-    @Column(length = 100, nullable = false, unique = true)
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @ManyToOne(optional = false)
+    @OneToOne(optional = false)
     public Season getSeason() {
         return season;
     }
@@ -32,27 +23,36 @@ public class Anime extends BaseModel implements Comparable<Anime> {
         this.season = season;
     }
 
-    @ManyToOne
-    public Series getSeries() {
-        return series;
+    @Column(length = 100, nullable = false, unique = true)
+    public String getJapan() {
+        return japan;
     }
 
-    public void setSeries(Series series) {
-        this.series = series;
+    public void setJapan(String japan) {
+        this.japan = japan;
     }
 
-    @ManyToOne
-    public Production getProduction() {
-        return production;
+    @Column(length = 100, nullable = false)
+    public String getTitle() {
+        return title;
     }
 
-    public void setProduction(Production production) {
-        this.production = production;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    @Column(length = 30)
+    public String getSname() {
+        return sname;
+    }
+
+    public void setSname(String sname) {
+        this.sname = sname;
     }
 
     public int compareTo(Anime other) {
         Assert.notNull(other);
-        return name.compareTo(other.name);
+        return title.compareTo(other.title);
     }
 
 }
