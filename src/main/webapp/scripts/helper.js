@@ -35,6 +35,9 @@ template.helper('fm_timeout', function (time) {
 });
 
 function fm_timeout(time) {
+    if (time == null) {
+        return "--分 --秒";
+    }
     var timeout = new Date().getTime() - time;
     if (timeout < 0) {
         return "--分 --秒";
@@ -65,7 +68,45 @@ function fm_timeout(time) {
     }
 }
 
+template.helper('fm_sakura', function (number, length) {
+    return fm_sakura(number, length);
+});
+
+function fm_sakura(number, length) {
+    number = number || 0;
+    length = length || 6;
+    length = length > 3 ? length + 1 : length;
+    var zerofm = "---,---";
+    var format = "***,***";
+    if (!number || number <= 0) {
+        return zerofm.substr(zerofm.length - length, length);
+    }
+    var string = fm_number(number, "###,###");
+    return format.substr(format.length - length, length - string.length) + string;
+}
+
+template.helper('fm_star', function (number, length) {
+    return fm_star(number, length);
+});
+
+function fm_star(number, length) {
+    number = number || 0;
+    length = length || 4;
+    var zerofm = "------";
+    var format = "******";
+    if (!number || number <= 0) {
+        return zerofm.substr(zerofm.length - length, length);
+    }
+    var string = number + "";
+    return format.substr(format.length - length, length - string.length) + string;
+}
+
+template.helper("fm_number", function (number, format) {
+    return fm_number(number, format);
+});
+
 function fm_number(number, format) {
+    number = number || 0;
     format = format || "###,###";
     var result = "";
     var string = number < 0 ? -number + "" : number + "";
@@ -84,45 +125,9 @@ function fm_number(number, format) {
     return number < 0 ? "-" + result : result;
 }
 
-template.helper('fm_sakura', function (number, width) {
-    return fm_sakura(number, width);
-});
-
-function fm_sakura(number, width) {
-    width = width || 6;
-    width = width > 3 ? width + 1 : width;
-    var zerofm = "---,---";
-    var format = "***,***";
-    if (!number || number <= 0) {
-        return zerofm.substr(zerofm.length - width, width);
-    }
-    var string = fm_number(number, "###,###");
-    return format.substr(format.length - width, width - string.length) + string;
-}
-
-template.helper('fm_star', function (number, width) {
-    return fm_star(number, width);
-});
-
-function fm_star(number, width) {
-    width = width || 4;
-    var zerofm = "------";
-    var format = "******";
-    if (!number || number <= 0) {
-        return zerofm.substr(zerofm.length - width, width);
-    }
-    var string = number + "";
-    return format.substr(format.length - width, width - string.length) + string;
-}
-
-template.helper("fm_number", function (number, format) {
-    return fm_number(number, format);
-});
-
 template.helper("fm_verstr", function (disc) {
     return fm_verstr(disc);
 });
-
 
 function fm_verstr(disc) {
     return disc["amzver"] ? fm_type(disc) + " 卐" : fm_type(disc);
