@@ -158,7 +158,11 @@ template.helper("fm_dirk", function (disc) {
 });
 
 function fm_dirk(disc) {
-    return fm_star(disc["arnk"]) + "/" + fm_star(disc["curk"]);
+    if (disc["rank1"] && disc["rank2"]) {
+        return fm_star(disc["rank1"]) + "/" + fm_star(disc["rank2"]);
+    } else {
+        return fm_star(disc["arnk"]) + "/" + fm_star(disc["curk"]);
+    }
 }
 
 template.helper("fm_eqrk", function (disc) {
@@ -167,4 +171,14 @@ template.helper("fm_eqrk", function (disc) {
 
 function fm_eqrk(disc) {
     return fm_star(disc["curk"]) + "/" + fm_star(disc["prrk"]);
+}
+
+template.helper("is_timeout", function (time) {
+    return is_timeout(time);
+});
+
+function is_timeout(time) {
+    if (time)
+        return new Date().getTime() - time > 7200000;
+    return false;
 }

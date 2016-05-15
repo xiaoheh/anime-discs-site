@@ -80,6 +80,26 @@ public class SakuraAction extends BaseAction {
                     object.put("amdt", rank.getPadt().getTime());
                 }
             }
+            if (rank.getPadt1() != null) {
+                object.put("date1", rank.getPadt1());
+                object.put("rank1", rank.getPark1());
+            }
+            if (rank.getPadt2() != null) {
+                object.put("date2", rank.getPadt2());
+                object.put("rank2", rank.getPark2());
+            }
+            if (rank.getPadt3() != null) {
+                object.put("date3", rank.getPadt3());
+                object.put("rank3", rank.getPark3());
+            }
+            if (rank.getPadt4() != null) {
+                object.put("date4", rank.getPadt4());
+                object.put("rank4", rank.getPark4());
+            }
+            if (rank.getPadt5() != null) {
+                object.put("date5", rank.getPadt5());
+                object.put("rank6", rank.getPark5());
+            }
         }
         DiscSakura sakura = disc.getSakura();
         if (sakura != null) {

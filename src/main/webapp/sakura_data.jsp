@@ -66,6 +66,12 @@
             <span>更新时间: {{list.time | fm_date:"yyyy-MM-dd hh:mm:ss"}}</span>
             <span>(距离现在 {{list.time | fm_timeout}})</span>
             {{/if}}
+            {{if is_timeout(list.time)}}
+            <div class="text-warning">
+                <span>提示: Sakura可能是延迟了两小时以上, 建议打开更多Amazon排名数据.</span>
+                <span>(点击功能 -> 自定义表格格式 -> Amazon排名模式 或 手动选中Amazon1 ~ 5)</span>
+            </div>
+            {{/if}}
         </caption>
         <thead>
         <tr>
@@ -74,6 +80,11 @@
             <th class="arnk sorter">Amazon</th>
             <th class="atot sorter">更新时间</th>
             <th class="srnk sorter">当前/前回</th>
+            <th class="rank1 sorter">Amazon1</th>
+            <th class="rank2 sorter">Amazon2</th>
+            <th class="rank3 sorter">Amazon3</th>
+            <th class="rank4 sorter">Amazon4</th>
+            <th class="rank5 sorter">Amazon5</th>
             <th class="cupt zero-width"></th>
             <th class="cupt sorter">累积PT</th>
             <th class="cupt zero-width"></th>
@@ -98,6 +109,11 @@
             <td class="srnk" data-number="{{disc.curk}}">
                 <a href="http://rankstker.net/show.cgi?n={{disc.asin}}" target="_blank">{{disc | fm_srnk}}</a>
             </td>
+            <td class="rank1" data-number="{{disc.rank1}}">{{disc.rank1 | fm_number}}位</td>
+            <td class="rank2" data-number="{{disc.rank2}}">{{disc.rank2 | fm_number}}位</td>
+            <td class="rank3" data-number="{{disc.rank3}}">{{disc.rank3 | fm_number}}位</td>
+            <td class="rank4" data-number="{{disc.rank4}}">{{disc.rank4 | fm_number}}位</td>
+            <td class="rank5" data-number="{{disc.rank5}}">{{disc.rank5 | fm_number}}位</td>
             <td class="cupt zero-width">(</td>
             <td class="cupt" data-number="{{disc.cupt}}">{{disc.cupt | fm_sakura}} pt</td>
             <td class="cupt zero-width">)</td>
@@ -247,7 +263,8 @@
             render_profile([
                 {title: "默认中文模式", checked: ["index", "arnk", "srnk", "cupt", "title"]},
                 {title: "默认日文模式", checked: ["index", "arnk", "srnk", "cupt", "japan"]},
-                {title: "Sakura标准模式", checked: ["index", "srnk", "cupt", "cubk", "release", "title"]}
+                {title: "Sakura标准模式", checked: ["index", "srnk", "cupt", "cubk", "release", "title"]},
+                {title: "Amazon排名模式", checked: ["index", "rank1", "rank2", "rank3", "rank4", "rank5", "srnk", "title"]}
             ]);
             $("table.table>tbody>tr").each(function () {
                 var $td1 = $(this).find("td.arnk");

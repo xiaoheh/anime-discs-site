@@ -59,6 +59,26 @@
         width: 85px;
     }
 
+    table.table th.rank1 {
+        width: 90px;
+    }
+
+    table.table th.rank2 {
+        width: 90px;
+    }
+
+    table.table th.rank3 {
+        width: 90px;
+    }
+
+    table.table th.rank4 {
+        width: 90px;
+    }
+
+    table.table th.rank5 {
+        width: 90px;
+    }
+
     table.table th.atot {
         width: 85px;
     }

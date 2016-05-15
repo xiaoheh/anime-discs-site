@@ -115,7 +115,7 @@ public class SpiderService {
                 if (task.isContinue(e)) {
                     taskList.add(task);
                     String format = "%s 抓取任务遇到网络错误, 已安排重试, 任务链接为: %s";
-                    logger.printf(Level.INFO, format, name, task.getUrl());
+                    logger.printf(Level.DEBUG, format, name, task.getUrl());
                     logger.catching(Level.DEBUG, e);
                 } else {
                     String format = "%s 抓取任务在尝试%d次后依然失败, 错误信息为: %s, 任务链接为: %s";
