@@ -55,44 +55,38 @@
         </div>
         <div id="rank-tab" class="tab-pane fade">
             <div class="form-group">
-                <label>SAKURA排名</label>
-                <input type="text" class="form-control"
-                       value="{{curk | fm_sakura}}位/{{prrk | fm_sakura}}位">
+                <label>碟片标题</label>
+                <input type="text" class="form-control" value="{{title}}">
             </div>
             <div class="form-group">
-                <label>AMAZON1</label>
-                <input type="text" class="form-control"
-                       value="{{rank1 | fm_number}}位 ({{date1 | fm_timeout}} 前)">
+                <label>Amazon1</label>
+                <input type="text" class="form-control" value="{{rank1 | fm_number}}位 ({{date1 | fm_timeout}} 前)">
             </div>
             <div class="form-group">
-                <label>SAKURA2</label>
-                <input type="text" class="form-control"
-                       value="{{rank2 | fm_number}}位 ({{date2 | fm_timeout}} 前)">
+                <label>Amazon2</label>
+                <input type="text" class="form-control" value="{{rank2 | fm_number}}位 ({{date2 | fm_timeout}} 前)">
             </div>
             <div class="form-group">
-                <label>SAKURA3</label>
-                <input type="text" class="form-control"
-                       value="{{rank3 | fm_number}}位 ({{date3 | fm_timeout}} 前)">
+                <label>Amazon3</label>
+                <input type="text" class="form-control" value="{{rank3 | fm_number}}位 ({{date3 | fm_timeout}} 前)">
             </div>
             <div class="form-group">
-                <label>SAKURA4</label>
-                <input type="text" class="form-control"
-                       value="{{rank4 | fm_number}}位 ({{date4 | fm_timeout}} 前)">
+                <label>Amazon4</label>
+                <input type="text" class="form-control" value="{{rank4 | fm_number}}位 ({{date4 | fm_timeout}} 前)">
             </div>
             <div class="form-group">
-                <label>SAKURA5</label>
-                <input type="text" class="form-control"
-                       value="{{rank5 | fm_number}}位 ({{date5 | fm_timeout}} 前)">
+                <label>Amazon5</label>
+                <input type="text" class="form-control" value="{{rank5 | fm_number}}位 ({{date5 | fm_timeout}} 前)">
             </div>
         </div>
         <div id="other-tab" class="tab-pane fade">
             <div class="form-group">
-                <label>发售日期</label>
-                <input type="text" id="release" class="form-control" value="{{release | fm_date:'yyyy/MM/dd'}}">
+                <label>碟片标题</label>
+                <input type="text" class="form-control" value="{{title}}">
             </div>
             <div class="form-group">
-                <label>剩余天数</label>
-                <input type="text" class="form-control" value="{{sday}}天">
+                <label>当前/前回</label>
+                <input type="text" class="form-control" value="{{curk | fm_sakura}}位/{{prrk | fm_sakura}}位">
             </div>
             <div class="form-group">
                 <label>累计PT</label>
@@ -100,7 +94,15 @@
             </div>
             <div class="form-group">
                 <label>Nico预约</label>
-                <input type="text" class="form-control" value="{{cubk | fm_number}}">
+                <input type="text" class="form-control" value="{{cubk | fm_number}} 预约">
+            </div>
+            <div class="form-group">
+                <label>发售日期</label>
+                <input type="text" id="release" class="form-control" value="{{release | fm_date:'yyyy/MM/dd'}}">
+            </div>
+            <div class="form-group">
+                <label>剩余天数</label>
+                <input type="text" class="form-control" value="{{sday}}天">
             </div>
         </div>
     </div>
