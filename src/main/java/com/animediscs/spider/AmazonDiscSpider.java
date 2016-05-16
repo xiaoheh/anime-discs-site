@@ -130,8 +130,8 @@ public class AmazonDiscSpider {
 
     private void checkRankChange(DiscRank discRank) {
         if (discRank.getPark() != discRank.getPark1()) {
-            long tenMinute = System.currentTimeMillis() - 600000;
-            if (discRank.getPadt1() == null && discRank.getPadt1().getTime() < tenMinute) {
+            long tenMinute = System.currentTimeMillis() - 300000;
+            if (discRank.getPadt1() == null || discRank.getPadt1().getTime() < tenMinute) {
                 discRank.setPadt5(discRank.getPadt4());
                 discRank.setPadt4(discRank.getPadt3());
                 discRank.setPadt3(discRank.getPadt2());
