@@ -61,3 +61,7 @@ div.textarea-readonly {
 .transparent {
     color: transparent;
 }
+
+input:disabled {
+    color: black;
+}

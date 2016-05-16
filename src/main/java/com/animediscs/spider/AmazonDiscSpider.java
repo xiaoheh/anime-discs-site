@@ -121,26 +121,35 @@ public class AmazonDiscSpider {
             int curk = parseNumber(matcher.group(1));
             discRank.setPadt(new Date());
             discRank.setPark(curk);
-            if (discRank.getPark() != discRank.getPark1()) {
-                pushRank(discRank);
-            }
+            checkRankChange(discRank);
         } else {
             logger.printf(Level.DEBUG, "未找到Amazon排名数据, 跳过此碟片: %s", disc.getAsin());
         }
         dao.saveOrUpdate(discRank);
     }
 
-    private void pushRank(DiscRank discRank) {
-        discRank.setPadt5(discRank.getPadt4());
-        discRank.setPadt4(discRank.getPadt3());
-        discRank.setPadt3(discRank.getPadt2());
-        discRank.setPadt2(discRank.getPadt1());
-        discRank.setPadt1(discRank.getPadt());
-        discRank.setPark5(discRank.getPark4());
-        discRank.setPark4(discRank.getPark3());
-        discRank.setPark3(discRank.getPark2());
-        discRank.setPark2(discRank.getPark1());
-        discRank.setPark1(discRank.getPark());
+    private void checkRankChange(DiscRank discRank) {
+        if (discRank.getPark() != discRank.getPark1()) {
+            long tenMinute = System.currentTimeMillis() - 600000;
+            if (discRank.getPadt1() == null && discRank.getPadt1().getTime() < tenMinute) {
+                discRank.setPadt5(discRank.getPadt4());
+                discRank.setPadt4(discRank.getPadt3());
+                discRank.setPadt3(discRank.getPadt2());
+                discRank.setPadt2(discRank.getPadt1());
+                discRank.setPadt1(discRank.getPadt());
+                discRank.setPark5(discRank.getPark4());
+                discRank.setPark4(discRank.getPark3());
+                discRank.setPark3(discRank.getPark2());
+                discRank.setPark2(discRank.getPark1());
+                discRank.setPark1(discRank.getPark());
+
+                DiscRecord record = new DiscRecord();
+                record.setDisc(discRank.getDisc());
+                record.setDate(discRank.getPadt());
+                record.setRank(discRank.getPark());
+                dao.save(record);
+            }
+        }
     }
 
     private DiscRank getDiscAmazon(Disc disc) {

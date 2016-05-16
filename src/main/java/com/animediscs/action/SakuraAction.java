@@ -1,12 +1,14 @@
 package com.animediscs.action;
 
-import com.animediscs.model.*;
+import com.animediscs.model.DiscList;
 import com.animediscs.service.DiscService;
 import com.animediscs.support.BaseAction;
 import com.animediscs.support.Cache;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static com.animediscs.action.DiscAction.buildDisc;
 
 public class SakuraAction extends BaseAction {
 
@@ -37,78 +39,12 @@ public class SakuraAction extends BaseAction {
         if (discList.getDate() != null) {
             object.put("time", discList.getDate().getTime());
         }
-        object.put("discs", buildDiscs(discList));
-        return object;
-    }
-
-    private JSONArray buildDiscs(DiscList discList) {
         boolean top100 = "top_100".equals(discList.getName());
         JSONArray array = new JSONArray();
         discService.getDiscsOfDiscList(discList).forEach(disc -> {
             array.put(buildDisc(disc, top100));
         });
-        return array;
-    }
-
-    private JSONObject buildDisc(Disc disc, boolean top100) {
-        JSONObject object = new JSONObject();
-        object.put("id", disc.getId());
-        object.put("asin", disc.getAsin());
-        object.put("title", disc.getTitle());
-        object.put("japan", disc.getJapan());
-        object.put("dvdver", disc.isDvdver());
-        object.put("boxver", disc.isBoxver());
-        object.put("amzver", disc.isAmzver());
-        if (disc.getSname() == null) {
-            object.put("sname", disc.getTitle());
-        } else {
-            object.put("sname", disc.getSname());
-        }
-        if (disc.getRelease() != null) {
-            object.put("release", disc.getRelease().getTime());
-        }
-        DiscRank rank = disc.getRank();
-        if (rank != null) {
-            if (top100) {
-                if (rank.getSpdt() != null) {
-                    object.put("arnk", rank.getSprk());
-                    object.put("amdt", rank.getSpdt().getTime());
-                }
-            } else {
-                if (rank.getPadt() != null) {
-                    object.put("arnk", rank.getPark());
-                    object.put("amdt", rank.getPadt().getTime());
-                }
-            }
-            if (rank.getPadt1() != null) {
-                object.put("rank1", rank.getPark1());
-                object.put("date1", rank.getPadt1().getTime());
-            }
-            if (rank.getPadt2() != null) {
-                object.put("rank2", rank.getPark2());
-                object.put("date2", rank.getPadt2().getTime());
-            }
-            if (rank.getPadt3() != null) {
-                object.put("rank3", rank.getPark3());
-                object.put("date3", rank.getPadt3().getTime());
-            }
-            if (rank.getPadt4() != null) {
-                object.put("rank4", rank.getPark4());
-                object.put("date4", rank.getPadt4().getTime());
-            }
-            if (rank.getPadt5() != null) {
-                object.put("rank5", rank.getPark5());
-                object.put("date5", rank.getPadt5().getTime());
-            }
-        }
-        DiscSakura sakura = disc.getSakura();
-        if (sakura != null) {
-            object.put("curk", sakura.getCurk());
-            object.put("prrk", sakura.getPrrk());
-            object.put("cupt", sakura.getCupt());
-            object.put("cubk", sakura.getCubk());
-            object.put("sday", sakura.getSday());
-        }
+        object.put("discs", array);
         return object;
     }
 
