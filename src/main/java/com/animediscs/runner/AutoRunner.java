@@ -66,11 +66,11 @@ public class AutoRunner {
         schedule("Amazon次要排名抓取", 20, 240, () -> {
             amazonDiscSpider.doUpdateExt(120, amazonRunner, 3);
         });
-        schedule("Amazon全部排名抓取", 25, 1800, () -> {
-            amazonDiscSpider.doUpdateAll(900, amazonRunner, 4);
+        schedule("Amazon动画数据抓取", 25, 3600, () -> {
+            amazonAnimeSpider.doUpdate(amazonRunner, 4);
         });
-        schedule("Amazon动画数据抓取", 35, 3600, () -> {
-            amazonAnimeSpider.doUpdate(amazonRunner, 5);
+        schedule("Amazon全部排名抓取", 35, 1800, () -> {
+            amazonDiscSpider.doUpdateAll(900, amazonRunner, 5);
         });
         schedule("任务线程状态报告", 0, 30, () -> {
             String timeout = Format.formatTimeout(startupTimeMillis);

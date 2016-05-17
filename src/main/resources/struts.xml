@@ -23,6 +23,8 @@
         <action name="error" method="error" class="com.animediscs.action.ErrorAction"/>
         <action name="sakura" method="get" class="com.animediscs.action.SakuraAction"/>
         <action name="get_disc" method="get" class="com.animediscs.action.DiscAction"/>
+        <action name="list_disc" method="list" class="com.animediscs.action.DiscAction"/>
+        <action name="list_rank" method="listRank" class="com.animediscs.action.DiscAction"/>
         <action name="update_disc" method="update" class="com.animediscs.action.DiscAction"/>
     </package>
 </struts>

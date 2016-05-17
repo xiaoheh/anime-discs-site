@@ -28,6 +28,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="sakura_data.jsp">SAKURA数据</a></li>
                         <li><a href="curt_volume.jsp">首卷预测排名</a></li>
+                        <li><a href="list_disc.jsp?filter=disclist&name=manual">手动维护碟片</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">

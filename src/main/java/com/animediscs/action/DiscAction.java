@@ -3,10 +3,14 @@ package com.animediscs.action;
 import com.animediscs.dao.Dao;
 import com.animediscs.model.*;
 import com.animediscs.support.BaseAction;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
+
+import static com.animediscs.util.Helper.readAllLines;
 
 public class DiscAction extends BaseAction {
 
@@ -22,6 +26,8 @@ public class DiscAction extends BaseAction {
     private boolean boxver;
     private boolean amzver;
     private String release;
+    private String filter;
+    private String name;
 
     @Autowired
     public void setDao(Dao dao) {
@@ -92,7 +98,72 @@ public class DiscAction extends BaseAction {
             object.put("cupt", sakura.getCupt());
             object.put("cubk", sakura.getCubk());
             object.put("sday", sakura.getSday());
+        } else if (disc.getRelease() != null) {
+            object.put("sday", getSday(disc));
         }
+        return object;
+    }
+
+    private static int getSday(Disc disc) {
+        long currentTime = System.currentTimeMillis();
+        long releaseTime = disc.getRelease().getTime() - 3600000L;
+        return (int) ((releaseTime - currentTime) / 86400000L);
+    }
+
+    public void list() throws Exception {
+        if ("disclist".equals(filter) && "manual".equals(name)) {
+            DiscList discList = new DiscList();
+            discList.setName("manual");
+            discList.setTitle("人工维护的动画列表");
+            readAllLines("config/disclist.txt").forEach(asin -> {
+                Disc disc = dao.lookup(Disc.class, "asin", asin);
+                if (disc != null) {
+                    discList.getDiscs().add(disc);
+                }
+            });
+
+            JSONArray array = new JSONArray();
+            array.put(buildDiscList(discList));
+            responseJson(array.toString());
+        } else {
+            responseError("不支持的操作");
+        }
+    }
+
+    public void listRank() throws Exception {
+        Disc disc = dao.get(Disc.class, id);
+        if (disc == null) {
+            responseError("没有这个碟片数据");
+        } else {
+            JSONObject object = buildDisc(disc, false);
+            object.put("ranks", buildRanks(dao.findBy(DiscRecord.class, "disc", disc)));
+            responseJson(object.toString());
+        }
+    }
+
+    private JSONArray buildRanks(List<DiscRecord> ranks) {
+        JSONArray array = new JSONArray();
+        ranks.stream().sorted().forEach(rank -> {
+            JSONObject object = new JSONObject();
+            object.put("date", rank.getDate().getTime() + 3600000);
+            object.put("rank", rank.getRank());
+            array.put(object);
+        });
+        return array;
+    }
+
+    private JSONObject buildDiscList(DiscList discList) {
+        JSONObject object = new JSONObject();
+        object.put("key", discList.getName());
+        object.put("title", discList.getTitle());
+        if (discList.getDate() != null) {
+            object.put("time", discList.getDate().getTime());
+        }
+        JSONArray array = new JSONArray();
+        discList.getDiscs().forEach(disc -> {
+            array.put(buildDisc(disc, false));
+        });
+        object.put("discs", array);
         return object;
     }
 
@@ -134,6 +205,14 @@ public class DiscAction extends BaseAction {
 
     public void setRelease(String release) {
         this.release = release;
+    }
+
+    public void setFilter(String filter) {
+        this.filter = filter;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 }
