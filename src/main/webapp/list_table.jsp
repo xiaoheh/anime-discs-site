@@ -3,7 +3,7 @@
 <html>
 <head>
     <%@ include file="include/meta.jsp" %>
-    <title>Anime Discs - 全部排名</title>
+    <title>Anime Discs - 全部榜单</title>
     <%@ include file="include/import.jsp" %>
     <link href="styles/table.css" rel="stylesheet"/>
     <script src="scripts/table.js"></script>
@@ -16,11 +16,11 @@
             padding-right: 2px;
         }
 
-        table.table th.date {
-            width: 170px;
+        table.table th.name {
+            width: 80px;
         }
 
-        table.table td.rank {
+        table.table td.title {
             text-align: left;
         }
 
@@ -32,23 +32,27 @@
 <script id="template" type="text/html">
     <table class="table sorter table-bordered table-striped">
         <caption>
-            <span>{{title}} 的全部排名</span>
+            <span>全部榜单</span>
         </caption>
         <thead>
         <tr>
             <th class="index">ID</th>
             <th class="index zero-width"></th>
-            <th class="date sorter">时间</th>
-            <th class="rank sorter">排名</th>
+            <th class="name sorter">名称</th>
+            <th class="title sorter">标题</th>
         </tr>
         </thead>
         <tbody>
-        {{each ranks as rank idx}}
+        {{each tables as table idx}}
         <tr id="row-{{idx+1}}">
             <td class="index" data-number="{{idx+1}}">{{idx+1}}</td>
             <td class="index zero-width">)</td>
-            <td class="date" data-number="{{date}}">{{rank.date | fm_date:'yyyy/MM/dd hh:mm:ss'}}</td>
-            <td class="rank" data-number="{{rank}}">{{rank.rank}}</td>
+            <td class="name">
+                <a href="list_disc.jsp?filter=table&name={{table.name}}">{{table.name}}</a>
+            </td>
+            <td class="title">
+                <a href="${cookie.admin.value?"edit":"view"}_table.jsp?id={{table.id}}">{{table.title}}</a>
+            </td>
         </tr>
         {{/each}}
         </tbody>
@@ -73,7 +77,7 @@
     }
 
     function ajax_update_page() {
-        $.getJSON("list_rank.do", {id: ${param.id}}, function (data) {
+        $.getJSON("list_table.do", function (data) {
             cache.data = data;
             render_page(data);
         });
@@ -81,7 +85,7 @@
 
     function render_page(data) {
         post_before_render();
-        $("#content").html(render("template", data));
+        $("#content").html(render("template", {tables: data}));
         post_after_render();
     }
 

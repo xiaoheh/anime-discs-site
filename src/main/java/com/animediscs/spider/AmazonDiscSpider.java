@@ -3,73 +3,96 @@ package com.animediscs.spider;
 import com.animediscs.dao.Dao;
 import com.animediscs.model.*;
 import com.animediscs.runner.SpiderService;
-import com.animediscs.service.DiscService;
-import com.animediscs.support.Constants;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.logging.log4j.*;
-import org.jsoup.nodes.Document;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.animediscs.util.Helper.nullSafeGet;
 import static com.animediscs.util.Parser.parseNumber;
+import static java.lang.System.currentTimeMillis;
 
 @Service
 public class AmazonDiscSpider {
 
     private Logger logger = LogManager.getLogger(AmazonDiscSpider.class);
-    private Pattern pattern = Pattern.compile("DVD \\- ([0-9,]+)位");
+    private Pattern pattern = Pattern.compile("- ([0-9,]+)位");
 
     private Dao dao;
-    private DiscService discService;
 
     @Autowired
     public void setDao(Dao dao) {
         this.dao = dao;
     }
 
-    @Autowired
-    public void setDiscService(DiscService discService) {
-        this.discService = discService;
-    }
-
     public void doUpdateHot(int second, SpiderService service, int level) {
-        DiscList discList = discService.getLatestDiscList();
-        if (discList != null) {
-            discList.setDiscs(discService.getDiscsOfDiscList(discList, 15));
-            addUpdateTask("Amazon(Hot)", second, service, level, discList);
-        }
+        dao.execute(session -> {
+            Date yesterday = DateUtils.addDays(new Date(), -1);
+            session.createCriteria(DiscList.class)
+                    .add(Restrictions.eq("sakura", true))
+                    .add(Restrictions.gt("date", yesterday))
+                    .addOrder(Order.desc("name"))
+                    .setFirstResult(1)
+                    .setMaxResults(1)
+                    .list().forEach(o -> {
+                DiscList discList = (DiscList) o;
+                List<Disc> discs = discList.getDiscs().stream()
+                        .sorted(Disc.sortBySakura()).limit(15)
+                        .collect(Collectors.toList());
+                addUpdateTask("Amazon(Hot)", second, service, level, discList, discs);
+            });
+        });
     }
 
     public void doUpdateExt(int second, SpiderService service, int level) {
-        discService.findLatestDiscExtList().forEach(discList -> {
-            discList.setDiscs(discService.getDiscsOfDiscList(discList));
-            addUpdateTask("Amazon(Ext)", second, service, level, discList);
+        dao.execute(session -> {
+            Date yesterday = DateUtils.addDays(new Date(), -1);
+            session.createCriteria(DiscList.class)
+                    .add(Restrictions.eq("sakura", true))
+                    .add(Restrictions.gt("date", yesterday))
+                    .addOrder(Order.desc("name"))
+                    .setFirstResult(1)
+                    .list().forEach(o -> {
+                DiscList discList = (DiscList) o;
+                discList.getDiscs().sort(Disc.sortBySakura());
+                addUpdateTask("Amazon(Ext)", second, service, level, discList);
+            });
         });
     }
 
     public void doUpdateAll(int second, SpiderService service, int level) {
-        DiscList discList = Constants.ALL_DISCS;
-        discList.setDiscs(discService.findAllDiscs());
+        DiscList discList = new DiscList();
+        discList.setName("all_disc");
+        discList.setTitle("全部碟片");
+        discList.setDiscs(dao.findAll(Disc.class));
         addUpdateTask("Amazon(All)", second, service, level, discList);
     }
 
     private void addUpdateTask(String name, int second, SpiderService service, int level, DiscList discList) {
+        addUpdateTask(name, second, service, level, discList, discList.getDiscs());
+    }
+
+    private void addUpdateTask(String name, int second, SpiderService service, int level, DiscList discList, List<Disc> discs) {
         AtomicInteger skip = new AtomicInteger(0);
-        AtomicInteger count = new AtomicInteger(discList.getDiscs().size());
+        AtomicInteger count = new AtomicInteger(discs.size());
         AtomicInteger update = new AtomicInteger(0);
         infoStart(name, discList, count);
-        discList.getDiscs().forEach(disc -> {
+        discs.stream().sorted(Disc.sortBySakura()).forEach(disc -> {
             String url = "http://www.amazon.co.jp/dp/" + disc.getAsin();
             service.addTask(level, url, needUpdate(disc, second), document -> {
                 if (document != null) {
-                    updateDiscAmazon(disc, document);
+                    String rankText = document.select("#SalesRank").text();
+                    updateRank(getDiscRank(disc), rankText);
                     debugUpdate(name, discList, count, disc, update);
                 } else {
                     debugSkip(name, discList, count, disc, skip);
@@ -81,6 +104,17 @@ public class AmazonDiscSpider {
                 }
             });
         });
+    }
+
+    private DiscRank getDiscRank(Disc disc) {
+        DiscRank rank = disc.getRank();
+        if (rank == null) {
+            rank = new DiscRank();
+            rank.setDisc(disc);
+        } else {
+            dao.refresh(rank);
+        }
+        return rank;
     }
 
     private void infoStart(String name, DiscList discList, AtomicInteger count) {
@@ -110,55 +144,44 @@ public class AmazonDiscSpider {
                 name, discList.getTitle(), update.get(), skip.get());
     }
 
-    private void updateDiscAmazon(Disc disc, Document document) {
-        DiscRank discRank = getDiscAmazon(disc);
-        if (discRank.getId() != null) {
-            dao.refresh(discRank);
-        }
-        String text = document.select("#SalesRank").text();
-        Matcher matcher = pattern.matcher(text);
-        if (matcher.find()) {
-            int curk = parseNumber(matcher.group(1));
-            discRank.setPadt(new Date());
-            discRank.setPark(curk);
-            checkRankChange(discRank);
-        } else {
-            logger.printf(Level.DEBUG, "未找到Amazon排名数据, 跳过此碟片: %s", disc.getAsin());
-        }
-        dao.saveOrUpdate(discRank);
-    }
-
-    private void checkRankChange(DiscRank discRank) {
-        if (discRank.getPark() != discRank.getPark1()) {
-            long tenMinute = System.currentTimeMillis() - 300000;
-            if (discRank.getPadt1() == null || discRank.getPadt1().getTime() < tenMinute) {
-                discRank.setPadt5(discRank.getPadt4());
-                discRank.setPadt4(discRank.getPadt3());
-                discRank.setPadt3(discRank.getPadt2());
-                discRank.setPadt2(discRank.getPadt1());
-                discRank.setPadt1(discRank.getPadt());
-                discRank.setPark5(discRank.getPark4());
-                discRank.setPark4(discRank.getPark3());
-                discRank.setPark3(discRank.getPark2());
-                discRank.setPark2(discRank.getPark1());
-                discRank.setPark1(discRank.getPark());
-
-                DiscRecord record = new DiscRecord();
-                record.setDisc(discRank.getDisc());
-                record.setDate(discRank.getPadt());
-                record.setRank(discRank.getPark());
-                dao.save(record);
+    private void updateRank(DiscRank rank, String rankText) {
+        rank.setPadt(new Date());
+        if (needUpdate(rank.getPadt1())) {
+            Matcher matcher = pattern.matcher(rankText);
+            if (matcher.find()) {
+                rank.setPark(parseNumber(matcher.group(1)));
+                if (rank.getPark() != rank.getPark1()) {
+                    pushRank(rank);
+                    saveRank(rank);
+                }
             }
         }
+        dao.saveOrUpdate(rank);
     }
 
-    private DiscRank getDiscAmazon(Disc disc) {
-        DiscRank discRank = disc.getRank();
-        if (discRank == null) {
-            discRank = new DiscRank();
-            discRank.setDisc(disc);
-        }
-        return discRank;
+    private void pushRank(DiscRank rank) {
+        rank.setPadt5(rank.getPadt4());
+        rank.setPadt4(rank.getPadt3());
+        rank.setPadt3(rank.getPadt2());
+        rank.setPadt2(rank.getPadt1());
+        rank.setPadt1(rank.getPadt());
+        rank.setPark5(rank.getPark4());
+        rank.setPark4(rank.getPark3());
+        rank.setPark3(rank.getPark2());
+        rank.setPark2(rank.getPark1());
+        rank.setPark1(rank.getPark());
+    }
+
+    private void saveRank(DiscRank rank) {
+        DiscRecord record = new DiscRecord();
+        record.setDisc(rank.getDisc());
+        record.setDate(rank.getPadt());
+        record.setRank(rank.getPark());
+        dao.save(record);
+    }
+
+    private boolean needUpdate(Date date) {
+        return date == null || date.getTime() < currentTimeMillis() - 300000;
     }
 
     private Supplier<Boolean> needUpdate(Disc disc, int second) {

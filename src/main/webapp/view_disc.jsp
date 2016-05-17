@@ -8,51 +8,48 @@
 <body>
 <%@ include file="include/navbar.jsp" %>
 <div id="content"></div>
-<script id="disc-tmpl" type="text/html">
+<script id="template" type="text/html">
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#disc-tab" data-toggle="tab">基本数据</a></li>
+        <li class="active"><a href="#info-tab" data-toggle="tab">基本数据</a></li>
         <li><a href="#rank-tab" data-toggle="tab">排名数据</a></li>
         <li><a href="#other-tab" data-toggle="tab">其他数据</a></li>
-        <li><a href="list_rank.jsp?id={{id}}">全部排名</a></li>
+        <li><a href="list_rank.jsp?id={{id}}" target="_blank">全部排名</a></li>
     </ul>
     <div class="tab-content" style="padding-top: 10px">
-        <div id="disc-tab" class="tab-pane fade in active">
-            <form role="form">
-                <input type="hidden" id="id" value="{{id}}">
-                <div class="form-group">
-                    <label>碟片标题</label>
-                    <input type="text" class="form-control" value="{{title}}">
-                </div>
-                <div class="form-group">
-                    <label>日文原名</label>
-                    <div class="textarea-readonly">{{japan}}</div>
-                </div>
-                <div class="form-group">
-                    <label>简短名称</label>
-                    <input type="text" class="form-control" value="{{sname}}">
-                </div>
-                <div class="form-group">
-                    <label>碟片类型</label>
-                    <select class="form-control" data-value="{{dvdver?'1':'2'}}">
-                        <option value="1">DVD</option>
-                        <option value="2">Blu-ray</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>分卷类型</label>
-                    <select class="form-control" data-value="{{boxver?'1':'2'}}">
-                        <option value="1">BOX</option>
-                        <option value="2">非BOX</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>限定类型</label>
-                    <select class="form-control" data-value="{{amzver?'1':'2'}}">
-                        <option value="1">尼限定</option>
-                        <option value="2">非尼限定</option>
-                    </select>
-                </div>
-            </form>
+        <div id="info-tab" class="tab-pane fade in active">
+            <div class="form-group">
+                <label>碟片标题</label>
+                <input type="text" class="form-control" value="{{title}}">
+            </div>
+            <div class="form-group">
+                <label>日文原名</label>
+                <div class="textarea-readonly">{{japan}}</div>
+            </div>
+            <div class="form-group">
+                <label>简短名称</label>
+                <input type="text" class="form-control" value="{{sname}}">
+            </div>
+            <div class="form-group">
+                <label>碟片类型</label>
+                <select class="form-control" data-value="{{dvdver?'1':'2'}}">
+                    <option value="1">DVD</option>
+                    <option value="2">Blu-ray</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>分卷类型</label>
+                <select class="form-control" data-value="{{boxver?'1':'2'}}">
+                    <option value="1">BOX</option>
+                    <option value="2">非BOX</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>限定类型</label>
+                <select class="form-control" data-value="{{amzver?'1':'2'}}">
+                    <option value="1">尼限定</option>
+                    <option value="2">非尼限定</option>
+                </select>
+            </div>
         </div>
         <div id="rank-tab" class="tab-pane fade">
             <div class="form-group">
@@ -86,7 +83,7 @@
                 <input type="text" class="form-control" value="{{title}}">
             </div>
             <div class="form-group">
-                <label>当前/前回</label>
+                <label>Sakura排名</label>
                 <input type="text" class="form-control" value="{{curk | fm_sakura}}位/{{prrk | fm_sakura}}位">
             </div>
             <div class="form-group">
@@ -114,9 +111,9 @@
 </script>
 <script>
     $(function () {
-        $.getJSON("get_disc.do", {id: ${param.id}}, function (data) {
+        $.getJSON("view_disc.do", {id: ${param.id}}, function (data) {
             var $content = $("#content");
-            $content.html(template("disc-tmpl", data));
+            $content.html(template("template", data));
             $content.find("select").each(function () {
                 $(this).val($(this).data("value"));
             });

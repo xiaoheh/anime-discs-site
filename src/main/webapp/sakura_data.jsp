@@ -7,16 +7,101 @@
     <%@ include file="include/import.jsp" %>
     <link href="styles/table.css" rel="stylesheet"/>
     <script src="scripts/table.js"></script>
+    <style>
+        /* 小设备 */
+        @media (max-width: 767px) {
+
+            table.table th.index {
+                width: 32px;
+                text-align: center;
+                padding-left: 2px;
+                padding-right: 2px;
+            }
+
+            table.table th.index {
+                width: 32px;
+                text-align: center;
+                padding-left: 2px;
+                padding-right: 2px;
+            }
+
+            table.table th.rank {
+                width: 88px;
+            }
+
+            table.table th.cupt {
+                width: 66px;
+            }
+
+        }
+
+        /* 大设备 */
+        @media (min-width: 768px) {
+
+            table.table th.index {
+                width: 60px;
+            }
+
+            table.table th.arnk {
+                width: 85px;
+            }
+
+            table.table th.atot {
+                width: 85px;
+            }
+
+            table.table th.srnk {
+                width: 155px;
+            }
+
+            table.table th.cupt {
+                width: 95px;
+            }
+
+            table.table th.sday {
+                width: 85px;
+            }
+
+            table.table th.cubk {
+                width: 100px;
+            }
+
+            table.table th.release {
+                width: 90px;
+            }
+
+            table.table th.rank1 {
+                width: 85px;
+            }
+
+            table.table th.rank2 {
+                width: 85px;
+            }
+
+            table.table th.rank3 {
+                width: 85px;
+            }
+
+            table.table th.rank4 {
+                width: 85px;
+            }
+
+            table.table th.rank5 {
+                width: 85px;
+            }
+
+        }
+    </style>
 </head>
 <body>
 <%@ include file="include/navbar.jsp" %>
 <div id="content"></div>
-<script id="tables-tmpl-small" type="text/html">
-    {{each lists as list idx}}
-    <table id="{{list.key}}" class="table sorter table-bordered table-striped">
+<script id="template-small" type="text/html">
+    {{each tables as table idx}}
+    <table id="{{table.name}}" class="table sorter table-bordered table-striped">
         <caption>
-            <span><b>{{list.title}}</b></span>
-            <span><span class="hidden-xxs">上次更新 </span>{{list.time | fm_timeout}}</span>
+            <span><b>{{table.title}}</b></span>
+            <span><span class="hidden-xxs">上次更新 </span>{{table.time | fm_timeout}}</span>
         </caption>
         <thead>
         <tr>
@@ -30,14 +115,14 @@
         </tr>
         </thead>
         <tbody>
-        {{each list.discs as disc idx2}}
+        {{each table.discs as disc idx2}}
         {{if disc.arnk < 9999 && disc.curk < 9999 && disc.prrk < 9999}}
         <tr id="row-{{idx+1}}-{{idx2+1}}">
             <td class="index hidden-xxm" data-number="{{idx2+1}}">{{idx2+1}}</td>
             <td class="index hidden-xxm zero-width">)</td>
             {{if disc.arnk != disc.curk}}
             <td class="rank danger" data-number="{{disc.arnk}}">
-                <a href="http://rankstker.net/show.cgi?n={{disc.asin}}" target="_blank">{{disc | fm_dirk}}</a>
+                <a href="http://rankstker.net/show.cgi?n={{disc.asin}}" target="_blank">{{disc | fm_nerk}}</a>
             </td>
             {{else}}
             <td class="rank" data-number="{{disc.curk}}">
@@ -48,7 +133,8 @@
             <td class="cupt hidden-xxs" data-number="{{disc.cupt}}">{{disc.cupt | fm_star:6}}</td>
             <td class="cupt hidden-xxs zero-width"> pt)</td>
             <td class="sname">
-                <a href="${param.admin?"edit":"view"}_disc.jsp?id={{disc.id}}">{{disc.sname}} {{disc | fm_verstr}}</a>
+                <a href="${cookie.admin.value?"edit":"view"}_disc.jsp?id={{disc.id}}">{{disc.sname}} {{disc |
+                    fm_verstr}}</a>
             </td>
         </tr>
         {{/if}}
@@ -57,16 +143,16 @@
     </table>
     {{/each}}
 </script>
-<script id="tables-tmpl" type="text/html">
-    {{each lists as list idx}}
-    <table id="{{list.key}}" class="table sorter table-striped table-bordered">
+<script id="template" type="text/html">
+    {{each tables as table idx}}
+    <table id="{{table.name}}" class="table sorter table-striped table-bordered">
         <caption>
-            <span><b>{{list.title}}</b></span>
-            {{if list.time}}
-            <span>更新时间: {{list.time | fm_date:"yyyy-MM-dd hh:mm:ss"}}</span>
-            <span>(距离现在 {{list.time | fm_timeout}})</span>
+            <span><b>{{table.title}}</b></span>
+            {{if table.time}}
+            <span>更新时间: {{table.time | fm_date:"yyyy-MM-dd hh:mm:ss"}}</span>
+            <span>(距离现在 {{table.time | fm_timeout}})</span>
             {{/if}}
-            {{if is_timeout(list.time)}}
+            {{if is_timeout(table.time)}}
             <div class="text-warning">
                 <span>提示: Sakura可能是延迟了两小时以上, 建议打开更多Amazon排名数据.</span>
                 <span>(点击功能 -> 自定义表格格式 -> Amazon排名模式 或 手动选中Rank1 ~ 5)</span>
@@ -88,22 +174,16 @@
             <th class="cubk sorter">Nico预约</th>
             <th class="cubk zero-width"></th>
             <th class="release sorter">发售日期</th>
-            <th class="japan sorter">日文原名</th>
             <th class="title sorter">碟片标题</th>
             <th class="rank1 sorter">Rank1</th>
-            <th class="date1 sorter">更新1</th>
             <th class="rank2 sorter">Rank2</th>
-            <th class="date2 sorter">更新2</th>
             <th class="rank3 sorter">Rank3</th>
-            <th class="date3 sorter">更新3</th>
             <th class="rank4 sorter">Rank4</th>
-            <th class="date4 sorter">更新4</th>
             <th class="rank5 sorter">Rank5</th>
-            <th class="date5 sorter">更新5</th>
         </tr>
         </thead>
         <tbody>
-        {{each list.discs as disc idx2}}
+        {{each table.discs as disc idx2}}
         <tr>
             <td class="index" data-number="{{idx2+1}}">{{idx2+1}}</td>
             <td class="index zero-width">)</td>
@@ -122,22 +202,14 @@
             <td class="cubk" data-number="{{disc.cubk}}">{{disc.cubk | fm_number}} 预约</td>
             <td class="cubk zero-width">]</td>
             <td class="release" data-number="{{disc.release}}">{{disc.release | fm_date:"yyyy/MM/dd"}}</td>
-            <td class="japan">
-                <a href="${param.admin?"edit":"view"}_disc.jsp?id={{disc.id}}">{{disc.japan}}</a>
-            </td>
             <td class="title">
-                <a href="${param.admin?"edit":"view"}_disc.jsp?id={{disc.id}}">{{disc.title}}</a>
+                <a href="${cookie.admin.value?"edit":"view"}_disc.jsp?id={{disc.id}}">{{disc.title}}</a>
             </td>
             <td class="rank1" data-number="{{disc.rank1}}">{{disc.rank1 | fm_number}}位</td>
-            <td class="date1" data-number="{{disc.date1}}">{{disc.date1 | fm_rtmout}}</td>
             <td class="rank2" data-number="{{disc.rank2}}">{{disc.rank2 | fm_number}}位</td>
-            <td class="date2" data-number="{{disc.date2}}">{{disc.date2 | fm_rtmout}}</td>
             <td class="rank3" data-number="{{disc.rank3}}">{{disc.rank3 | fm_number}}位</td>
-            <td class="date3" data-number="{{disc.date3}}">{{disc.date3 | fm_rtmout}}</td>
             <td class="rank4" data-number="{{disc.rank4}}">{{disc.rank4 | fm_number}}位</td>
-            <td class="date4" data-number="{{disc.date4}}">{{disc.date4 | fm_rtmout}}</td>
             <td class="rank5" data-number="{{disc.rank5}}">{{disc.rank5 | fm_number}}位</td>
-            <td class="date5" data-number="{{disc.date5}}">{{disc.date5 | fm_rtmout}}</td>
         </tr>
         {{/each}}
         </tbody>
@@ -240,16 +312,16 @@
 
     function handle_data(data) {
         $(data).each(function () {
-            navbar.add_postion(this.key, this.title);
+            navbar.add_postion(this.name, this.title);
         });
     }
 
     function render_page(data) {
         post_before_render();
         if (device.is_small()) {
-            $("#content").html(render("tables-tmpl-small", {lists: data}));
+            $("#content").html(render("template-small", {tables: data}));
         } else {
-            $("#content").html(render("tables-tmpl", {lists: data}));
+            $("#content").html(render("template", {tables: data}));
         }
         post_after_render();
     }
@@ -272,12 +344,8 @@
         if (!device.is_small()) {
             render_profile([
                 {title: "默认中文模式", checked: ["index", "arnk", "srnk", "cupt", "sday", "title"]},
-                {title: "默认日文模式", checked: ["index", "arnk", "srnk", "cupt", "japan"]},
                 {title: "Sakura标准模式", checked: ["index", "srnk", "cupt", "cubk", "release", "title"]},
-                {
-                    title: "Amazon排名模式",
-                    checked: ["index", "arnk", "srnk", "title", "rank1", "rank2", "rank3", "rank4", "rank5"]
-                }
+                {title: "Amazon排名模式", checked: ["index", "srnk", "title", "rank1", "rank2", "rank3", "rank4", "rank5"]}
             ]);
             $("table.table>tbody>tr").each(function () {
                 var $td1 = $(this).find("td.arnk");

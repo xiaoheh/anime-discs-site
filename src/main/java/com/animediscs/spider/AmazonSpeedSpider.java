@@ -34,7 +34,7 @@ public class AmazonSpeedSpider {
                 document.select("div.zg_title a").forEach(link -> {
                     Matcher matcher = pattern.matcher(link.attr("href"));
                     if (matcher.find()) {
-                        updateDiscAmazon(matcher.group(1), matcher.group(2));
+                        updateSpeed(matcher.group(1), matcher.group(2));
                     } else {
                         logger.printf(Level.DEBUG, "未找到Amazon速报数据, 跳过此链接: %s", link.attr("href"));
                     }
@@ -44,7 +44,7 @@ public class AmazonSpeedSpider {
         }
     }
 
-    private void updateDiscAmazon(String asin, String rank) {
+    private void updateSpeed(String asin, String rank) {
         Disc disc = dao.lookup(Disc.class, "asin", asin);
         if (disc != null) {
             DiscRank discRank = getDiscAmazon(disc);

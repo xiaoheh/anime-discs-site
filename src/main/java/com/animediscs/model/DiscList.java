@@ -12,6 +12,7 @@ public class DiscList extends BaseModel implements Comparable<DiscList> {
 
     private String name;
     private String title;
+    private boolean sakura;
 
     private Date date;
     private List<Disc> discs = new LinkedList<>();
@@ -35,6 +36,15 @@ public class DiscList extends BaseModel implements Comparable<DiscList> {
     }
 
     @Column
+    public boolean isSakura() {
+        return sakura;
+    }
+
+    public void setSakura(boolean sakura) {
+        this.sakura = sakura;
+    }
+
+    @Column
     public Date getDate() {
         return date;
     }
@@ -55,16 +65,25 @@ public class DiscList extends BaseModel implements Comparable<DiscList> {
 
     public int compareTo(DiscList other) {
         Assert.notNull(other);
-        return other.name.compareTo(name);
+        if (sakura != other.sakura) {
+            return sakura ? -1 : 1;
+        } else {
+            return other.name.compareTo(name);
+        }
     }
 
     @Transient
-    public boolean isBeforeUpdate(Date date) {
+    public boolean isBefore(Date date) {
         return this.date == null || this.date.compareTo(date) < 0;
     }
 
-    public static String titleOfSeason(String key) {
-        return key.substring(0, 4) + "年" + key.substring(5) + "月新番";
+    @Transient
+    public boolean isTop100() {
+        return "top_100".equals(getName());
+    }
+
+    public static String titleOfSeason(String name) {
+        return name.substring(0, 4) + "年" + name.substring(5) + "月新番";
     }
 
 }

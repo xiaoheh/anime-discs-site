@@ -138,6 +138,9 @@ template.helper("fm_type", function (disc) {
 });
 
 function fm_type(disc) {
+    if (disc["cdver"]) {
+        return "◎";
+    }
     if (disc["dvdver"]) {
         return disc["boxver"] ? "▲" : "△";
     } else {
@@ -153,16 +156,12 @@ function fm_srnk(disc) {
     return fm_sakura(disc["curk"]) + "位/" + fm_sakura(disc["prrk"]) + "位";
 }
 
-template.helper("fm_dirk", function (disc) {
-    return fm_dirk(disc);
+template.helper("fm_arnk", function (disc) {
+    return fm_arnk(disc);
 });
 
-function fm_dirk(disc) {
-    if (disc["rank1"] && disc["rank2"]) {
-        return fm_star(disc["rank1"]) + "/" + fm_star(disc["rank2"]);
-    } else {
-        return fm_star(disc["arnk"]) + "/" + fm_star(disc["curk"]);
-    }
+function fm_arnk(disc) {
+    return fm_sakura(disc["rank1"]) + "位/" + fm_sakura(disc["rank2"]) + "位";
 }
 
 template.helper("fm_eqrk", function (disc) {
@@ -171,6 +170,14 @@ template.helper("fm_eqrk", function (disc) {
 
 function fm_eqrk(disc) {
     return fm_star(disc["curk"]) + "/" + fm_star(disc["prrk"]);
+}
+
+template.helper("fm_nerk", function (disc) {
+    return fm_nerk(disc);
+});
+
+function fm_nerk(disc) {
+    return fm_star(disc["rank1"]) + "/" + fm_star(disc["rank2"]);
 }
 
 template.helper("is_timeout", function (time) {

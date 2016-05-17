@@ -11,28 +11,17 @@
 /* 小设备 */
 @media (max-width: 767px) {
 
-    table.table > thead > tr > th.index {
-        width: 32px;
-        text-align: center;
-        padding-left: 2px;
-        padding-right: 2px;
+    table.table thead tr th {
+        padding-left: 18px;
     }
 
-    table.table > thead > tr > th.rank {
-        width: 88px;
-    }
-
-    table.table > thead > tr > th.cupt {
-        width: 66px;
-    }
-
-    table.table > tbody > tr > td {
+    table.table td {
         padding-left: 4px;
         padding-right: 4px;
         text-align: center;
     }
 
-    table.table > tbody > tr > td.sname {
+    table.table td.sname {
         text-align: left;
         word-break: break-all;
     }
@@ -46,105 +35,19 @@
         font-size: 14px;
     }
 
-    table.table th {
-        text-align: left;
-        padding-left: 20px !important;
+    table.table thead tr th {
+        padding-left: 20px;
     }
 
     table.table th.index {
-        width: 60px;
-    }
-
-    table.table th.arnk {
-        width: 85px;
-    }
-
-    table.table th.atot {
-        width: 85px;
-    }
-
-    table.table th.srnk {
-        width: 155px;
-    }
-
-    table.table th.cupt {
-        width: 95px;
-    }
-
-    table.table th.tapt {
-        width: 75px;
-    }
-
-    table.table th.sday {
-        width: 85px;
-    }
-
-    table.table th.capt {
-        width: 85px;
-    }
-
-    table.table th.stot {
-        width: 85px;
-    }
-
-    table.table th.cubk {
-        width: 100px;
-    }
-
-    table.table th.shelves {
-        width: 90px;
-    }
-
-    table.table th.release {
-        width: 90px;
-    }
-
-    table.table th.rank1 {
-        width: 85px;
-    }
-
-    table.table th.rank2 {
-        width: 85px;
-    }
-
-    table.table th.rank3 {
-        width: 85px;
-    }
-
-    table.table th.rank4 {
-        width: 85px;
-    }
-
-    table.table th.rank5 {
-        width: 85px;
-    }
-
-    table.table th.date1 {
-        width: 65px;
-    }
-
-    table.table th.date2 {
-        width: 65px;
-    }
-
-    table.table th.date3 {
-        width: 65px;
-    }
-
-    table.table th.date4 {
-        width: 65px;
-    }
-
-    table.table th.date5 {
-        width: 65px;
+        width: 32px;
+        text-align: center;
+        padding-left: 2px;
+        padding-right: 2px;
     }
 
     table.table td {
         text-align: center;
-    }
-
-    table.table td.japan {
-        text-align: left;
     }
 
     table.table td.title {
@@ -166,7 +69,7 @@ table.table > caption > span > b {
 }
 
 table.table > thead > tr > th {
-    padding-left: 18px;
+    text-align: left;
 }
 
 table.table > thead > tr > th.zero-width {

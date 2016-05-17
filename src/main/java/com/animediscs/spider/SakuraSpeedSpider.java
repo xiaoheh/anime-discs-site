@@ -51,7 +51,7 @@ public class SakuraSpeedSpider {
         if (!updateText.equals("更新中")) {
             Date japanDate = parseDate(update, updateText);
             Date chinaDate = DateUtils.addHours(japanDate, -1);
-            if (discList.isBeforeUpdate(chinaDate)) {
+            if (discList.isBefore(chinaDate)) {
                 updateDiscList(table, discList, chinaDate);
                 logger.printf(Level.INFO, "成功更新Sakura速报数据(%s)", discList.getTitle());
             } else {
@@ -120,11 +120,11 @@ public class SakuraSpeedSpider {
         return parseDate(release, dateText);
     }
 
-    private DiscList getDiscList(String key) {
-        if (key == null || key.isEmpty()) {
+    private DiscList getDiscList(String name) {
+        if (name == null || name.isEmpty()) {
             return getDiscList("top_100", "日亚实时TOP100");
         } else {
-            return getDiscList(key, titleOfSeason(key));
+            return getDiscList(name, titleOfSeason(name));
         }
     }
 
@@ -134,6 +134,7 @@ public class SakuraSpeedSpider {
             discList = new DiscList();
             discList.setName(name);
             discList.setTitle(title);
+            discList.setSakura(true);
         }
         return discList;
     }

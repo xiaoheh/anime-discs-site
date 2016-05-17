@@ -4,6 +4,7 @@ import com.animediscs.support.BaseModel;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
+import java.util.Comparator;
 import java.util.Date;
 
 @Entity
@@ -17,6 +18,7 @@ public class Disc extends BaseModel implements Comparable<Disc> {
     private String japan;
     private String sname;
 
+    private boolean cdver;
     private boolean dvdver;
     private boolean boxver;
     private boolean amzver;
@@ -68,6 +70,15 @@ public class Disc extends BaseModel implements Comparable<Disc> {
 
     public void setSname(String sname) {
         this.sname = sname;
+    }
+
+    @Column
+    public boolean isCdver() {
+        return cdver;
+    }
+
+    public void setCdver(boolean cdver) {
+        this.cdver = cdver;
     }
 
     @Column
@@ -126,11 +137,31 @@ public class Disc extends BaseModel implements Comparable<Disc> {
 
     public int compareTo(Disc other) {
         Assert.notNull(other);
-        if (sakura != null && other.sakura != null) {
-            return sakura.compareTo(other.sakura);
-        } else {
-            return title.compareTo(other.title);
-        }
+        return title.compareTo(other.title);
+    }
+
+    public static Comparator<Disc> sortBySakura() {
+        return (o1, o2) -> {
+            if (o1.sakura != null && o2.sakura != null) {
+                return o1.sakura.compareTo(o2.sakura);
+            }
+            if (o1.sakura == null && o2.sakura == null) {
+                return o1.compareTo(o2);
+            }
+            return o1.sakura == null ? 1 : -1;
+        };
+    }
+
+    public static Comparator<Disc> sortByAmazon() {
+        return (o1, o2) -> {
+            if (o1.rank != null && o2.rank != null) {
+                return o1.rank.compareTo(o2.rank);
+            }
+            if (o1.rank == null && o2.rank == null) {
+                return o1.compareTo(o2);
+            }
+            return o1.rank == null ? 1 : -1;
+        };
     }
 
     public static String titleOfDisc(String discName) {

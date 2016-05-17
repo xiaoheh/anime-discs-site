@@ -29,7 +29,7 @@ public class AutoRunner {
     public AutoRunner() {
         ExecutorService execute = Executors.newFixedThreadPool(1);
         sakuraRunner = new SpiderService("Sakura", 1, 2, execute);
-        amazonRunner = new SpiderService("Amazon", 5, 2, execute);
+        amazonRunner = new SpiderService("Amazon", 6, 2, execute);
     }
 
     @Autowired
@@ -64,13 +64,13 @@ public class AutoRunner {
             amazonDiscSpider.doUpdateHot(30, amazonRunner, 2);
         });
         schedule("Amazon次要排名抓取", 20, 240, () -> {
-            amazonDiscSpider.doUpdateExt(120, amazonRunner, 3);
+            amazonDiscSpider.doUpdateExt(120, amazonRunner, 4);
         });
         schedule("Amazon动画数据抓取", 25, 3600, () -> {
-            amazonAnimeSpider.doUpdate(amazonRunner, 4);
+            amazonAnimeSpider.doUpdate(amazonRunner, 5);
         });
         schedule("Amazon全部排名抓取", 35, 1800, () -> {
-            amazonDiscSpider.doUpdateAll(900, amazonRunner, 5);
+            amazonDiscSpider.doUpdateAll(900, amazonRunner, 6);
         });
         schedule("任务线程状态报告", 0, 30, () -> {
             String timeout = Format.formatTimeout(startupTimeMillis);
@@ -92,6 +92,14 @@ public class AutoRunner {
                 }
             }
         }, delay * 1000, period * 1000);
+    }
+
+    public SpiderService getAmazonRunner() {
+        return amazonRunner;
+    }
+
+    public SpiderService getSakuraRunner() {
+        return sakuraRunner;
     }
 
     private interface Callable {
