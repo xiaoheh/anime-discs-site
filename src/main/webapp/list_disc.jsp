@@ -16,23 +16,24 @@
     <table id="{{list.key}}" class="table sorter table-bordered table-striped">
         <caption>
             <span><b>{{list.title}}</b></span>
-            <span><span class="hidden-xxs">上次更新 </span>{{list.time | fm_timeout}}</span>
         </caption>
         <thead>
         <tr>
-            <th class="index hidden-xxm">ID</th>
-            <th class="index hidden-xxm zero-width"></th>
-            <th style="width: 108px" class="rank sorter">排名</th>
+            <th class="index">ID</th>
+            <th class="index zero-width"></th>
+            <th style="width: 118px" class="rank sorter">排名</th>
             <th class="sname sorter">碟片标题</th>
         </tr>
         </thead>
         <tbody>
         {{each list.discs as disc idx2}}
         <tr id="row-{{idx+1}}-{{idx2+1}}">
-            <td class="index hidden-xxm" data-number="{{idx2+1}}">{{idx2+1}}</td>
-            <td class="index hidden-xxm zero-width">)</td>
-            <td class="rank" data-number="{{disc.arnk}}">
-                <a href="list_rank.jsp?id={{disc.id}}">{{disc | fm_dirk}}</a>
+            <td class="index" data-number="{{idx2+1}}">{{idx2+1}}</td>
+            <td class="index zero-width">)</td>
+            <td class="rank" data-number="{{disc.rank1}}">
+                <a href="list_rank.jsp?id={{disc.id}}">
+                    {{disc.rank1 | fm_star:6}}/{{disc.rank2 | fm_star:6}}
+                </a>
             </td>
             <td class="sname">
                 <a href="${param.admin?"edit":"view"}_disc.jsp?id={{disc.id}}">{{disc.sname}} {{disc | fm_verstr}}</a>
@@ -92,7 +93,7 @@
         <tr>
             <td class="index" data-number="{{idx2+1}}">{{idx2+1}}</td>
             <td class="index zero-width">)</td>
-            <td class="srnk" data-number="{{disc.arnk}}">
+            <td class="srnk" data-number="{{disc.rank1}}">
                 <a href="list_rank.jsp?id={{disc.id}}" target="_blank">
                     {{disc.rank1 | fm_sakura:6}}位/{{disc.rank2 | fm_sakura:6}}位
                 </a>

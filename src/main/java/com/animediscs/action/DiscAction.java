@@ -111,7 +111,7 @@ public class DiscAction extends BaseAction {
         if ("disclist".equals(filter) && "manual".equals(name)) {
             DiscList discList = new DiscList();
             discList.setName("manual");
-            discList.setTitle("人工维护的动画列表");
+            discList.setTitle("手动维护的动画列表");
             readAllLines("config/disclist.txt").forEach(asin -> {
                 Disc disc = dao.lookup(Disc.class, "asin", asin);
                 if (disc != null) {

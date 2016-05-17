@@ -13,6 +13,7 @@
         <li class="active"><a href="#disc-tab" data-toggle="tab">基本数据</a></li>
         <li><a href="#rank-tab" data-toggle="tab">排名数据</a></li>
         <li><a href="#other-tab" data-toggle="tab">其他数据</a></li>
+        <li><a href="list_rank.jsp?id={{id}}">全部排名</a></li>
     </ul>
     <div class="tab-content" style="padding-top: 10px">
         <div id="disc-tab" class="tab-pane fade in active">

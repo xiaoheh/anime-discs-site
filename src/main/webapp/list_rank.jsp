@@ -27,7 +27,7 @@
 <script id="tables-tmpl" type="text/html">
     <table class="table sorter table-bordered table-striped">
         <caption>
-            <span>{{title}}的全部排名</span>
+            <span>{{title}} 的全部排名</span>
         </caption>
         <thead>
         <tr>
