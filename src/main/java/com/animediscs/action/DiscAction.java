@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.List;
 
 import static com.animediscs.util.Helper.readAllLines;
@@ -46,14 +47,10 @@ public class DiscAction extends BaseAction {
         object.put("asin", disc.getAsin());
         object.put("title", disc.getTitle());
         object.put("japan", disc.getJapan());
+        object.put("sname", disc.getSname());
         object.put("dvdver", disc.isDvdver());
         object.put("boxver", disc.isBoxver());
         object.put("amzver", disc.isAmzver());
-        if (disc.getSname() == null) {
-            object.put("sname", disc.getTitle());
-        } else {
-            object.put("sname", disc.getSname());
-        }
         if (disc.getRelease() != null) {
             object.put("release", disc.getRelease().getTime());
         }
@@ -121,6 +118,7 @@ public class DiscAction extends BaseAction {
                     discList.getDiscs().add(disc);
                 }
             });
+            Collections.sort(discList.getDiscs());
 
             JSONArray array = new JSONArray();
             array.put(buildDiscList(discList));
