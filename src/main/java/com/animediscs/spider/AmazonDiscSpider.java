@@ -55,6 +55,10 @@ public class AmazonDiscSpider {
     }
 
     public void doUpdateExt(int second, SpiderService service, int level) {
+        if (service.isBusy(level)) {
+            logger.printf(Level.INFO, "抓取服务忙, 暂停添加任务");
+            return;
+        }
         dao.execute(session -> {
             Date yesterday = DateUtils.addDays(new Date(), -1);
             session.createCriteria(DiscList.class)
@@ -71,6 +75,10 @@ public class AmazonDiscSpider {
     }
 
     public void doUpdateAll(int second, SpiderService service, int level) {
+        if (service.isBusy(level)) {
+            logger.printf(Level.INFO, "抓取服务忙, 暂停添加任务");
+            return;
+        }
         DiscList discList = new DiscList();
         discList.setName("all_disc");
         discList.setTitle("全部碟片");

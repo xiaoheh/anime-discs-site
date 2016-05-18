@@ -62,6 +62,12 @@ public class SpiderService {
         thread.start();
     }
 
+    public boolean isBusy(int level) {
+        Assert.isTrue(level >= 1 && level <= maxLevel);
+        int index = level - 1;
+        return tasksArray[index] != null && tasksArray[index].size() > 0;
+    }
+
     public void addTask(int level, String url, Supplier<Boolean> test, Consumer<Document> consumer) {
         addTask(level, new SpiderTask(url, test, consumer));
     }
