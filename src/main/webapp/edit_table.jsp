@@ -97,7 +97,7 @@
 
     function update() {
         form.info("提交中...");
-        $.post("edit_disc.do", {
+        $.post("edit_table.do", {
             id: $("#id").val(),
             name: $("#name").val(),
             title: $("#title").val(),

@@ -32,6 +32,7 @@
 
         <action name="view_table" method="view" class="com.animediscs.action.TableAction"/>
         <action name="list_table" method="list" class="com.animediscs.action.TableAction"/>
+        <action name="edit_table" method="edit" class="com.animediscs.action.TableAction"/>
 
         <action name="remove_disc_from_table" method="removeDisc" class="com.animediscs.action.TableAction"/>
         <action name="add_disc_to_table_with_id" method="addDiscWithId" class="com.animediscs.action.TableAction"/>

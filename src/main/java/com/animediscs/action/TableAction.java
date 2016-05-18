@@ -20,6 +20,9 @@ public class TableAction extends BaseAction {
     private Long id;
     private Long discId;
     private String asin;
+    private String name;
+    private String title;
+    private boolean sakura;
 
     @Autowired
     public void setDao(Dao dao) {
@@ -35,19 +38,6 @@ public class TableAction extends BaseAction {
     public void setAmazonAnimeSpider(AmazonAnimeSpider amazonAnimeSpider) {
         this.amazonAnimeSpider = amazonAnimeSpider;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setDiscId(Long discId) {
-        this.discId = discId;
-    }
-
-    public void setAsin(String asin) {
-        this.asin = asin;
-    }
-
 
     public void view() throws Exception {
         DiscList discList = dao.get(DiscList.class, id);
@@ -75,6 +65,15 @@ public class TableAction extends BaseAction {
             });
         });
         responseJson(array.toString());
+    }
+
+    public void edit() throws Exception {
+        DiscList discList = dao.get(DiscList.class, id);
+        discList.setName(name);
+        discList.setTitle(title);
+        discList.setSakura(sakura);
+        dao.update(discList);
+        responseSuccess();
     }
 
     public void removeDisc() throws Exception {
@@ -124,6 +123,30 @@ public class TableAction extends BaseAction {
         object.put("id", disc.getId());
         object.put("title", disc.getTitle());
         return object;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setDiscId(Long discId) {
+        this.discId = discId;
+    }
+
+    public void setAsin(String asin) {
+        this.asin = asin;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setSakura(boolean sakura) {
+        this.sakura = sakura;
     }
 
 }
