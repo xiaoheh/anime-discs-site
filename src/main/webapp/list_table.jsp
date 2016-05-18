@@ -36,7 +36,7 @@
 <script id="template" type="text/html">
     <table class="table sorter table-bordered table-striped">
         <caption>
-            <span>全部碟片列表</span>
+            <span><b>所有碟片列表</b></span>
         </caption>
         <thead>
         <tr>
