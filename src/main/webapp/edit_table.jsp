@@ -5,6 +5,7 @@
     <title>Anime Discs - 碟片信息</title>
     <%@ include file="include/import.jsp" %>
     <link href="styles/table.css" rel="stylesheet"/>
+    <script src="scripts/table.js"></script>
 </head>
 <body>
 <%@ include file="include/navbar.jsp" %>
@@ -45,7 +46,7 @@
     </div>
 </script>
 <script id="edit-tmpl" type="text/html">
-    <table class="table table-bordered table-striped">
+    <table id="manager" class="table sorter table-bordered table-striped">
         <caption>
             <div class="form-group">
                 <label>
@@ -56,14 +57,16 @@
         </caption>
         <thead>
         <tr>
-            <th style="width: 100px">管理操作</th>
-            <th>碟片标题</th>
+            <th style="width: 60px; text-align: center; padding-left: 8px">操作</th>
+            <th class="sorter" style="width: 120px">ASIN</th>
+            <th class="sorter">碟片标题</th>
         </tr>
         </thead>
         <tbody>
         {{each discs as disc}}
         <tr id="{{disc.id}}">
-            <td><a href="javascript:remove('{{disc.id}}')">从表单移除</a></td>
+            <td><a href="javascript:remove('{{disc.id}}')">移除</a></td>
+            <td><a href="http://www.amazon.co.jp/dp/{{disc.asin}}">{{disc.asin}}</a></td>
             <td style="text-align: left"><a href="edit_disc.jsp?id={{disc.id}}">{{disc.title}}</a></td>
         </tr>
         {{/each}}
@@ -72,8 +75,9 @@
 </script>
 <script id="row-tmpl" type="text/html">
     <tr id="{{id}}">
-        <td><a href="edit_disc.jsp?id={{id}}">{{title}}</a></td>
         <td><a href="javascript:remove('{{id}}')">移除</a></td>
+        <td><a href="http://www.amazon.co.jp/dp/{{asin}}">{{asin}}</a></td>
+        <td style="text-align: left"><a href="edit_disc.jsp?id={{id}}">{{title}}</a></td>
     </tr>
 </script>
 <script>
@@ -91,6 +95,7 @@
             $.getJSON("list_disc.do", {filter: "table", name: data.name}, function (data2) {
                 $("#edit-tab").html(template("edit-tmpl", {discs: data2.discs}));
                 $("#edit-tab").removeClass("in active");
+                tablesorter("#manager");
             });
         });
     });
