@@ -16,15 +16,15 @@
     <div class="tab-content" style="padding-top: 10px">
         <div id="info-tab" class="tab-pane fade in active">
             <div class="form-group">
-                <label>榜单名称</label>
+                <label>碟片列表名称</label>
                 <input type="text" class="form-control" value="{{name}}">
             </div>
             <div class="form-group">
-                <label>榜单标题</label>
+                <label>碟片列表标题</label>
                 <input type="text" class="form-control" value="{{title}}">
             </div>
             <div class="form-group">
-                <label>榜单类型</label>
+                <label>碟片列表类型</label>
                 <select class="form-control" data-value="{{sakura?'1':'2'}}">
                     <option value="1">Sakura</option>
                     <option value="2">非Sakura</option>

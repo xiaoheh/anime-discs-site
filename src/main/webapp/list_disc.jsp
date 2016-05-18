@@ -279,7 +279,8 @@
     function ajax_update_page() {
         $.getJSON("list_disc.do", {
             filter: '${param.filter == null ? "" : param.filter}',
-            name: '${param.name == null ? "" : param.name}'
+            name: '${param.name == null ? "" : param.name}',
+            type: '${param.type == null ? "" : param.type}'
         }, function (data) {
             cache.data = data;
             handle_data(data);

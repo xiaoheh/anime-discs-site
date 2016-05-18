@@ -3,7 +3,7 @@
 <html>
 <head>
     <%@ include file="include/meta.jsp" %>
-    <title>Anime Discs - 全部榜单</title>
+    <title>Anime Discs - 全部碟片列表</title>
     <%@ include file="include/import.jsp" %>
     <link href="styles/table.css" rel="stylesheet"/>
     <script src="scripts/table.js"></script>
@@ -36,7 +36,7 @@
 <script id="template" type="text/html">
     <table class="table sorter table-bordered table-striped">
         <caption>
-            <span>全部榜单</span>
+            <span>全部碟片列表</span>
         </caption>
         <thead>
         <tr>

@@ -3,6 +3,8 @@ package com.animediscs.action;
 import com.animediscs.dao.Dao;
 import com.animediscs.model.*;
 import com.animediscs.support.BaseAction;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,15 +92,75 @@ public class DiscAction extends BaseAction {
         DiscList discList;
         if ("table".equals(filter)) {
             discList = getDiscByTable();
+        } else if ("type".equals(filter)) {
+            if ("cd".equals(type)) {
+                discList = getDiscsOfCD();
+            } else {
+                discList = getDiscsOfDVD();
+            }
         } else {
             discList = getAllDiscs();
         }
         JSONObject object = new JSONObject();
-        object.put("id", discList.getId());
+        if (discList.getId() != null) {
+            object.put("id", discList.getId());
+        }
         object.put("name", discList.getName());
         object.put("title", discList.getTitle());
         object.put("discs", buildDiscsForList(discList));
         responseJson(object.toString());
+    }
+
+    private DiscList getAllDiscs() {
+        DiscList discList = new DiscList();
+        discList.setName("all_disc");
+        discList.setTitle("全部碟片");
+        List<Disc> discs = dao.findAll(Disc.class);
+        Collections.sort(discs, Disc.sortByAmazon());
+        discList.setDiscs(discs);
+        return discList;
+    }
+
+    private DiscList getDiscByTable() throws IOException {
+        DiscList discList = dao.lookup(DiscList.class, "name", name);
+        if (discList != null) {
+            dao.execute(session -> {
+                List<Disc> discs = dao.get(DiscList.class, discList.getId()).getDiscs();
+                Collections.sort(discs, Disc.sortByAmazon());
+                discList.setDiscs(discs);
+            });
+        } else {
+            responseError("未找到指定的动画列表");
+        }
+        return discList;
+    }
+
+    private DiscList getDiscsOfCD() {
+        DiscList discList = new DiscList();
+        discList.setName("all_cd");
+        discList.setTitle("所有音乐碟片");
+        dao.execute(session -> {
+            List<Disc> discs = session.createCriteria(Disc.class)
+                    .add(Restrictions.eq("type", DiscType.CD))
+                    .list();
+            Collections.sort(discs, Disc.sortByAmazon());
+            discList.setDiscs(discs);
+        });
+        return discList;
+    }
+
+    private DiscList getDiscsOfDVD() {
+        DiscList discList = new DiscList();
+        discList.setName("all_cd");
+        discList.setTitle("所有动画碟片");
+        dao.execute(session -> {
+            List<Disc> discs = session.createCriteria(Disc.class)
+                    .add(Restrictions.ne("type", DiscType.CD))
+                    .list();
+            Collections.sort(discs, Disc.sortByAmazon());
+            discList.setDiscs(discs);
+        });
+        return discList;
     }
 
     private JSONArray buildDiscsForList(DiscList discList) {
@@ -150,32 +212,6 @@ public class DiscAction extends BaseAction {
             array.put(object);
         });
         return array;
-    }
-
-    private DiscList getAllDiscs() {
-        DiscList discList;
-        discList = new DiscList();
-        discList.setName("all_disc");
-        discList.setTitle("全部碟片");
-        List<Disc> discs = dao.findAll(Disc.class);
-        Collections.sort(discs, Disc.sortByAmazon());
-        discList.setDiscs(discs);
-        return discList;
-    }
-
-    private DiscList getDiscByTable() throws IOException {
-        DiscList discList;
-        discList = dao.lookup(DiscList.class, "name", name);
-        if (discList != null) {
-            dao.execute(session -> {
-                List<Disc> discs = dao.get(DiscList.class, discList.getId()).getDiscs();
-                Collections.sort(discs, Disc.sortByAmazon());
-                discList.setDiscs(discs);
-            });
-        } else {
-            responseError("未找到指定的榜单");
-        }
-        return discList;
     }
 
     public void edit() throws Exception {

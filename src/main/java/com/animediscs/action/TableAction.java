@@ -111,7 +111,7 @@ public class TableAction extends BaseAction {
                 object.put("success", true);
             } else {
                 amazonAnimeSpider.doUpdate(autoRunner.getAmazonRunner(), 3, id, asin);
-                object.put("error", "未找到指定碟片, 已安排从亚马逊查询, 查询成功后会自动添加到该榜单");
+                object.put("error", "未找到指定碟片, 已安排从亚马逊查询, 查询成功后会自动添加到该碟片列表");
                 object.put("success", false);
             }
         });
