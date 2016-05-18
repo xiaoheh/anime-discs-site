@@ -1,3 +1,4 @@
+<%@ page import="com.animediscs.action.DiscType" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -31,16 +32,10 @@
             </div>
             <div class="form-group">
                 <label>碟片类型</label>
-                <select class="form-control" data-value="{{dvdver?'1':'2'}}">
-                    <option value="1">DVD</option>
-                    <option value="2">Blu-ray</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>分卷类型</label>
-                <select class="form-control" data-value="{{boxver?'1':'2'}}">
-                    <option value="1">BOX</option>
-                    <option value="2">非BOX</option>
+                <select class="form-control" data-value="{{type}}">
+                    <% for (DiscType type : DiscType.values()) { %>
+                    <option value="<%=type.ordinal()%>"><%=type.name()%></option>
+                    <% } %>
                 </select>
             </div>
             <div class="form-group">

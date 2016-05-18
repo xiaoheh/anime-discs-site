@@ -1,5 +1,6 @@
 package com.animediscs.spider;
 
+import com.animediscs.action.DiscType;
 import com.animediscs.dao.Dao;
 import com.animediscs.model.*;
 import com.animediscs.runner.SpiderService;
@@ -102,10 +103,17 @@ public class SakuraSpeedSpider {
             disc.setRelease(parseRelease(tr));
             disc.setAmzver(isAmzver(japan));
             if (type.equals("◎")) {
-                disc.setBoxver(true);
-                disc.setDvdver(!japan.contains("Blu-ray"));
+                if (japan.contains("Blu-ray")) {
+                    disc.setType(DiscType.BD_BOX);
+                } else {
+                    disc.setType(DiscType.DVD_BOX);
+                }
             } else {
-                disc.setDvdver(type.equals("○"));
+                if (japan.contains("Blu-ray")) {
+                    disc.setType(DiscType.BD);
+                } else {
+                    disc.setType(DiscType.DVD);
+                }
             }
         }
         dao.saveOrUpdate(disc);

@@ -67,8 +67,7 @@ public class SakuraAction extends BaseAction {
         } else {
             object.put("sname", disc.getSname());
         }
-        object.put("dvdver", disc.isDvdver());
-        object.put("boxver", disc.isBoxver());
+        object.put("type", disc.getType().ordinal());
         object.put("amzver", disc.isAmzver());
         object.put("release", disc.getRelease().getTime());
         DiscRank rank = disc.getRank();

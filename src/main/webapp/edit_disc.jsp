@@ -1,3 +1,4 @@
+<%@ page import="com.animediscs.action.DiscType" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -32,26 +33,19 @@
             </div>
             <div class="form-group">
                 <label>碟片类型</label>
-                <select class="form-control" id="dvdver" data-value="{{dvdver?'1':'2'}}">
-                    <option value="1">DVD</option>
-                    <option value="2">Blu-ray</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>分卷类型</label>
-                <select class="form-control" id="boxver" data-value="{{boxver?'1':'2'}}">
-                    <option value="1">BOX</option>
-                    <option value="2">非BOX</option>
+                <select id="type" class="form-control" data-value="{{type}}">
+                    <% for (DiscType type : DiscType.values()) { %>
+                    <option value="<%=type.ordinal()%>"><%=type.name()%></option>
+                    <% } %>
                 </select>
             </div>
             <div class="form-group">
                 <label>限定类型</label>
-                <select class="form-control" id="amzver" data-value="{{amzver?'1':'2'}}">
+                <select class="form-control" data-value="{{amzver?'1':'2'}}">
                     <option value="1">尼限定</option>
                     <option value="2">非尼限定</option>
                 </select>
-            </div>
-        </div>
+            </div>        </div>
         <div id="rank-tab" class="tab-pane fade">
             <div class="form-group">
                 <label>碟片标题</label>
@@ -133,8 +127,7 @@
             id: $("#id").val(),
             title: $("#title").val(),
             sname: $("#sname").val(),
-            dvdver: $("#dvdver").val() == "1",
-            boxver: $("#boxver").val() == "1",
+            type: $("#type option:selected").text(),
             amzver: $("#amzver").val() == "1",
             release: $("#release").val()
         }, function (data) {

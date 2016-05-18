@@ -15,7 +15,7 @@ public class Anime extends BaseModel implements Comparable<Anime> {
     private String title;
     private String sname;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     public Season getSeason() {
         return season;
     }

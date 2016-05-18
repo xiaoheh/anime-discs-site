@@ -54,6 +54,10 @@
                 width: 155px;
             }
 
+            table.table th.type {
+                width: 60px;
+            }
+
             table.table th.cupt {
                 width: 95px;
             }
@@ -147,7 +151,7 @@
     {{each tables as table idx}}
     <table id="{{table.name}}" class="table sorter table-striped table-bordered">
         <caption>
-            <span><a href="list_disc.jsp?filter=table&name={{table.name}}"">{{table.title}}</a></span>
+            <span><a href="list_disc.jsp?filter=table&name={{table.name}}">{{table.title}}</a></span>
             {{if table.time}}
             <span>更新时间: {{table.time | fm_date:"yyyy-MM-dd hh:mm:ss"}}</span>
             <span>(距离现在 {{table.time | fm_timeout}})</span>
@@ -166,6 +170,7 @@
             <th class="arnk sorter">Amazon</th>
             <th class="atot sorter">更新时间</th>
             <th class="srnk sorter">当前/前回</th>
+            <th class="type sorter">类型</th>
             <th class="cupt zero-width"></th>
             <th class="cupt sorter">累积PT</th>
             <th class="cupt zero-width"></th>
@@ -194,6 +199,7 @@
             <td class="srnk" data-number="{{disc.curk}}">
                 <a href="http://rankstker.net/show.cgi?n={{disc.asin}}" target="_blank">{{disc | fm_srnk}}</a>
             </td>
+            <td class="type" data-number="{{disc.type}}">{{disc | fm_type}}</td>
             <td class="cupt zero-width">(</td>
             <td class="cupt" data-number="{{disc.cupt}}">{{disc.cupt | fm_sakura}} pt</td>
             <td class="cupt zero-width">)</td>
@@ -344,7 +350,7 @@
         if (!device.is_small()) {
             render_profile([
                 {title: "默认中文模式", checked: ["index", "arnk", "srnk", "cupt", "sday", "title"]},
-                {title: "Sakura标准模式", checked: ["index", "srnk", "cupt", "cubk", "release", "title"]},
+                {title: "Sakura标准模式", checked: ["index", "srnk", "type", "cupt", "cubk", "release", "title"]},
                 {title: "Amazon排名模式", checked: ["index", "srnk", "title", "rank1", "rank2", "rank3", "rank4", "rank5"]}
             ]);
             $("table.table>tbody>tr").each(function () {

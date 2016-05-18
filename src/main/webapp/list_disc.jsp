@@ -44,6 +44,10 @@
                 width: 85px;
             }
 
+            table.table th.type {
+                width: 60px;
+            }
+
             table.table th.cupt {
                 width: 95px;
             }
@@ -130,6 +134,7 @@
             <th class="index zero-width"></th>
             <th class="arnk sorter">当前/前回</th>
             <th class="atot sorter">更新时间</th>
+            <th class="type sorter">类型</th>
             <th class="cupt zero-width"></th>
             <th class="cupt sorter">累积PT</th>
             <th class="cupt zero-width"></th>
@@ -155,6 +160,7 @@
                 <a href="list_rank.jsp?id={{disc.id}}">{{disc | fm_arnk}}</a>
             </td>
             <td class="atot" data-number="{{disc.amdt}}">{{disc.amdt | fm_timeout}}</td>
+            <td class="type" data-number="{{disc.type}}">{{disc | fm_type}}</td>
             <td class="cupt zero-width">(</td>
             <td class="cupt" data-number="{{disc.cupt}}">{{disc.cupt | fm_sakura}} pt</td>
             <td class="cupt zero-width">)</td>

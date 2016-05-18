@@ -1,5 +1,6 @@
 package com.animediscs.spider;
 
+import com.animediscs.action.DiscType;
 import com.animediscs.dao.Dao;
 import com.animediscs.model.*;
 import com.animediscs.runner.SpiderService;
@@ -112,16 +113,25 @@ public class AmazonAnimeSpider {
         disc.setAsin(asin);
         disc.setJapan(japan);
         disc.setTitle(Disc.titleOfDisc(japan));
-        if (type.equals("CD")) {
-            disc.setCdver(true);
-        } else {
-            disc.setDvdver(type.equals("DVD"));
+        switch (type) {
+            case "CD":
+                disc.setType(DiscType.CD);
+                break;
+            case "DVD":
+                disc.setType(DiscType.DVD);
+                break;
+            case "Blu-ray":
+                disc.setType(DiscType.BD);
+                break;
+            default:
+                disc.setType(DiscType.OTHER);
+                break;
         }
         disc.setAmzver(Disc.isAmzver(japan));
 
         Elements elements2 = document.select("#productDetailsTable ul li");
         if (elements2.size() > 0) {
-            if (disc.isCdver()) {
+            if (disc.getType() == DiscType.CD) {
                 Pattern pattern = Pattern.compile("(\\d{4}/\\d{1,2}/\\d{1,2})");
                 elements2.forEach(element -> {
                     Matcher matcher = pattern.matcher(element.text().trim());

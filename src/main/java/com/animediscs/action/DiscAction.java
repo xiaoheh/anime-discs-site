@@ -21,8 +21,7 @@ public class DiscAction extends BaseAction {
     private String name;
     private String title;
     private String sname;
-    private boolean dvdver;
-    private boolean boxver;
+    private String type;
     private boolean amzver;
     private String release;
     private String filter;
@@ -40,8 +39,7 @@ public class DiscAction extends BaseAction {
         object.put("title", disc.getTitle());
         object.put("japan", disc.getJapan());
         object.put("sname", disc.getSname());
-        object.put("dvdver", disc.isDvdver());
-        object.put("boxver", disc.isBoxver());
+        object.put("type", disc.getType().ordinal());
         object.put("amzver", disc.isAmzver());
         if (disc.getRelease() != null) {
             object.put("release", disc.getRelease().getTime());
@@ -110,8 +108,7 @@ public class DiscAction extends BaseAction {
             object.put("id", disc.getId());
             object.put("asin", disc.getAsin());
             object.put("title", disc.getTitle());
-            object.put("dvdver", disc.isDvdver());
-            object.put("boxver", disc.isBoxver());
+            object.put("type", disc.getType().ordinal());
             object.put("amzver", disc.isAmzver());
             if (disc.getSname() == null || disc.getSname().isEmpty()) {
                 object.put("sname", disc.getTitle());
@@ -188,8 +185,7 @@ public class DiscAction extends BaseAction {
         Disc disc = dao.get(Disc.class, id);
         disc.setTitle(title);
         disc.setSname(sname);
-        disc.setDvdver(dvdver);
-        disc.setBoxver(boxver);
+        disc.setType(DiscType.valueOf(type));
         disc.setAmzver(amzver);
         disc.setRelease(release);
         dao.update(disc);
@@ -212,12 +208,8 @@ public class DiscAction extends BaseAction {
         this.sname = sname;
     }
 
-    public void setDvdver(boolean dvdver) {
-        this.dvdver = dvdver;
-    }
-
-    public void setBoxver(boolean boxver) {
-        this.boxver = boxver;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setAmzver(boolean amzver) {

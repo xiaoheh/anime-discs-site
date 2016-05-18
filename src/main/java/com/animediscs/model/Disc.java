@@ -1,5 +1,6 @@
 package com.animediscs.model;
 
+import com.animediscs.action.DiscType;
 import com.animediscs.support.BaseModel;
 import org.springframework.util.Assert;
 
@@ -18,9 +19,7 @@ public class Disc extends BaseModel implements Comparable<Disc> {
     private String japan;
     private String sname;
 
-    private boolean cdver;
-    private boolean dvdver;
-    private boolean boxver;
+    private DiscType type;
     private boolean amzver;
 
     private Date release;
@@ -72,31 +71,13 @@ public class Disc extends BaseModel implements Comparable<Disc> {
         this.sname = sname;
     }
 
-    @Column
-    public boolean isCdver() {
-        return cdver;
+    @Column(nullable = false)
+    public DiscType getType() {
+        return type;
     }
 
-    public void setCdver(boolean cdver) {
-        this.cdver = cdver;
-    }
-
-    @Column
-    public boolean isDvdver() {
-        return dvdver;
-    }
-
-    public void setDvdver(boolean dvdver) {
-        this.dvdver = dvdver;
-    }
-
-    @Column
-    public boolean isBoxver() {
-        return boxver;
-    }
-
-    public void setBoxver(boolean boxver) {
-        this.boxver = boxver;
+    public void setType(DiscType type) {
+        this.type = type;
     }
 
     @Column
