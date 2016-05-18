@@ -89,7 +89,7 @@
 <script id="template-small" type="text/html">
     <table id="{{table.name}}" class="table sorter table-bordered table-striped">
         <caption>
-            <span><b>{{table.title}}</b></span>
+            <span><a href="${cookie.admin.value?"edit":"view"}_table.jsp?id={{table.id}}">{{table.title}}</a></span>
         </caption>
         <thead>
         <tr>
@@ -110,8 +110,9 @@
                 </a>
             </td>
             <td class="sname">
-                <a href="${cookie.admin.value?"edit":"view"}_disc.jsp?id={{disc.id}}">{{disc.sname}} {{disc |
-                    fm_verstr}}</a>
+                <a href="${cookie.admin.value?"edit":"view"}_disc.jsp?id={{disc.id}}">
+                    {{disc.sname}} {{disc | fm_verstr}}
+                </a>
             </td>
         </tr>
         {{/each}}
@@ -121,7 +122,7 @@
 <script id="template" type="text/html">
     <table id="{{table.name}}" class="table sorter table-striped table-bordered">
         <caption>
-            <span><b>{{table.title}}</b></span>
+            <span><a href="${cookie.admin.value?"edit":"view"}_table.jsp?id={{table.id}}">{{table.title}}</a></span>
         </caption>
         <thead>
         <tr>

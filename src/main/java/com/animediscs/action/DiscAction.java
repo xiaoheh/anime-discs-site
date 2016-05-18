@@ -96,6 +96,7 @@ public class DiscAction extends BaseAction {
             discList = getAllDiscs();
         }
         JSONObject object = new JSONObject();
+        object.put("id", discList.getId());
         object.put("name", discList.getName());
         object.put("title", discList.getTitle());
         object.put("discs", buildDiscsForList(discList));

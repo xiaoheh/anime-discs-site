@@ -68,6 +68,10 @@ table.table > caption > span > b {
     color: black;
 }
 
+table.table > caption > span > a {
+    font-weight: 500;
+}
+
 table.table > thead > tr > th {
     text-align: left;
 }
