@@ -26,7 +26,7 @@
             }
 
             table.table th.rank {
-                width: 88px;
+                width: 92px;
             }
 
             table.table th.cupt {
