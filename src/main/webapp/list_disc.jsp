@@ -96,7 +96,7 @@
             {{if table.id}}
             <span><a href="${cookie.admin.value?"edit":"view"}_table.jsp?id={{table.id}}">{{table.title}}</a></span>
             {{else}}
-            <span><a href="list_disc.jsp">{{table.title}}</a></span>
+            <span><b>{{table.title}}</b></span>
             {{/if}}
         </caption>
         <thead>
@@ -133,7 +133,7 @@
             {{if table.id}}
             <span><a href="${cookie.admin.value?"edit":"view"}_table.jsp?id={{table.id}}">{{table.title}}</a></span>
             {{else}}
-            <span><a href="list_disc.jsp">{{table.title}}</a></span>
+            <span><b>{{table.title}}</b></span>
             {{/if}}
         </caption>
         <thead>
