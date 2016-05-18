@@ -33,15 +33,15 @@
                     <option value="2">非Sakura</option>
                 </select>
             </div>
+            <div class="button-group">
+                <button onclick="update()" class="btn btn-primary">提交</button>
+                <button onclick="page.back()" class="btn btn-default">返回</button>
+                <span id="msg"></span>
+            </div>
         </div>
         <div id="edit-tab" class="tab-pane fade in active">
 
         </div>
-    </div>
-    <div class="button-group">
-        <button onclick="update()" class="btn btn-primary">提交</button>
-        <button onclick="page.back()" class="btn btn-default">返回</button>
-        <span id="msg"></span>
     </div>
 </script>
 <script id="edit-tmpl" type="text/html">
@@ -56,15 +56,15 @@
         </caption>
         <thead>
         <tr>
-            <th style="width: 80%">名称</th>
-            <th>操作</th>
+            <th style="width: 100px">管理操作</th>
+            <th>碟片标题</th>
         </tr>
         </thead>
         <tbody>
         {{each discs as disc}}
         <tr id="{{disc.id}}">
-            <td><a href="edit_disc.jsp?id={{disc.id}}">{{disc.title}}</a></td>
-            <td><a href="javascript:remove('{{disc.id}}')">移除</a></td>
+            <td><a href="javascript:remove('{{disc.id}}')">从表单移除</a></td>
+            <td style="text-align: left"><a href="edit_disc.jsp?id={{disc.id}}">{{disc.title}}</a></td>
         </tr>
         {{/each}}
         </tbody>
@@ -83,7 +83,7 @@
             $("select").each(function () {
                 $(this).val($(this).data("value"));
             });
-            $(".tab-content").find(":input").each(function () {
+            $(":input").not("button").each(function () {
                 if ($(this).attr("id") == null) {
                     $(this).prop("disabled", true);
                 }
