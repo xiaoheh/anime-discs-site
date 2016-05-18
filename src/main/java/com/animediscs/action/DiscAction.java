@@ -3,6 +3,7 @@ package com.animediscs.action;
 import com.animediscs.dao.Dao;
 import com.animediscs.model.*;
 import com.animediscs.support.BaseAction;
+import org.apache.commons.lang3.time.DateUtils;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.json.JSONArray;
@@ -144,9 +145,76 @@ public class DiscAction extends BaseAction {
                     .add(Restrictions.eq("type", DiscType.CD))
                     .list();
             Collections.sort(discs, Disc.sortByAmazon());
+            discs.forEach(disc -> {
+                DiscSakura sakura = disc.getSakura();
+                if (sakura == null) {
+                    sakura = new DiscSakura();
+                }
+                sakura.setDisc(disc);
+                sakura.setCurk(disc.getRank().getPark1());
+                sakura.setPrrk(disc.getRank().getPark2());
+                sakura.setSday(getSday(disc));
+                if (needUpdateCupt(sakura)) {
+                    sakura.setCupt(getCupt(disc));
+                }
+                sakura.setDate(new Date());
+                dao.save(sakura);
+                disc.setSakura(sakura);
+            });
             discList.setDiscs(discs);
         });
         return discList;
+    }
+
+    private boolean needUpdateCupt(DiscSakura sakura) {
+        if (sakura.getDate() == null) {
+            return true;
+        }
+        if (sakura.getSday() < 0) {
+            return false;
+        }
+        Date date = new Date();
+        date = DateUtils.setMinutes(date, 0);
+        date = DateUtils.setSeconds(date, 0);
+        date = DateUtils.setMilliseconds(date, 0);
+        return date.compareTo(sakura.getDate()) > 0;
+    }
+
+    private int getCupt(Disc disc) {
+        return (int) (0.5 + dao.query(session -> {
+            List<DiscRecord> list = session.createCriteria(DiscRecord.class)
+                    .add(Restrictions.eq("disc", disc))
+                    .addOrder(Order.desc("date"))
+                    .list();
+            Date date = new Date();
+            date = DateUtils.addHours(date, -1);
+            date = DateUtils.setMinutes(date, 0);
+            date = DateUtils.setSeconds(date, 0);
+            date = DateUtils.setMilliseconds(date, 0);
+
+            List<DiscRecord> dest = new ArrayList<>(list.size() * 2);
+            while (list.size() > 0) {
+                Date release = DateUtils.addHours(disc.getRelease(), -1);
+                DiscRecord discRecord = list.remove(0);
+                while (date.compareTo(discRecord.getDate()) >= 0) {
+                    if (date.compareTo(release) < 0) {
+                        DiscRecord record = new DiscRecord();
+                        int rank = discRecord.getRank();
+                        record.setRank(rank);
+                        record.setDate(date);
+                        record.setAdpt(150 / Math.exp(Math.log(rank) / Math.log(5.25)));
+                        dest.add(record);
+                    }
+                    date = DateUtils.addHours(date, -1);
+                }
+            }
+
+            double cupt = 0;
+            for (int i = dest.size() - 1; i >= 0; i--) {
+                cupt += dest.get(i).getAdpt();
+            }
+            return cupt;
+        }));
     }
 
     private DiscList getDiscsOfDVD() {

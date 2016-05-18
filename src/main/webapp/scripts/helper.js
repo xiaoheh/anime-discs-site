@@ -30,6 +30,18 @@ function fm_date(date, format) {
     return format;
 }
 
+template.helper("fm_rank_date", function (time, type) {
+    return fm_rank_date(time, type);
+});
+
+function fm_rank_date(time, type) {
+    if (type == "CD") {
+        return fm_date(time, 'yyyy-MM-dd hh时');
+    } else {
+        return fm_date(time, 'yyyy-MM-dd hh:mm:ss');
+    }
+}
+
 template.helper('fm_timeout', function (time) {
     return fm_timeout(time);
 });

@@ -4,6 +4,7 @@ import com.animediscs.support.BaseModel;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "disc_sakura")
@@ -11,6 +12,7 @@ public class DiscSakura extends BaseModel implements Comparable<DiscSakura> {
 
     private Disc disc;
 
+    private Date date;
     private int curk; // current spdt
     private int prrk; // previous spdt
     private int cubk; // current book
@@ -24,6 +26,15 @@ public class DiscSakura extends BaseModel implements Comparable<DiscSakura> {
 
     public void setDisc(Disc disc) {
         this.disc = disc;
+    }
+
+    @Column
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     @Column

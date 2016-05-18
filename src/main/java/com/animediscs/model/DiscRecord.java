@@ -13,6 +13,8 @@ public class DiscRecord extends BaseModel implements Comparable<DiscRecord> {
     private Disc disc;
     private Date date; // used field: yyyy-MM-dd-HH
     private int rank; // this hour rank
+    private double adpt;
+    private double cupt;
 
     @ManyToOne(optional = false)
     public Disc getDisc() {
@@ -39,6 +41,24 @@ public class DiscRecord extends BaseModel implements Comparable<DiscRecord> {
 
     public void setRank(int rank) {
         this.rank = rank;
+    }
+
+    @Transient
+    public double getAdpt() {
+        return adpt;
+    }
+
+    public void setAdpt(double adpt) {
+        this.adpt = adpt;
+    }
+
+    @Transient
+    public double getCupt() {
+        return cupt;
+    }
+
+    public void setCupt(double cupt) {
+        this.cupt = cupt;
     }
 
     public int compareTo(DiscRecord other) {

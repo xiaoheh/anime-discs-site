@@ -9,19 +9,21 @@
     <script src="scripts/table.js"></script>
     <style>
 
-        table.table th.index {
-            width: 32px;
-            text-align: center;
-            padding-left: 2px;
-            padding-right: 2px;
-        }
-
         table.table th.date {
             width: 170px;
         }
 
-        table.table td.rank {
+        table.table th.rank {
+            width: 60px;
+        }
+
+        table.table th.adpt {
+            width: 60px;
+        }
+
+        table.table td.cupt {
             text-align: left;
+            padding-left: 15px;
         }
 
     </style>
@@ -36,19 +38,19 @@
         </caption>
         <thead>
         <tr>
-            <th class="index">ID</th>
-            <th class="index zero-width"></th>
             <th class="date sorter">时间</th>
             <th class="rank sorter">排名</th>
+            <th class="adpt sorter hidden-sx">增加</th>
+            <th class="cupt sorter">累积</th>
         </tr>
         </thead>
         <tbody>
         {{each ranks as rank idx}}
         <tr id="row-{{idx+1}}">
-            <td class="index" data-number="{{idx+1}}">{{idx+1}}</td>
-            <td class="index zero-width">)</td>
-            <td class="date" data-number="{{date}}">{{rank.date | fm_date:'yyyy/MM/dd hh:mm:ss'}}</td>
+            <td class="date" data-number="{{date}}">{{rank.date | fm_rank_date:type}}</td>
             <td class="rank" data-number="{{rank}}">{{rank.rank}}</td>
+            <td class="adpt" data-number="{{adpt}}">{{rank.adpt}}</td>
+            <td class="cupt" data-number="{{cupt}}">{{rank.cupt}}</td>
         </tr>
         {{/each}}
         </tbody>
