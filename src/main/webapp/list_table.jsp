@@ -20,6 +20,10 @@
             width: 80px;
         }
 
+        table.table th.link {
+            width: 70px;
+        }
+
         table.table td.title {
             text-align: left;
         }
@@ -39,6 +43,7 @@
             <th class="index">ID</th>
             <th class="index zero-width"></th>
             <th class="name sorter">名称</th>
+            <th class="link sorter">操作</th>
             <th class="title sorter">标题</th>
         </tr>
         </thead>
@@ -47,12 +52,11 @@
         <tr id="row-{{idx+1}}">
             <td class="index" data-number="{{idx+1}}">{{idx+1}}</td>
             <td class="index zero-width">)</td>
-            <td class="name">
-                <a href="list_disc.jsp?filter=table&name={{table.name}}">{{table.name}}</a>
-            </td>
-            <td class="title">
-                <a href="${cookie.admin.value?"edit":"view"}_table.jsp?id={{table.id}}">{{table.title}}</a>
-            </td>
+            <td class="name">{{table.name}}</td>
+            <td><a href="${cookie.admin.value?"edit":"view"}_table.jsp?id={{table.id}}">
+                ${cookie.admin.value?"编辑":"查看"}
+            </a></td>
+            <td class="title"><a href="list_disc.jsp?filter=table&name={{table.name}}">{{table.title}}</a></td>
         </tr>
         {{/each}}
         </tbody>
