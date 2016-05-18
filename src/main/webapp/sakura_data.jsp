@@ -100,7 +100,7 @@
     {{each tables as table idx}}
     <table id="{{table.name}}" class="table sorter table-bordered table-striped">
         <caption>
-            <span><b>{{table.title}}</b></span>
+            <span><a href="list_disc.jsp?filter=table&name={{table.name}}">{{table.title}}</a></span>
             <span><span class="hidden-xxs">上次更新 </span>{{table.time | fm_timeout}}</span>
         </caption>
         <thead>
@@ -147,7 +147,7 @@
     {{each tables as table idx}}
     <table id="{{table.name}}" class="table sorter table-striped table-bordered">
         <caption>
-            <span><b>{{table.title}}</b></span>
+            <span><a href="list_disc.jsp?filter=table&name={{table.name}}"">{{table.title}}</a></span>
             {{if table.time}}
             <span>更新时间: {{table.time | fm_date:"yyyy-MM-dd hh:mm:ss"}}</span>
             <span>(距离现在 {{table.time | fm_timeout}})</span>
