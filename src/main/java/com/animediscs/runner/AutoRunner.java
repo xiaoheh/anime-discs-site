@@ -23,27 +23,13 @@ public class AutoRunner {
 
     private SakuraSpeedSpider sakuraSpeedSpider;
     private AmazonSpeedSpider amazonSpeedSpider;
+    private AmazonAnimeSpider amazonAnimeSpider;
     private AmazonDiscSpider amazonDiscSpider;
 
     public AutoRunner() {
         ExecutorService execute = Executors.newFixedThreadPool(1);
         sakuraRunner = new SpiderService("Sakura", 1, 2, execute);
-        amazonRunner = new SpiderService("Amazon", 5, 2, execute);
-    }
-
-    @Autowired
-    public void setSakuraSpeedSpider(SakuraSpeedSpider sakuraSpeedSpider) {
-        this.sakuraSpeedSpider = sakuraSpeedSpider;
-    }
-
-    @Autowired
-    public void setAmazonSpeedSpider(AmazonSpeedSpider amazonSpeedSpider) {
-        this.amazonSpeedSpider = amazonSpeedSpider;
-    }
-
-    @Autowired
-    public void setAmazonDiscSpider(AmazonDiscSpider amazonDiscSpider) {
-        this.amazonDiscSpider = amazonDiscSpider;
+        amazonRunner = new SpiderService("Amazon", 6, 2, execute);
     }
 
     @PostConstruct
@@ -57,10 +43,13 @@ public class AutoRunner {
         schedule("Amazon重点排名抓取", 15, 120, () -> {
             amazonDiscSpider.doUpdateHot(60, amazonRunner, 2);
         });
-        schedule("Amazon次要排名抓取", 20, 240, () -> {
-            amazonDiscSpider.doUpdateExt(120, amazonRunner, 4);
+        schedule("Amazon次要排名抓取", 20, 300, () -> {
+            amazonDiscSpider.doUpdateExt(150, amazonRunner, 6);
         });
-        schedule("Amazon全部排名抓取", 35, 1200, () -> {
+        schedule("Amazon动画数据抓取", 25, 3600, () -> {
+            amazonAnimeSpider.doUpdate(amazonRunner, 4);
+        });
+        schedule("Amazon全部排名抓取", 55, 1200, () -> {
             amazonDiscSpider.doUpdateAll(600, amazonRunner, 5);
         });
         schedule("任务线程状态报告", 0, 30, () -> {
@@ -95,6 +84,26 @@ public class AutoRunner {
 
     private interface Callable {
         void call() throws Exception;
+    }
+
+    @Autowired
+    public void setSakuraSpeedSpider(SakuraSpeedSpider sakuraSpeedSpider) {
+        this.sakuraSpeedSpider = sakuraSpeedSpider;
+    }
+
+    @Autowired
+    public void setAmazonSpeedSpider(AmazonSpeedSpider amazonSpeedSpider) {
+        this.amazonSpeedSpider = amazonSpeedSpider;
+    }
+
+    @Autowired
+    public void setAmazonAnimeSpider(AmazonAnimeSpider amazonAnimeSpider) {
+        this.amazonAnimeSpider = amazonAnimeSpider;
+    }
+
+    @Autowired
+    public void setAmazonDiscSpider(AmazonDiscSpider amazonDiscSpider) {
+        this.amazonDiscSpider = amazonDiscSpider;
     }
 
 }

@@ -11,6 +11,7 @@ public class Anime extends BaseModel implements Comparable<Anime> {
 
     private Season season;
     private String japan;
+    private String alias;
     private String title;
     private String sname;
 
@@ -39,6 +40,15 @@ public class Anime extends BaseModel implements Comparable<Anime> {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Column(length = 100)
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     @Column(length = 30)
