@@ -46,6 +46,7 @@ public class SakuraAction extends BaseAction {
         boolean top100 = discList.isTop100();
 
         JSONObject object = new JSONObject();
+        object.put("id", discList.getId());
         object.put("name", discList.getName());
         object.put("title", discList.getTitle());
         object.put("time", discList.getDate().getTime());

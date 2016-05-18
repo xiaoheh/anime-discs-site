@@ -27,6 +27,9 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">推荐<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="sakura_data.jsp">SAKURA数据</a></li>
+                        <li><a href="list_disc.jsp?filter=table&name=top_100">日亚实时TOP100</a></li>
+                        <li><a href="list_disc.jsp?filter=table&name=2016-04">2016年04月新番</a></li>
+                        <li><a href="list_disc.jsp?filter=table&name=2016-01">2016年01月新番</a></li>
                         <li><a href="list_disc.jsp?filter=table&name=mydvd">手动添加的DVD</a></li>
                         <li><a href="list_disc.jsp?filter=table&name=mycd">手动添加的CD</a></li>
                     </ul>

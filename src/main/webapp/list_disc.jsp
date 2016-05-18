@@ -93,7 +93,11 @@
 <script id="template-small" type="text/html">
     <table id="{{table.name}}" class="table sorter table-bordered table-striped">
         <caption>
+            {{if table.id}}
             <span><a href="${cookie.admin.value?"edit":"view"}_table.jsp?id={{table.id}}">{{table.title}}</a></span>
+            {{else}}
+            <span><a href="list_disc.jsp">{{table.title}}</a></span>
+            {{/if}}
         </caption>
         <thead>
         <tr>
@@ -109,7 +113,7 @@
             <td class="index hidden-xxs" data-number="{{idx+1}}">{{idx+1}}</td>
             <td class="index hidden-xxs zero-width">)</td>
             <td class="rank" data-number="{{disc.rank1}}">
-                <a href="list_rank.jsp?id={{disc.id}}">
+                <a href="http://www.amazon.co.jp/dp/{{disc.asin}}">
                     {{disc.rank1 | fm_star:6}}/{{disc.rank2 | fm_star:6}}
                 </a>
             </td>
@@ -126,7 +130,11 @@
 <script id="template" type="text/html">
     <table id="{{table.name}}" class="table sorter table-striped table-bordered">
         <caption>
+            {{if table.id}}
             <span><a href="${cookie.admin.value?"edit":"view"}_table.jsp?id={{table.id}}">{{table.title}}</a></span>
+            {{else}}
+            <span><a href="list_disc.jsp">{{table.title}}</a></span>
+            {{/if}}
         </caption>
         <thead>
         <tr>
@@ -157,7 +165,7 @@
             <td class="index" data-number="{{idx2+1}}">{{idx2+1}}</td>
             <td class="index zero-width">)</td>
             <td class="arnk" data-number="{{disc.rank1}}">
-                <a href="list_rank.jsp?id={{disc.id}}">{{disc | fm_arnk}}</a>
+                <a href="http://www.amazon.co.jp/dp/{{disc.asin}}">{{disc | fm_arnk}}</a>
             </td>
             <td class="atot" data-number="{{disc.amdt}}">{{disc.amdt | fm_timeout}}</td>
             <td class="type" data-number="{{disc.type}}">{{disc | fm_type}}</td>
