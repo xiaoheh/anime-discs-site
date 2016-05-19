@@ -83,7 +83,7 @@
                 <input type="text" class="form-control" value="{{title}}">
             </div>
             <div class="form-group">
-                <label>Sakura排名</label>
+                <label>当前/前回</label>
                 <input type="text" class="form-control" value="{{curk | fm_sakura}}位/{{prrk | fm_sakura}}位">
             </div>
             <div class="form-group">
