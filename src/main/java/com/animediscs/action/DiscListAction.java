@@ -147,8 +147,10 @@ public class DiscListAction extends BaseAction {
                 sakura = new DiscSakura();
             }
             sakura.setDisc(disc);
-            sakura.setCurk(disc.getRank().getPark1());
-            sakura.setPrrk(disc.getRank().getPark2());
+            if (disc.getRank() != null) {
+                sakura.setCurk(disc.getRank().getPark1());
+                sakura.setPrrk(disc.getRank().getPark2());
+            }
             sakura.setSday(getSday(disc));
             if (needUpdateCupt(sakura)) {
                 sakura.setCupt(getCdCupt(disc));
@@ -165,8 +167,10 @@ public class DiscListAction extends BaseAction {
                 sakura = new DiscSakura();
             }
             sakura.setDisc(disc);
-            sakura.setCurk(disc.getRank().getPark1());
-            sakura.setPrrk(disc.getRank().getPark2());
+            if (disc.getRank() != null) {
+                sakura.setCurk(disc.getRank().getPark1());
+                sakura.setPrrk(disc.getRank().getPark2());
+            }
             sakura.setSday(getSday(disc));
             if (needUpdateCupt(sakura)) {
                 sakura.setCupt(getDvdCupt(disc));
