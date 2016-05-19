@@ -45,11 +45,12 @@
             </div>
             <div class="form-group">
                 <label>限定类型</label>
-                <select class="form-control" data-value="{{amzver?'1':'2'}}">
+                <select id="amzver" class="form-control" data-value="{{amzver?'1':'2'}}">
                     <option value="1">尼限定</option>
                     <option value="2">非尼限定</option>
                 </select>
-            </div>        </div>
+            </div>
+        </div>
         <div id="rank-tab" class="tab-pane fade">
             <div class="form-group">
                 <label>碟片标题</label>
