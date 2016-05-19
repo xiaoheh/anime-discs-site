@@ -174,9 +174,9 @@ public class AmazonAnimeSpider {
                     pushRank(rank);
                     saveRank(rank);
                 }
+                dao.saveOrUpdate(rank);
             }
         }
-        dao.saveOrUpdate(rank);
     }
 
     private boolean needUpdate(Date date) {

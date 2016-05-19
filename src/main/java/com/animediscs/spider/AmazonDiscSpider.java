@@ -162,9 +162,9 @@ public class AmazonDiscSpider {
                     pushRank(rank);
                     saveRank(rank);
                 }
+                dao.saveOrUpdate(rank);
             }
         }
-        dao.saveOrUpdate(rank);
     }
 
     private void pushRank(DiscRank rank) {
