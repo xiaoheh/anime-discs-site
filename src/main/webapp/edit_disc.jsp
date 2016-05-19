@@ -38,9 +38,12 @@
             <div class="form-group">
                 <label>碟片类型</label>
                 <select id="type" class="form-control" data-value="{{type}}">
-                    <% for (DiscType type : DiscType.values()) { %>
-                    <option value="<%=type.ordinal()%>"><%=type.name()%></option>
-                    <% } %>
+                    <option value="0">CD</option>
+                    <option value="1">BD</option>
+                    <option value="2">DVD</option>
+                    <option value="3">BD_BOX</option>
+                    <option value="4">DVD_BOX</option>
+                    <option value="5">OTHER</option>
                 </select>
             </div>
             <div class="form-group">
