@@ -45,7 +45,7 @@
             }
 
             table.table th.acot {
-                width: 85px;
+                width: 115px;
             }
 
             table.table th.type {
@@ -180,7 +180,7 @@
                 <a href="http://www.amazon.co.jp/dp/{{disc.asin}}">{{disc | fm_arnk}}</a>
             </td>
             <td class="atot" data-number="{{disc.atot}}">{{disc.atot | fm_timeout}}</td>
-            <td class="acot" data-number="{{disc.acot}}">{{disc.acot | fm_timeout}}</td>
+            <td class="acot" data-number="{{disc.acot}}">{{disc.acot | fm_date:'yy/MM/dd hh:mm'}}</td>
             <td class="type" data-number="{{disc.type}}">{{disc | fm_type}}</td>
             <td class="cupt zero-width">(</td>
             <td class="cupt" data-number="{{disc.cupt}}">{{disc.cupt | fm_sakura}} pt</td>
