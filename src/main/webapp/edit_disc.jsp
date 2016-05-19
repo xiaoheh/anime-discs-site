@@ -32,6 +32,10 @@
                 <input type="text" id="sname" class="form-control" value="{{sname}}">
             </div>
             <div class="form-group">
+                <label>ASIN</label>
+                <input type="text" class="form-control" value="{{asin}}">
+            </div>
+            <div class="form-group">
                 <label>碟片类型</label>
                 <select id="type" class="form-control" data-value="{{type}}">
                     <% for (DiscType type : DiscType.values()) { %>

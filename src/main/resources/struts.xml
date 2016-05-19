@@ -25,8 +25,8 @@
         <action name="sakura" method="view" class="com.animediscs.action.SakuraAction"/>
 
         <action name="view_disc" method="view" class="com.animediscs.action.DiscAction"/>
-        <action name="list_disc" method="list" class="com.animediscs.action.DiscAction"/>
         <action name="edit_disc" method="edit" class="com.animediscs.action.DiscAction"/>
+        <action name="list_disc" method="list" class="com.animediscs.action.DiscListAction"/>
 
         <action name="list_rank" method="list" class="com.animediscs.action.RankAction"/>
 

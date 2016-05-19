@@ -121,6 +121,7 @@ public class TableAction extends BaseAction {
     private JSONObject buildDisc(Disc disc) {
         JSONObject object = new JSONObject();
         object.put("id", disc.getId());
+        object.put("asin", disc.getAsin());
         object.put("title", disc.getTitle());
         return object;
     }
