@@ -65,7 +65,6 @@ public class AmazonDiscSpider {
                     .add(Restrictions.eq("sakura", true))
                     .add(Restrictions.gt("date", yesterday))
                     .addOrder(Order.desc("name"))
-                    .setFirstResult(1)
                     .list().forEach(o -> {
                 DiscList discList = (DiscList) o;
                 discList.getDiscs().sort(Disc.sortBySakura());
@@ -153,8 +152,8 @@ public class AmazonDiscSpider {
     }
 
     private void updateRank(DiscRank rank, String rankText) {
-        rank.setPadt(new Date());
         if (needUpdate(rank.getPadt1())) {
+            rank.setPadt(new Date());
             Matcher matcher = pattern.matcher(rankText);
             if (matcher.find()) {
                 rank.setPark(parseNumber(matcher.group(1)));
