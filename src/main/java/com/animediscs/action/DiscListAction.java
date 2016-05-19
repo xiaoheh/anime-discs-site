@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static com.animediscs.model.Disc.sortByAmazon;
+import static com.animediscs.util.Helper.nullSafeGet;
 
 public class DiscListAction extends BaseAction {
 
@@ -55,10 +56,23 @@ public class DiscListAction extends BaseAction {
         if (discList.getId() != null) {
             object.put("id", discList.getId());
         }
+        setListTime(object, discList);
         object.put("name", discList.getName());
         object.put("title", discList.getTitle());
         object.put("discs", buildDiscList(discList));
         responseJson(object.toString());
+    }
+
+    private void setListTime(JSONObject object, DiscList discList) {
+        Long time = discList.getDiscs().stream()
+                .map(disc -> {
+                    Date date = nullSafeGet(disc.getRank(), DiscRank::getPadt1);
+                    return date == null ? 0 : date.getTime();
+                }).sorted((o1, o2) -> o2.compareTo(o1))
+                .findFirst().orElse(null);
+        if (time != null) {
+            object.put("time", time.longValue());
+        }
     }
 
     private int getSday(Disc disc) {
@@ -207,19 +221,22 @@ public class DiscListAction extends BaseAction {
                 if (discList.isTop100()) {
                     if (rank.getSpdt() != null) {
                         object.put("arnk", rank.getSpdt());
-                        object.put("amdt", rank.getSpdt().getTime());
+                        object.put("atot", rank.getSpdt().getTime());
                     }
                 } else {
                     if (rank.getPadt() != null) {
                         object.put("arnk", rank.getPark());
-                        object.put("amdt", rank.getPadt().getTime());
+                        object.put("atot", rank.getPadt().getTime());
                     }
                 }
-                object.put("rank1", rank.getPark1());
-                object.put("rank2", rank.getPark2());
-                object.put("rank3", rank.getPark3());
-                object.put("rank4", rank.getPark4());
-                object.put("rank5", rank.getPark5());
+                if (rank.getPadt1() != null) {
+                    object.put("acot", rank.getPadt1().getTime());
+                    object.put("rank1", rank.getPark1());
+                    object.put("rank2", rank.getPark2());
+                    object.put("rank3", rank.getPark3());
+                    object.put("rank4", rank.getPark4());
+                    object.put("rank5", rank.getPark5());
+                }
             }
             DiscSakura sakura = disc.getSakura();
             if (sakura != null) {

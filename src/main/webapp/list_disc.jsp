@@ -44,6 +44,10 @@
                 width: 85px;
             }
 
+            table.table th.acot {
+                width: 85px;
+            }
+
             table.table th.type {
                 width: 60px;
             }
@@ -98,6 +102,9 @@
             {{else}}
             <span><b>{{table.title}}</b></span>
             {{/if}}
+            {{if table.time}}
+            <span><span class="hidden-xxs">上次更新 </span>{{table.time | fm_timeout}}</span>
+            {{/if}}
         </caption>
         <thead>
         <tr>
@@ -135,13 +142,18 @@
             {{else}}
             <span><b>{{table.title}}</b></span>
             {{/if}}
+            {{if table.time}}
+            <span>更新时间: {{table.time | fm_date:"yyyy-MM-dd hh:mm:ss"}}</span>
+            <span>(距离现在 {{table.time | fm_timeout}})</span>
+            {{/if}}
         </caption>
         <thead>
         <tr>
             <th class="index sorter">序号</th>
             <th class="index zero-width"></th>
             <th class="arnk sorter">当前/前回</th>
-            <th class="atot sorter">更新时间</th>
+            <th class="atot sorter">上次抓取</th>
+            <th class="acot sorter">更新时间</th>
             <th class="type sorter">类型</th>
             <th class="cupt zero-width"></th>
             <th class="cupt sorter">累积PT</th>
@@ -167,7 +179,8 @@
             <td class="arnk" data-number="{{disc.rank1}}">
                 <a href="http://www.amazon.co.jp/dp/{{disc.asin}}">{{disc | fm_arnk}}</a>
             </td>
-            <td class="atot" data-number="{{disc.amdt}}">{{disc.amdt | fm_timeout}}</td>
+            <td class="atot" data-number="{{disc.atot}}">{{disc.atot | fm_timeout}}</td>
+            <td class="acot" data-number="{{disc.acot}}">{{disc.acot | fm_timeout}}</td>
             <td class="type" data-number="{{disc.type}}">{{disc | fm_type}}</td>
             <td class="cupt zero-width">(</td>
             <td class="cupt" data-number="{{disc.cupt}}">{{disc.cupt | fm_sakura}} pt</td>
