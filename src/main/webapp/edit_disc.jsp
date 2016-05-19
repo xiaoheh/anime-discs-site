@@ -110,9 +110,20 @@
         <span id="msg"></span>
     </div>
 </script>
+<script id="navbar-tmpl" type="text/html">
+    <li class="dropdown hidden-xs">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            功能<b class="caret"></b>
+        </a>
+        <ul id="control" class="dropdown-menu">
+            <li><a href="javascript:navbar.refresh()">刷新</a></li>
+        </ul>
+    </li>
+</script>
 <script>
 
     $(function () {
+        render_navber_menu();
         $.getJSON("view_disc.do", {id: ${param.id}}, function (data) {
             $("#content").html(template("template", data));
             $("select").each(function () {
@@ -125,6 +136,10 @@
             });
         });
     });
+
+    function render_navber_menu() {
+        $("#nav-body").prepend($("#navbar-tmpl").html());
+    }
 
     function update() {
         form.info("提交中...");
