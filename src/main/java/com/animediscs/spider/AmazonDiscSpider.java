@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 import static com.animediscs.util.Helper.nullSafeGet;
 import static com.animediscs.util.Parser.parseNumber;
-import static java.lang.System.currentTimeMillis;
 
 @Service
 public class AmazonDiscSpider {
@@ -96,7 +95,7 @@ public class AmazonDiscSpider {
         infoStart(name, discList, count);
         discs.stream().sorted(Disc.sortBySakura()).forEach(disc -> {
             String url = "http://www.amazon.co.jp/dp/" + disc.getAsin();
-            service.addTask(level, url, needUpdate(disc, second), document -> {
+            service.addTask(level, url, needSpider(disc, second), document -> {
                 if (document != null) {
                     String rankText = document.select("#SalesRank").text();
                     updateRank(getDiscRank(disc), rankText);
@@ -187,15 +186,21 @@ public class AmazonDiscSpider {
         dao.save(record);
     }
 
-    private boolean needUpdate(Date date) {
-        return date == null || date.getTime() < currentTimeMillis() - 300000;
+    private Supplier<Boolean> needSpider(Disc disc, int second) {
+        return () -> {
+            if (needSpider(nullSafeGet(disc.getRank(), DiscRank::getPadt), second)) {
+                return needUpdate(nullSafeGet(disc.getRank(), DiscRank::getPadt1));
+            }
+            return false;
+        };
     }
 
-    private Supplier<Boolean> needUpdate(Disc disc, int second) {
-        return () -> {
-            Date date = nullSafeGet(disc.getRank(), DiscRank::getPadt);
-            return date == null || date.compareTo(DateUtils.addSeconds(new Date(), -second)) < 0;
-        };
+    private boolean needSpider(Date date, int second) {
+        return date == null || date.getTime() < System.currentTimeMillis() - second * 1000;
+    }
+
+    private boolean needUpdate(Date date) {
+        return date == null || date.getTime() < System.currentTimeMillis() - 1200000L;
     }
 
 }
