@@ -1,6 +1,6 @@
 package com.animediscs.spider;
 
-import com.animediscs.action.DiscType;
+import com.animediscs.model.DiscType;
 import com.animediscs.dao.Dao;
 import com.animediscs.model.*;
 import com.animediscs.runner.SpiderService;

@@ -1,4 +1,4 @@
-<%@ page import="com.animediscs.action.DiscType" %>
+<%@ page import="com.animediscs.model.DiscType" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>

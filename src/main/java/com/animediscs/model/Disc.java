@@ -1,6 +1,5 @@
 package com.animediscs.model;
 
-import com.animediscs.action.DiscType;
 import com.animediscs.support.BaseModel;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
