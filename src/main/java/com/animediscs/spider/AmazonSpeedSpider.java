@@ -4,11 +4,14 @@ import com.animediscs.dao.Dao;
 import com.animediscs.model.Disc;
 import com.animediscs.model.DiscRank;
 import com.animediscs.runner.SpiderService;
+import com.animediscs.runner.task.JsonSpiderTask;
 import org.apache.logging.log4j.*;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,7 +33,7 @@ public class AmazonSpeedSpider {
             int start = page * 20 - 19;
             logger.printf(Level.INFO, "开始更新Amazon速报数据(%02d - %02d)", start, start + 19);
             String format = "http://www.amazon.co.jp/gp/bestsellers/dvd/ref=zg_bs_dvd_pg_%1$d?ie=UTF8&pg=%1$d";
-            service.addTask(level, String.format(format, page), document -> {
+            Consumer<Document> consumer = document -> {
                 document.select("div.zg_title a").forEach(link -> {
                     Matcher matcher = pattern.matcher(link.attr("href"));
                     if (matcher.find()) {
@@ -40,7 +43,8 @@ public class AmazonSpeedSpider {
                     }
                 });
                 logger.printf(Level.INFO, "成功更新Amazon速报数据(%02d - %02d)", start, start + 19);
-            });
+            };
+            service.addTask(level, new JsonSpiderTask(String.format(format, page), () -> true, consumer));
         }
     }
 

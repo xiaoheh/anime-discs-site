@@ -3,18 +3,21 @@ package com.animediscs.spider;
 import com.animediscs.dao.Dao;
 import com.animediscs.model.*;
 import com.animediscs.runner.SpiderService;
+import com.animediscs.runner.task.RankSpiderTask;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.logging.log4j.*;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -94,11 +97,10 @@ public class AmazonDiscSpider {
         AtomicInteger update = new AtomicInteger(0);
         infoStart(name, discList, count);
         discs.stream().sorted(Disc.sortBySakura()).forEach(disc -> {
-            String url = "http://www.amazon.co.jp/dp/" + disc.getAsin();
-            service.addTask(level, url, needSpider(disc, second), document -> {
+            Consumer<Document> consumer = document -> {
                 if (document != null) {
-                    String rankText = document.select("#SalesRank").text();
-                    updateRank(getDiscRank(disc), rankText);
+                    Node rank = document.getElementsByTagName("SalesRank").item(0);
+                    updateRank(getDiscRank(disc), rank.getTextContent());
                     debugUpdate(name, discList, count, disc, update);
                 } else {
                     debugSkip(name, discList, count, disc, skip);
@@ -108,7 +110,8 @@ public class AmazonDiscSpider {
                 } else if (count.get() % 10 == 0) {
                     infoUpdateTen(name, discList, count);
                 }
-            });
+            };
+            service.addTask(level, new RankSpiderTask(disc.getAsin(), needSpider(disc, second), consumer));
         });
     }
 
@@ -152,16 +155,13 @@ public class AmazonDiscSpider {
 
     private void updateRank(DiscRank rank, String rankText) {
         if (needUpdate(rank.getPadt1())) {
+            rank.setPark(parseNumber(rankText));
             rank.setPadt(new Date());
-            Matcher matcher = pattern.matcher(rankText);
-            if (matcher.find()) {
-                rank.setPark(parseNumber(matcher.group(1)));
-                if (rank.getPark() != rank.getPark1()) {
-                    pushRank(rank);
-                    saveRank(rank);
-                }
-                dao.saveOrUpdate(rank);
+            if (rank.getPark() != rank.getPark1()) {
+                pushRank(rank);
+                saveRank(rank);
             }
+            dao.saveOrUpdate(rank);
         }
     }
 

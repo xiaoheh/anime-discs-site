@@ -20,6 +20,7 @@ public class AutoRunner {
 
     private SpiderService sakuraRunner;
     private SpiderService amazonRunner;
+    private SpiderService rankerRunner;
 
     private SakuraSpeedSpider sakuraSpeedSpider;
     private AmazonSpeedSpider amazonSpeedSpider;
@@ -29,7 +30,8 @@ public class AutoRunner {
     public AutoRunner() {
         ExecutorService execute = Executors.newFixedThreadPool(1);
         sakuraRunner = new SpiderService("Sakura", 1, 2, execute);
-        amazonRunner = new SpiderService("Amazon", 6, 2, execute);
+        amazonRunner = new SpiderService("Amazon", 3, 2, execute);
+        rankerRunner = new SpiderService("Ranker", 3, 1, execute);
     }
 
     @PostConstruct
@@ -40,22 +42,23 @@ public class AutoRunner {
         schedule("Amazon速报数据抓取", 10, 60, () -> {
             amazonSpeedSpider.doUpdate(amazonRunner, 1);
         });
-        schedule("Amazon重点排名抓取", 15, 120, () -> {
-            amazonDiscSpider.doUpdateHot(60, amazonRunner, 2);
+        schedule("Amazon动画数据抓取", 15, 3600, () -> {
+            amazonAnimeSpider.doUpdate(amazonRunner, 2);
         });
-        schedule("Amazon次要排名抓取", 20, 300, () -> {
-            amazonDiscSpider.doUpdateExt(150, amazonRunner, 6);
+        schedule("Amazon重点排名抓取", 20, 120, () -> {
+            amazonDiscSpider.doUpdateHot(60, rankerRunner, 1);
         });
-        schedule("Amazon动画数据抓取", 25, 3600, () -> {
-            amazonAnimeSpider.doUpdate(amazonRunner, 4);
+        schedule("Amazon次要排名抓取", 25, 300, () -> {
+            amazonDiscSpider.doUpdateExt(150, rankerRunner, 3);
         });
-        schedule("Amazon全部排名抓取", 55, 1200, () -> {
-            amazonDiscSpider.doUpdateAll(600, amazonRunner, 5);
+        schedule("Amazon全部排名抓取", 35, 1200, () -> {
+            amazonDiscSpider.doUpdateAll(600, rankerRunner, 2);
         });
         schedule("任务线程状态报告", 0, 30, () -> {
             String timeout = Format.formatTimeout(startupTimeMillis);
             logger.printf(Level.INFO, "(%s): %s", timeout, sakuraRunner.getStatus());
             logger.printf(Level.INFO, "(%s): %s", timeout, amazonRunner.getStatus());
+            logger.printf(Level.INFO, "(%s): %s", timeout, rankerRunner.getStatus());
         });
     }
 

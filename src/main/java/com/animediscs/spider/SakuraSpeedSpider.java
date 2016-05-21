@@ -4,8 +4,10 @@ import com.animediscs.model.DiscType;
 import com.animediscs.dao.Dao;
 import com.animediscs.model.*;
 import com.animediscs.runner.SpiderService;
+import com.animediscs.runner.task.JsonSpiderTask;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.logging.log4j.*;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.function.Consumer;
 
 import static com.animediscs.model.Disc.*;
 import static com.animediscs.model.DiscList.titleOfSeason;
@@ -37,14 +40,15 @@ public class SakuraSpeedSpider {
 
     public void doUpdate(SpiderService service, int level) {
         logger.printf(Level.INFO, "开始更新Sakura速报数据");
-        service.addTask(level, SAKURA_SPEED_URL, document -> {
+        Consumer<Document> consumer = document -> {
             Elements tables = document.select("table");
             Elements fonts = document.select("b>font[color=red]");
             for (int i = 0; i < tables.size(); i++) {
                 updateDiscList(tables.get(i), fonts.get(i).text());
             }
             logger.printf(Level.INFO, "成功更新Sakura速报数据");
-        });
+        };
+        service.addTask(level, new JsonSpiderTask(SAKURA_SPEED_URL, () -> true, consumer));
     }
 
     private void updateDiscList(Element table, String updateText) {
