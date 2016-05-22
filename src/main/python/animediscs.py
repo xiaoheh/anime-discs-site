@@ -1,6 +1,6 @@
 from peewee import *
 
-database = MySQLDatabase('fuhaiwei', **{'user': 'root'})
+database = MySQLDatabase('animediscs', **{'user': 'wind','password':'wind'})
 
 class UnknownField(object):
     pass
@@ -31,7 +31,7 @@ class Anime(BaseModel):
         db_table = 'anime'
 
 class Disc(BaseModel):
-    amzver = IntegerField(null=True)  # bit
+    amzver = BooleanField(null=True)  # bit
     anime = ForeignKeyField(db_column='anime_id', null=True, rel_model=Anime, to_field='id')
     asin = CharField(unique=True)
     id = BigIntegerField(primary_key=True)
@@ -49,7 +49,7 @@ class DiscList(BaseModel):
     date = DateTimeField(null=True)
     id = BigIntegerField(primary_key=True)
     name = CharField(unique=True)
-    sakura = IntegerField(null=True)  # bit
+    sakura = BooleanField(null=True)  # bit
     title = CharField()
     version = BigIntegerField(null=True)
 
@@ -57,8 +57,8 @@ class DiscList(BaseModel):
         db_table = 'disc_list'
 
 class DiscListMap(BaseModel):
-    discs = BigIntegerField(db_column='discs_id')
-    id = BigIntegerField()
+    discs = ForeignKeyField(db_column='discs_id', rel_model=Disc, to_field='id')
+    id = ForeignKeyField(db_column='id', rel_model=DiscList, to_field='id')
 
     class Meta:
         db_table = 'disc_list_map'
@@ -108,16 +108,4 @@ class DiscSakura(BaseModel):
 
     class Meta:
         db_table = 'disc_sakura'
-
-class ProxyHost(BaseModel):
-    baned = IntegerField(null=True)  # bit
-    error_number = IntegerField(null=True)
-    host = CharField()
-    id = BigIntegerField(primary_key=True)
-    port = IntegerField(null=True)
-    right_number = IntegerField(null=True)
-    version = BigIntegerField(null=True)
-
-    class Meta:
-        db_table = 'proxy_host'
 

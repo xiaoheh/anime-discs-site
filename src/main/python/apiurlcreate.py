@@ -45,4 +45,5 @@ def urlcreate(params):
     #print(signature)
     request_url = 'http://'+endpoint+uri+'?'+canonical_query_string+'&Signature='+quote(signature)
     # print("Signed URL:{0}".format(request_url))
+    # print(request_url)
     return request_url
