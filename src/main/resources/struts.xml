@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<!--suppress Struts2ModelInspection -->
+<struts>
+    <constant name="struts.devMode" value="true"/>
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+    <constant name="struts.action.extension" value="do"/>
+
+    <package name="default" extends="struts-default">
+        <action name="index" class="com.animediscs.action.IndexAction">
+            <result type="redirect">/sakura_data.jsp</result>
+        </action>
+    </package>
+
+    <package name="json" extends="struts-default">
+        <global-results>
+            <result name="error" type="chain">error</result>
+        </global-results>
+        <global-exception-mappings>
+            <exception-mapping exception="java.lang.Exception" result="error"/>
+        </global-exception-mappings>
+        <action name="error" method="error" class="com.animediscs.action.ErrorAction"/>
+        <action name="sakura" method="get" class="com.animediscs.action.SakuraAction"/>
+        <action name="get_disc" method="get" class="com.animediscs.action.DiscAction"/>
+        <action name="update_disc" method="update" class="com.animediscs.action.DiscAction"/>
+    </package>
+</struts>
