@@ -200,7 +200,7 @@ public class AmazonDiscSpider {
     }
 
     private boolean needUpdate(Date date) {
-        return date == null || date.getTime() < System.currentTimeMillis() - 300000L;
+        return date == null || date.getTime() < System.currentTimeMillis() - 1200000L;
     }
 
 }
