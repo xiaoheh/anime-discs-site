@@ -30,11 +30,26 @@ function fm_date(date, format) {
     return format;
 }
 
+template.helper("fm_rank_date", function (time, type) {
+    return fm_rank_date(time, type);
+});
+
+function fm_rank_date(time, type) {
+    if (type == "CD") {
+        return fm_date(time, 'yyyy-MM-dd hh时');
+    } else {
+        return fm_date(time, 'yyyy-MM-dd hh:mm:ss');
+    }
+}
+
 template.helper('fm_timeout', function (time) {
     return fm_timeout(time);
 });
 
 function fm_timeout(time) {
+    if (time == null) {
+        return "--分 --秒";
+    }
     var timeout = new Date().getTime() - time;
     if (timeout < 0) {
         return "--分 --秒";
@@ -65,7 +80,45 @@ function fm_timeout(time) {
     }
 }
 
+template.helper('fm_sakura', function (number, length) {
+    return fm_sakura(number, length);
+});
+
+function fm_sakura(number, length) {
+    number = number || 0;
+    length = length || 6;
+    length = length > 3 ? length + 1 : length;
+    var zerofm = "---,---";
+    var format = "***,***";
+    if (!number || number <= 0) {
+        return zerofm.substr(zerofm.length - length, length);
+    }
+    var string = fm_number(number, "###,###");
+    return format.substr(format.length - length, length - string.length) + string;
+}
+
+template.helper('fm_star', function (number, length) {
+    return fm_star(number, length);
+});
+
+function fm_star(number, length) {
+    number = number || 0;
+    length = length || 4;
+    var zerofm = "------";
+    var format = "******";
+    if (!number || number <= 0) {
+        return zerofm.substr(zerofm.length - length, length);
+    }
+    var string = number + "";
+    return format.substr(format.length - length, length - string.length) + string;
+}
+
+template.helper("fm_number", function (number, format) {
+    return fm_number(number, format);
+});
+
 function fm_number(number, format) {
+    number = number || 0;
     format = format || "###,###";
     var result = "";
     var string = number < 0 ? -number + "" : number + "";
@@ -84,45 +137,9 @@ function fm_number(number, format) {
     return number < 0 ? "-" + result : result;
 }
 
-template.helper('fm_sakura', function (number, width) {
-    return fm_sakura(number, width);
-});
-
-function fm_sakura(number, width) {
-    width = width || 6;
-    width = width > 3 ? width + 1 : width;
-    var zerofm = "---,---";
-    var format = "***,***";
-    if (!number || number <= 0) {
-        return zerofm.substr(zerofm.length - width, width);
-    }
-    var string = fm_number(number, "###,###");
-    return format.substr(format.length - width, width - string.length) + string;
-}
-
-template.helper('fm_star', function (number, width) {
-    return fm_star(number, width);
-});
-
-function fm_star(number, width) {
-    width = width || 4;
-    var zerofm = "------";
-    var format = "******";
-    if (!number || number <= 0) {
-        return zerofm.substr(zerofm.length - width, width);
-    }
-    var string = number + "";
-    return format.substr(format.length - width, width - string.length) + string;
-}
-
-template.helper("fm_number", function (number, format) {
-    return fm_number(number, format);
-});
-
 template.helper("fm_verstr", function (disc) {
     return fm_verstr(disc);
 });
-
 
 function fm_verstr(disc) {
     return disc["amzver"] ? fm_type(disc) + " 卐" : fm_type(disc);
@@ -133,10 +150,19 @@ template.helper("fm_type", function (disc) {
 });
 
 function fm_type(disc) {
-    if (disc["dvdver"]) {
-        return disc["boxver"] ? "▲" : "△";
-    } else {
-        return disc["boxver"] ? "★" : "☆";
+    switch (disc["type"]) {
+        case 0:
+            return "◎";
+        case 1:
+            return "☆";
+        case 2:
+            return "△";
+        case 3:
+            return "★";
+        case 4:
+            return "▲";
+        default:
+            return "☒";
     }
 }
 
@@ -148,12 +174,12 @@ function fm_srnk(disc) {
     return fm_sakura(disc["curk"]) + "位/" + fm_sakura(disc["prrk"]) + "位";
 }
 
-template.helper("fm_dirk", function (disc) {
-    return fm_dirk(disc);
+template.helper("fm_arnk", function (disc) {
+    return fm_arnk(disc);
 });
 
-function fm_dirk(disc) {
-    return fm_star(disc["arnk"]) + "/" + fm_star(disc["curk"]);
+function fm_arnk(disc) {
+    return fm_sakura(disc["rank1"]) + "位/" + fm_sakura(disc["rank2"]) + "位";
 }
 
 template.helper("fm_eqrk", function (disc) {
@@ -162,4 +188,22 @@ template.helper("fm_eqrk", function (disc) {
 
 function fm_eqrk(disc) {
     return fm_star(disc["curk"]) + "/" + fm_star(disc["prrk"]);
+}
+
+template.helper("fm_nerk", function (disc) {
+    return fm_nerk(disc);
+});
+
+function fm_nerk(disc) {
+    return fm_star(disc["rank1"]) + "/" + fm_star(disc["rank2"]);
+}
+
+template.helper("is_timeout", function (time) {
+    return is_timeout(time);
+});
+
+function is_timeout(time) {
+    if (time)
+        return new Date().getTime() - time > 7200000;
+    return false;
 }

@@ -1,11 +1,11 @@
 package com.animediscs.action;
 
-import com.animediscs.support.JsonAction;
+import com.animediscs.support.BaseAction;
 import org.json.JSONObject;
 
 import java.io.IOException;
 
-public class ErrorAction extends JsonAction {
+public class ErrorAction extends BaseAction {
 
     private Exception exception;
     private String exceptionStack;

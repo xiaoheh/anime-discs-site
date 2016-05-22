@@ -1,8 +1,6 @@
 package com.animediscs.model;
 
-import com.animediscs.model.disc.Disc;
 import com.animediscs.support.BaseModel;
-import com.animediscs.support.Constants;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -14,6 +12,7 @@ public class DiscList extends BaseModel implements Comparable<DiscList> {
 
     private String name;
     private String title;
+    private boolean sakura;
 
     private Date date;
     private List<Disc> discs = new LinkedList<>();
@@ -37,6 +36,15 @@ public class DiscList extends BaseModel implements Comparable<DiscList> {
     }
 
     @Column
+    public boolean isSakura() {
+        return sakura;
+    }
+
+    public void setSakura(boolean sakura) {
+        this.sakura = sakura;
+    }
+
+    @Column
     public Date getDate() {
         return date;
     }
@@ -57,9 +65,25 @@ public class DiscList extends BaseModel implements Comparable<DiscList> {
 
     public int compareTo(DiscList other) {
         Assert.notNull(other);
-        if (Constants.TOP_100_NAME.equals(name)) return -1;
-        if (Constants.TOP_100_NAME.equals(other.name)) return 1;
-        return other.name.compareTo(name);
+        if (sakura != other.sakura) {
+            return sakura ? -1 : 1;
+        } else {
+            return other.name.compareTo(name);
+        }
+    }
+
+    @Transient
+    public boolean isBefore(Date date) {
+        return this.date == null || this.date.compareTo(date) < 0;
+    }
+
+    @Transient
+    public boolean isTop100() {
+        return "top_100".equals(getName());
+    }
+
+    public static String titleOfSeason(String name) {
+        return name.substring(0, 4) + "年" + name.substring(5) + "月新番";
     }
 
 }

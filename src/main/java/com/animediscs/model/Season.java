@@ -1,28 +1,32 @@
 package com.animediscs.model;
 
 import com.animediscs.support.BaseModel;
-import org.springframework.util.Assert;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "season")
-public class Season extends BaseModel implements Comparable<Season> {
+public class Season extends BaseModel {
 
-    private String name;
+    private String japan;
+    private String title;
 
-    @Column(length = 100, nullable = false, unique = true)
-    public String getName() {
-        return name;
+    @Column(length = 30, nullable = false, unique = true)
+    public String getJapan() {
+        return japan;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setJapan(String japan) {
+        this.japan = japan;
     }
 
-    public int compareTo(Season other) {
-        Assert.notNull(other);
-        return other.name.compareTo(name);
+    @Column(length = 30, nullable = false)
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
 }

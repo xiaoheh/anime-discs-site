@@ -6,10 +6,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-/**
- * Created by fuhaiwei on 16/5/2.
- */
-public class JsonAction {
+public class BaseAction {
+
     protected void responseJson(String text) throws IOException {
         ServletActionContext.getResponse().setContentType("text/json;charset=utf-8");
         PrintWriter out = ServletActionContext.getResponse().getWriter();

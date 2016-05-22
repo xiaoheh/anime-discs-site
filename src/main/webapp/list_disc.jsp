@@ -3,7 +3,7 @@
 <html>
 <head>
     <%@ include file="include/meta.jsp" %>
-    <title>Anime Discs - Sakura数据</title>
+    <title>Anime Discs - 碟片列表</title>
     <%@ include file="include/import.jsp" %>
     <link href="styles/table.css" rel="stylesheet"/>
     <script src="scripts/table.js"></script>
@@ -12,25 +12,19 @@
         @media (max-width: 767px) {
 
             table.table th.index {
-                width: 32px;
-                text-align: center;
-                padding-left: 2px;
-                padding-right: 2px;
-            }
-
-            table.table th.index {
-                width: 32px;
+                width: 45px;
                 text-align: center;
                 padding-left: 2px;
                 padding-right: 2px;
             }
 
             table.table th.rank {
-                width: 92px;
+                width: 120px;
             }
 
-            table.table th.cupt {
-                width: 66px;
+            table.table td.rank {
+                padding-left: 2px;
+                padding-right: 2px;
             }
 
         }
@@ -43,15 +37,11 @@
             }
 
             table.table th.arnk {
-                width: 85px;
+                width: 155px;
             }
 
             table.table th.atot {
                 width: 85px;
-            }
-
-            table.table th.srnk {
-                width: 155px;
             }
 
             table.table th.type {
@@ -101,75 +91,57 @@
 <%@ include file="include/navbar.jsp" %>
 <div id="content"></div>
 <script id="template-small" type="text/html">
-    {{each tables as table idx}}
     <table id="{{table.name}}" class="table sorter table-bordered table-striped">
         <caption>
+            {{if table.id}}
             <span><a href="${cookie.admin.value?"edit":"view"}_table.jsp?id={{table.id}}">{{table.title}}</a></span>
-            <span><span class="hidden-xxs">上次更新 </span>{{table.time | fm_timeout}}</span>
+            {{else}}
+            <span><b>{{table.title}}</b></span>
+            {{/if}}
         </caption>
         <thead>
         <tr>
-            <th class="index hidden-xxm">ID</th>
-            <th class="index hidden-xxm zero-width"></th>
+            <th class="index hidden-xxs">ID</th>
+            <th class="index hidden-xxs zero-width"></th>
             <th class="rank sorter">排名</th>
-            <th class="cupt hidden-xxs zero-width"></th>
-            <th class="cupt hidden-xxs sorter">累积</th>
-            <th class="cupt hidden-xxs zero-width"></th>
             <th class="sname sorter">碟片标题</th>
         </tr>
         </thead>
         <tbody>
-        {{each table.discs as disc idx2}}
-        {{if disc.arnk < 9999 && disc.curk < 9999 && disc.prrk < 9999}}
+        {{each table.discs as disc idx}}
         <tr id="row-{{idx+1}}-{{idx2+1}}">
-            <td class="index hidden-xxm" data-number="{{idx2+1}}">{{idx2+1}}</td>
-            <td class="index hidden-xxm zero-width">)</td>
-            {{if disc.arnk != disc.curk}}
-            <td class="rank danger" data-number="{{disc.arnk}}">
-                <a href="http://rankstker.net/show.cgi?n={{disc.asin}}" target="_blank">{{disc | fm_nerk}}</a>
+            <td class="index hidden-xxs" data-number="{{idx+1}}">{{idx+1}}</td>
+            <td class="index hidden-xxs zero-width">)</td>
+            <td class="rank" data-number="{{disc.rank1}}">
+                <a href="http://www.amazon.co.jp/dp/{{disc.asin}}">
+                    {{disc.rank1 | fm_star:6}}/{{disc.rank2 | fm_star:6}}
+                </a>
             </td>
-            {{else}}
-            <td class="rank" data-number="{{disc.curk}}">
-                <a href="http://rankstker.net/show.cgi?n={{disc.asin}}" target="_blank">{{disc | fm_eqrk}}</a>
-            </td>
-            {{/if}}
-            <td class="cupt hidden-xxs zero-width">(</td>
-            <td class="cupt hidden-xxs" data-number="{{disc.cupt}}">{{disc.cupt | fm_star:6}}</td>
-            <td class="cupt hidden-xxs zero-width"> pt)</td>
             <td class="sname">
-                <a href="${cookie.admin.value?"edit":"view"}_disc.jsp?id={{disc.id}}">{{disc.sname}} {{disc |
-                    fm_verstr}}</a>
+                <a href="${cookie.admin.value?"edit":"view"}_disc.jsp?id={{disc.id}}">
+                    {{disc.sname}} {{disc | fm_verstr}}
+                </a>
             </td>
         </tr>
-        {{/if}}
         {{/each}}
         </tbody>
     </table>
-    {{/each}}
 </script>
 <script id="template" type="text/html">
-    {{each tables as table idx}}
     <table id="{{table.name}}" class="table sorter table-striped table-bordered">
         <caption>
+            {{if table.id}}
             <span><a href="${cookie.admin.value?"edit":"view"}_table.jsp?id={{table.id}}">{{table.title}}</a></span>
-            {{if table.time}}
-            <span>更新时间: {{table.time | fm_date:"yyyy-MM-dd hh:mm:ss"}}</span>
-            <span>(距离现在 {{table.time | fm_timeout}})</span>
-            {{/if}}
-            {{if is_timeout(table.time)}}
-            <div class="text-warning">
-                <span>提示: Sakura可能是延迟了两小时以上, 建议打开更多Amazon排名数据.</span>
-                <span>(点击功能 -> 自定义表格格式 -> Amazon排名模式 或 手动选中Rank1 ~ 5)</span>
-            </div>
+            {{else}}
+            <span><b>{{table.title}}</b></span>
             {{/if}}
         </caption>
         <thead>
         <tr>
             <th class="index sorter">序号</th>
             <th class="index zero-width"></th>
-            <th class="arnk sorter">Amazon</th>
+            <th class="arnk sorter">当前/前回</th>
             <th class="atot sorter">更新时间</th>
-            <th class="srnk sorter">当前/前回</th>
             <th class="type sorter">类型</th>
             <th class="cupt zero-width"></th>
             <th class="cupt sorter">累积PT</th>
@@ -192,13 +164,10 @@
         <tr>
             <td class="index" data-number="{{idx2+1}}">{{idx2+1}}</td>
             <td class="index zero-width">)</td>
-            <td class="arnk" data-number="{{disc.arnk}}">
-                <a href="http://www.amazon.co.jp/dp/{{disc.asin}}" target="_blank">{{disc.arnk | fm_number}}位</a>
+            <td class="arnk" data-number="{{disc.rank1}}">
+                <a href="http://www.amazon.co.jp/dp/{{disc.asin}}">{{disc | fm_arnk}}</a>
             </td>
             <td class="atot" data-number="{{disc.amdt}}">{{disc.amdt | fm_timeout}}</td>
-            <td class="srnk" data-number="{{disc.curk}}">
-                <a href="http://rankstker.net/show.cgi?n={{disc.asin}}" target="_blank">{{disc | fm_srnk}}</a>
-            </td>
             <td class="type" data-number="{{disc.type}}">{{disc | fm_type}}</td>
             <td class="cupt zero-width">(</td>
             <td class="cupt" data-number="{{disc.cupt}}">{{disc.cupt | fm_sakura}} pt</td>
@@ -220,7 +189,6 @@
         {{/each}}
         </tbody>
     </table>
-    {{/each}}
 </script>
 <div id="profile-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -309,7 +277,12 @@
     }
 
     function ajax_update_page() {
-        $.getJSON("sakura.do", function (data) {
+        $.getJSON("list_disc.do", {
+            filter: '${param.filter == null ? "" : param.filter}',
+            name: '${param.name == null ? "" : param.name}',
+            type: '${param.type == null ? "" : param.type}',
+            latest: '${param.latest != null && param.latest == "true"}'
+        }, function (data) {
             cache.data = data;
             handle_data(data);
             render_page(data);
@@ -317,17 +290,15 @@
     }
 
     function handle_data(data) {
-        $(data).each(function () {
-            navbar.add_postion(this.name, this.title);
-        });
+        navbar.add_postion(this.name, this.title);
     }
 
     function render_page(data) {
         post_before_render();
         if (device.is_small()) {
-            $("#content").html(render("template-small", {tables: data}));
+            $("#content").html(render("template-small", {table: data}));
         } else {
-            $("#content").html(render("template", {tables: data}));
+            $("#content").html(render("template", {table: data}));
         }
         post_after_render();
     }
@@ -348,18 +319,7 @@
             }
         }, 20);
         if (!device.is_small()) {
-            render_profile([
-                {title: "默认中文模式", checked: ["index", "arnk", "srnk", "cupt", "sday", "title"]},
-                {title: "Sakura标准模式", checked: ["index", "srnk", "type", "cupt", "cubk", "release", "title"]},
-                {title: "Amazon排名模式", checked: ["index", "srnk", "title", "rank1", "rank2", "rank3", "rank4", "rank5"]}
-            ]);
-            $("table.table>tbody>tr").each(function () {
-                var $td1 = $(this).find("td.arnk");
-                var $td2 = $(this).find("td.srnk");
-                if ($td1.data("number") != $td2.data("number")) {
-                    $td1.addClass("danger");
-                }
-            });
+            render_profile([{title: "默认中文模式", checked: ["index", "arnk", "cupt", "sday", "title"]}]);
         }
     }
 </script>

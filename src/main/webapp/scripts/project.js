@@ -14,7 +14,7 @@ $(function () {
 
 function update_active_status() {
     $("#navbar").find("li>a").each(function () {
-        if (page.url() == $(this).attr("href")) {
+        if (page.url() + page.search() == $(this).attr("href")) {
             $(this).parents("li").addClass("active");
         }
     });

@@ -1,8 +1,8 @@
 package com.animediscs.service;
 
 import com.animediscs.dao.Dao;
+import com.animediscs.model.Disc;
 import com.animediscs.model.DiscList;
-import com.animediscs.model.disc.Disc;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +23,13 @@ public class DiscService {
     }
 
     @Transactional
+    public DiscList getLatestDiscList() {
+        return dao.findAll(DiscList.class).stream()
+                .filter(this::isLatest).sorted()
+                .skip(1).findFirst().orElse(null);
+    }
+
+    @Transactional
     public List<DiscList> findLatestDiscList() {
         return dao.findAll(DiscList.class).stream()
                 .filter(this::isLatest).sorted()
@@ -30,10 +37,10 @@ public class DiscService {
     }
 
     @Transactional
-    public DiscList getLatestDiscList() {
+    public List<DiscList> findLatestDiscExtList() {
         return dao.findAll(DiscList.class).stream()
                 .filter(this::isLatest).sorted()
-                .skip(1).findFirst().get();
+                .skip(1).collect(Collectors.toList());
     }
 
     @Transactional

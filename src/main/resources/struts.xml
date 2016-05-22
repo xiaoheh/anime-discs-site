@@ -10,6 +10,7 @@
     <package name="default" extends="struts-default">
         <action name="index" class="com.animediscs.action.IndexAction">
             <result type="redirect">/sakura_data.jsp</result>
+            <result name="admin">WEB-INF/admin.jsp</result>
         </action>
     </package>
 
@@ -21,8 +22,20 @@
             <exception-mapping exception="java.lang.Exception" result="error"/>
         </global-exception-mappings>
         <action name="error" method="error" class="com.animediscs.action.ErrorAction"/>
-        <action name="sakura" method="get" class="com.animediscs.action.SakuraAction"/>
-        <action name="get_disc" method="get" class="com.animediscs.action.DiscAction"/>
-        <action name="update_disc" method="update" class="com.animediscs.action.DiscAction"/>
+        <action name="sakura" method="view" class="com.animediscs.action.SakuraAction"/>
+
+        <action name="view_disc" method="view" class="com.animediscs.action.DiscAction"/>
+        <action name="edit_disc" method="edit" class="com.animediscs.action.DiscAction"/>
+        <action name="list_disc" method="list" class="com.animediscs.action.DiscListAction"/>
+
+        <action name="list_rank" method="list" class="com.animediscs.action.RankAction"/>
+
+        <action name="view_table" method="view" class="com.animediscs.action.TableAction"/>
+        <action name="list_table" method="list" class="com.animediscs.action.TableAction"/>
+        <action name="edit_table" method="edit" class="com.animediscs.action.TableAction"/>
+
+        <action name="remove_disc_from_table" method="removeDisc" class="com.animediscs.action.TableAction"/>
+        <action name="add_disc_to_table_with_id" method="addDiscWithId" class="com.animediscs.action.TableAction"/>
+        <action name="add_disc_to_table_with_asin" method="addDiscWithAsin" class="com.animediscs.action.TableAction"/>
     </package>
 </struts>

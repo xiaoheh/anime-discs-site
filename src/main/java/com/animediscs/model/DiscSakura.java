@@ -1,4 +1,4 @@
-package com.animediscs.model.disc;
+package com.animediscs.model;
 
 import com.animediscs.support.BaseModel;
 import org.springframework.util.Assert;
@@ -7,21 +7,16 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "dics_sakura")
+@Table(name = "disc_sakura")
 public class DiscSakura extends BaseModel implements Comparable<DiscSakura> {
 
     private Disc disc;
 
-    private Date spdt; // speed date
+    private Date date;
     private int curk; // current spdt
     private int prrk; // previous spdt
-
-    private Date padt; // page date
     private int cubk; // current book
-    private int prbk; // previous book
     private int cupt; // current point
-    private int prpt; // previous point
-    private int capt; // calculate point
     private int sday; // surplus days
 
     @OneToOne(optional = false)
@@ -34,12 +29,12 @@ public class DiscSakura extends BaseModel implements Comparable<DiscSakura> {
     }
 
     @Column
-    public Date getSpdt() {
-        return spdt;
+    public Date getDate() {
+        return date;
     }
 
-    public void setSpdt(Date spdt) {
-        this.spdt = spdt;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     @Column
@@ -61,30 +56,12 @@ public class DiscSakura extends BaseModel implements Comparable<DiscSakura> {
     }
 
     @Column
-    public Date getPadt() {
-        return padt;
-    }
-
-    public void setPadt(Date padt) {
-        this.padt = padt;
-    }
-
-    @Column
     public int getCubk() {
         return cubk;
     }
 
     public void setCubk(int cubk) {
         this.cubk = cubk;
-    }
-
-    @Column
-    public int getPrbk() {
-        return prbk;
-    }
-
-    public void setPrbk(int prbk) {
-        this.prbk = prbk;
     }
 
     @Column
@@ -97,35 +74,12 @@ public class DiscSakura extends BaseModel implements Comparable<DiscSakura> {
     }
 
     @Column
-    public int getPrpt() {
-        return prpt;
-    }
-
-    public void setPrpt(int prpt) {
-        this.prpt = prpt;
-    }
-
-    @Column
-    public int getCapt() {
-        return capt;
-    }
-
-    public void setCapt(int capt) {
-        this.capt = capt;
-    }
-
-    @Column
     public int getSday() {
         return sday;
     }
 
     public void setSday(int sday) {
         this.sday = sday;
-    }
-
-    @Transient
-    public int getTapt() {
-        return cupt - prpt;
     }
 
     public int compareTo(DiscSakura other) {
