@@ -29,8 +29,8 @@ public class AutoRunner {
 
     public AutoRunner() {
         ExecutorService execute = Executors.newFixedThreadPool(1);
-        sakuraRunner = new SpiderService("Sakura", 1, 2, execute);
-        amazonRunner = new SpiderService("Amazon", 3, 2, execute);
+        sakuraRunner = new SpiderService("Sakura", 1, 1, execute);
+        amazonRunner = new SpiderService("Amazon", 3, 1, execute);
         rankerRunner = new SpiderService("Ranker", 3, 1, execute);
     }
 
@@ -39,12 +39,12 @@ public class AutoRunner {
         schedule("Sakura速报数据抓取", 5, 60, () -> {
             sakuraSpeedSpider.doUpdate(sakuraRunner, 1);
         });
-        schedule("Amazon速报数据抓取", 10, 60, () -> {
+        schedule("Amazon速报数据抓取", 10, 120, () -> {
             amazonSpeedSpider.doUpdate(amazonRunner, 1);
         });
-        schedule("Amazon动画数据抓取", 15, 3600, () -> {
-            amazonAnimeSpider.doUpdate(amazonRunner, 2);
-        });
+//        schedule("Amazon动画数据抓取", 15, 3600, () -> {
+//            amazonAnimeSpider.doUpdate(amazonRunner, 2);
+//        });
         schedule("Amazon重点排名抓取", 20, 120, () -> {
             amazonDiscSpider.doUpdateHot(60, rankerRunner, 1);
         });
