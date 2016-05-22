@@ -27,10 +27,10 @@ try:
 		while r.status_code != requests.codes.ok:
 			time.sleep(1)
 			r=s.get(url,timeout=None)
-		with open('dalao.xml','wb') as f:
+		with open('data.xml','wb') as f:
 			f.write(r.content)
 		xmlns="{http://webservices.amazon.com/AWSECommerceService/2011-08-01}"
-		tree = ET.parse('dalao.xml')
+		tree = ET.parse('data.xml')
 		root = tree.getroot()
 		items=root.find(xmlns+'Items')
 		item = items.find(xmlns+'Item')
@@ -58,7 +58,7 @@ try:
 			data1=DiscRank(disc=discid,park=salesrank,park1=salesrank,park2=rankrow.park1,park3=rankrow.park2,park4=rankrow.park3,park5=rankrow.park4,padt=now
 							,padt1=now,padt2=rankrow.padt1,padt3=rankrow.padt2,padt4=rankrow.padt3,padt5=rankrow.padt4,id=discrankid)
 			data1.save()
-		print('successfully stored')
+	print('successfully stored')
 except Exception as e:
 	print(e)
 	with open('err.log','a') as f:
