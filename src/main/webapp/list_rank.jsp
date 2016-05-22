@@ -47,10 +47,10 @@
         <tbody>
         {{each ranks as rank idx}}
         <tr id="row-{{idx+1}}">
-            <td class="date" data-number="{{date}}">{{rank.date | fm_rank_date:type}}</td>
-            <td class="rank" data-number="{{rank}}">{{rank.rank}}</td>
-            <td class="adpt" data-number="{{adpt}}">{{rank.adpt}}</td>
-            <td class="cupt" data-number="{{cupt}}">{{rank.cupt}}</td>
+            <td class="date" data-number="{{rank.date}}">{{rank.date | fm_rank_date:type}}</td>
+            <td class="rank" data-number="{{rank.rank}}">{{rank.rank}}</td>
+            <td class="adpt" data-number="{{rank.adpt}}">{{rank.adpt}}</td>
+            <td class="cupt" data-number="{{rank.cupt}}">{{rank.cupt}}</td>
         </tr>
         {{/each}}
         </tbody>
