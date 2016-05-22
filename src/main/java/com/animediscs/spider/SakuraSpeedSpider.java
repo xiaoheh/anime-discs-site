@@ -4,7 +4,7 @@ import com.animediscs.model.DiscType;
 import com.animediscs.dao.Dao;
 import com.animediscs.model.*;
 import com.animediscs.runner.SpiderService;
-import com.animediscs.runner.task.JsonSpiderTask;
+import com.animediscs.runner.task.JsoupSpiderTask;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.logging.log4j.*;
 import org.jsoup.nodes.Document;
@@ -48,7 +48,7 @@ public class SakuraSpeedSpider {
             }
             logger.printf(Level.INFO, "成功更新Sakura速报数据");
         };
-        service.addTask(level, new JsonSpiderTask(SAKURA_SPEED_URL, () -> true, consumer));
+        service.addTask(level, new JsoupSpiderTask(SAKURA_SPEED_URL, () -> true, consumer));
     }
 
     private void updateDiscList(Element table, String updateText) {

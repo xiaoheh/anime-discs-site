@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class JsonSpiderTask implements SpiderTask {
+public class JsoupSpiderTask implements SpiderTask {
 
     private String text;
     private Supplier<Boolean> test;
@@ -17,7 +17,7 @@ public class JsonSpiderTask implements SpiderTask {
     private int tryCount;
     private int maxRetry;
 
-    public JsonSpiderTask(String text, Supplier<Boolean> test, Consumer<Document> consumer) {
+    public JsoupSpiderTask(String text, Supplier<Boolean> test, Consumer<Document> consumer) {
         this.text = text;
         this.test = test;
         this.consumer = consumer;
