@@ -1,7 +1,6 @@
 package com.animediscs.runner;
 
 import org.apache.logging.log4j.*;
-import org.jsoup.nodes.Document;
 import org.springframework.dao.DataAccessException;
 import org.springframework.util.Assert;
 
@@ -10,8 +9,6 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import static com.animediscs.util.Format.formatError;
 import static com.animediscs.util.Helper.*;
@@ -68,15 +65,7 @@ public class SpiderService {
         return tasksArray[index] != null && tasksArray[index].size() > 0;
     }
 
-    public void addTask(int level, String url, Supplier<Boolean> test, Consumer<Document> consumer) {
-        addTask(level, new SpiderTask(url, test, consumer));
-    }
-
-    public void addTask(int level, String url, Consumer<Document> consumer) {
-        addTask(level, new SpiderTask(url, () -> true, consumer));
-    }
-
-    private void addTask(int level, SpiderTask task) {
+    public void addTask(int level, SpiderTask task) {
         Assert.isTrue(level >= 1 && level <= maxLevel);
         int index = level - 1;
         if (tasksArray[index] == null) {
@@ -121,11 +110,11 @@ public class SpiderService {
                 if (task.isContinue(e)) {
                     taskList.add(task);
                     String format = "%s 抓取任务遇到网络错误, 已安排重试, 任务链接为: %s";
-                    logger.printf(Level.DEBUG, format, name, task.getUrl());
+                    logger.printf(Level.DEBUG, format, name, task.getText());
                     logger.catching(Level.DEBUG, e);
                 } else {
                     String format = "%s 抓取任务在尝试%d次后依然失败, 错误信息为: %s, 任务链接为: %s";
-                    logger.printf(Level.INFO, format, name, task.getTryCount(), formatError(e), task.getUrl());
+                    logger.printf(Level.INFO, format, name, task.getTryCount(), formatError(e), task.getText());
                     logger.catching(Level.DEBUG, e);
                 }
             } catch (Exception e) {
@@ -147,11 +136,11 @@ public class SpiderService {
                 if (task.isContinue(e)) {
                     doSumitForUpdate(task);
                     String format = "%s 更新任务遇到数据库错误, 已安排重试, 任务链接为: %s";
-                    logger.printf(Level.DEBUG, format, name, task.getUrl());
+                    logger.printf(Level.DEBUG, format, name, task.getText());
                     logger.catching(Level.DEBUG, e);
                 } else {
                     String format = "%s 更新任务在尝试%d次后依然失败, 错误信息为: %s, 任务链接为: %s";
-                    logger.printf(Level.INFO, format, name, task.getTryCount(), formatError(e), task.getUrl());
+                    logger.printf(Level.INFO, format, name, task.getTryCount(), formatError(e), task.getText());
                     logger.catching(Level.DEBUG, e);
 
                 }

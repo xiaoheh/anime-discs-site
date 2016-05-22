@@ -105,7 +105,9 @@
     <table id="{{table.name}}" class="table sorter table-bordered table-striped">
         <caption>
             <span><a href="${cookie.admin.value?"edit":"view"}_table.jsp?id={{table.id}}">{{table.title}}</a></span>
+            {{if table.time}}
             <span><span class="hidden-xxs">上次更新 </span>{{table.time | fm_timeout}}</span>
+            {{/if}}
         </caption>
         <thead>
         <tr>

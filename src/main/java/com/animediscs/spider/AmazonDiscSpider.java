@@ -3,24 +3,26 @@ package com.animediscs.spider;
 import com.animediscs.dao.Dao;
 import com.animediscs.model.*;
 import com.animediscs.runner.SpiderService;
+import com.animediscs.runner.task.RankSpiderTask;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.logging.log4j.*;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.animediscs.util.Helper.nullSafeGet;
 import static com.animediscs.util.Parser.parseNumber;
-import static java.lang.System.currentTimeMillis;
 
 @Service
 public class AmazonDiscSpider {
@@ -65,7 +67,6 @@ public class AmazonDiscSpider {
                     .add(Restrictions.eq("sakura", true))
                     .add(Restrictions.gt("date", yesterday))
                     .addOrder(Order.desc("name"))
-                    .setFirstResult(1)
                     .list().forEach(o -> {
                 DiscList discList = (DiscList) o;
                 discList.getDiscs().sort(Disc.sortBySakura());
@@ -96,11 +97,10 @@ public class AmazonDiscSpider {
         AtomicInteger update = new AtomicInteger(0);
         infoStart(name, discList, count);
         discs.stream().sorted(Disc.sortBySakura()).forEach(disc -> {
-            String url = "http://www.amazon.co.jp/dp/" + disc.getAsin();
-            service.addTask(level, url, needUpdate(disc, second), document -> {
+            Consumer<Document> consumer = document -> {
                 if (document != null) {
-                    String rankText = document.select("#SalesRank").text();
-                    updateRank(getDiscRank(disc), rankText);
+                    Node rank = document.getElementsByTagName("SalesRank").item(0);
+                    updateRank(getDiscRank(disc), rank.getTextContent());
                     debugUpdate(name, discList, count, disc, update);
                 } else {
                     debugSkip(name, discList, count, disc, skip);
@@ -110,7 +110,8 @@ public class AmazonDiscSpider {
                 } else if (count.get() % 10 == 0) {
                     infoUpdateTen(name, discList, count);
                 }
-            });
+            };
+            service.addTask(level, new RankSpiderTask(disc.getAsin(), needSpider(disc, second), consumer));
         });
     }
 
@@ -153,18 +154,15 @@ public class AmazonDiscSpider {
     }
 
     private void updateRank(DiscRank rank, String rankText) {
-        rank.setPadt(new Date());
         if (needUpdate(rank.getPadt1())) {
-            Matcher matcher = pattern.matcher(rankText);
-            if (matcher.find()) {
-                rank.setPark(parseNumber(matcher.group(1)));
-                if (rank.getPark() != rank.getPark1()) {
-                    pushRank(rank);
-                    saveRank(rank);
-                }
+            rank.setPark(parseNumber(rankText));
+            rank.setPadt(new Date());
+            if (rank.getPark() != rank.getPark1()) {
+                pushRank(rank);
+                saveRank(rank);
             }
+            dao.saveOrUpdate(rank);
         }
-        dao.saveOrUpdate(rank);
     }
 
     private void pushRank(DiscRank rank) {
@@ -188,15 +186,21 @@ public class AmazonDiscSpider {
         dao.save(record);
     }
 
-    private boolean needUpdate(Date date) {
-        return date == null || date.getTime() < currentTimeMillis() - 300000;
+    private Supplier<Boolean> needSpider(Disc disc, int second) {
+        return () -> {
+            if (needSpider(nullSafeGet(disc.getRank(), DiscRank::getPadt), second)) {
+                return needUpdate(nullSafeGet(disc.getRank(), DiscRank::getPadt1));
+            }
+            return false;
+        };
     }
 
-    private Supplier<Boolean> needUpdate(Disc disc, int second) {
-        return () -> {
-            Date date = nullSafeGet(disc.getRank(), DiscRank::getPadt);
-            return date == null || date.compareTo(DateUtils.addSeconds(new Date(), -second)) < 0;
-        };
+    private boolean needSpider(Date date, int second) {
+        return date == null || date.getTime() < System.currentTimeMillis() - second * 1000;
+    }
+
+    private boolean needUpdate(Date date) {
+        return date == null || date.getTime() < System.currentTimeMillis() - 1200000L;
     }
 
 }

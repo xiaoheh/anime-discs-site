@@ -56,11 +56,26 @@
         </tbody>
     </table>
 </script>
+<script id="navbar-tmpl" type="text/html">
+    <li class="dropdown hidden-xs">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            功能<b class="caret"></b>
+        </a>
+        <ul id="control" class="dropdown-menu">
+            <li><a href="javascript:navbar.refresh()">刷新</a></li>
+        </ul>
+    </li>
+</script>
 <script>
     $(function () {
+        render_navber_menu();
         handle_refresh_action();
         handle_pageshow_action();
     });
+
+    function render_navber_menu() {
+        $("#nav-body").prepend($("#navbar-tmpl").html());
+    }
 
     function handle_refresh_action() {
         navbar.refresh(ajax_update_page);

@@ -1,9 +1,10 @@
 package com.animediscs.spider;
 
-import com.animediscs.action.DiscType;
+import com.animediscs.model.DiscType;
 import com.animediscs.dao.Dao;
 import com.animediscs.model.*;
 import com.animediscs.runner.SpiderService;
+import com.animediscs.runner.task.JsonSpiderTask;
 import org.apache.logging.log4j.*;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,24 +38,26 @@ public class AmazonAnimeSpider {
                 "&node=4367309051&pf_rd_m=AN1VRQENFRJN5&pf_rd_s=merchandised-search-leftnav" +
                 "&pf_rd_r=0GGNJ6034BX1979PRQTC&pf_rd_t=101&pf_rd_p=312858289&pf_rd_i=562020";
         logger.printf(Level.INFO, "开始更新番季列表数据");
-        service.addTask(level, url, document -> {
+        Consumer<Document> consumer = document -> {
             Elements elements = document.select("span.h3color+a");
             elements.forEach(element -> {
                 doUpdateSeason(service, level, element);
             });
             logger.printf(Level.INFO, "成功更新番季列表数据");
-        });
+        };
+        service.addTask(level, new JsonSpiderTask(url, () -> true, consumer));
     }
 
     private void doUpdateSeason(SpiderService service, int level, Element element) {
         Season season = getSeason(element.text().trim());
         logger.printf(Level.INFO, "开始更新番季数据 %s", season.getTitle());
         String url = "http://www.amazon.co.jp" + element.attr("href");
-        service.addTask(level, url, document -> {
+        Consumer<Document> consumer = document -> {
             Elements elements = document.select("div.acs-feature-item a");
             doUpdateAnime(season, elements);
             logger.printf(Level.INFO, "成功更新番季数据 %s", season.getTitle());
-        });
+        };
+        service.addTask(level, new JsonSpiderTask(url, () -> true, consumer));
     }
 
     private void doUpdateAnime(Season season, Elements elements) {
@@ -99,10 +103,11 @@ public class AmazonAnimeSpider {
 
     public void doUpdate(SpiderService service, int level, Long id, String asin) {
         logger.printf(Level.INFO, "准备抓取碟片信息: %s", asin);
-        service.addTask(level, "http://www.amazon.co.jp/dp/" + asin, document -> {
+        Consumer<Document> consumer = document -> {
             addDiscFromAmazon(asin, id, document);
             logger.printf(Level.INFO, "成功抓取碟片信息: %s", asin);
-        });
+        };
+        service.addTask(level, new JsonSpiderTask("http://www.amazon.co.jp/dp/" + asin, () -> true, consumer));
     }
 
     private void addDiscFromAmazon(String asin, Long id, Document document) {
@@ -174,9 +179,9 @@ public class AmazonAnimeSpider {
                     pushRank(rank);
                     saveRank(rank);
                 }
+                dao.saveOrUpdate(rank);
             }
         }
-        dao.saveOrUpdate(rank);
     }
 
     private boolean needUpdate(Date date) {

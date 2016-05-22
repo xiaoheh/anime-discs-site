@@ -1,4 +1,4 @@
-package com.animediscs.action;
+package com.animediscs.model;
 
 public enum DiscType {
 

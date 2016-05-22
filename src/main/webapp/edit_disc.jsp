@@ -1,4 +1,4 @@
-<%@ page import="com.animediscs.action.DiscType" %>
+<%@ page import="com.animediscs.model.DiscType" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -38,18 +38,22 @@
             <div class="form-group">
                 <label>碟片类型</label>
                 <select id="type" class="form-control" data-value="{{type}}">
-                    <% for (DiscType type : DiscType.values()) { %>
-                    <option value="<%=type.ordinal()%>"><%=type.name()%></option>
-                    <% } %>
+                    <option value="0">CD</option>
+                    <option value="1">BD</option>
+                    <option value="2">DVD</option>
+                    <option value="3">BD_BOX</option>
+                    <option value="4">DVD_BOX</option>
+                    <option value="5">OTHER</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>限定类型</label>
-                <select class="form-control" data-value="{{amzver?'1':'2'}}">
+                <select id="amzver" class="form-control" data-value="{{amzver?'1':'2'}}">
                     <option value="1">尼限定</option>
                     <option value="2">非尼限定</option>
                 </select>
-            </div>        </div>
+            </div>
+        </div>
         <div id="rank-tab" class="tab-pane fade">
             <div class="form-group">
                 <label>碟片标题</label>
@@ -82,7 +86,7 @@
                 <input type="text" class="form-control" value="{{title}}">
             </div>
             <div class="form-group">
-                <label>Sakura排名</label>
+                <label>当前/前回</label>
                 <input type="text" class="form-control" value="{{curk | fm_sakura}}位/{{prrk | fm_sakura}}位">
             </div>
             <div class="form-group">
@@ -109,9 +113,20 @@
         <span id="msg"></span>
     </div>
 </script>
+<script id="navbar-tmpl" type="text/html">
+    <li class="dropdown hidden-xs">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            功能<b class="caret"></b>
+        </a>
+        <ul id="control" class="dropdown-menu">
+            <li><a href="javascript:navbar.refresh()">刷新</a></li>
+        </ul>
+    </li>
+</script>
 <script>
 
     $(function () {
+        render_navber_menu();
         $.getJSON("view_disc.do", {id: ${param.id}}, function (data) {
             $("#content").html(template("template", data));
             $("select").each(function () {
@@ -124,6 +139,10 @@
             });
         });
     });
+
+    function render_navber_menu() {
+        $("#nav-body").prepend($("#navbar-tmpl").html());
+    }
 
     function update() {
         form.info("提交中...");

@@ -1,7 +1,8 @@
 package com.animediscs.model;
 
-import com.animediscs.action.DiscType;
 import com.animediscs.support.BaseModel;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -119,6 +120,25 @@ public class Disc extends BaseModel implements Comparable<Disc> {
     public int compareTo(Disc other) {
         Assert.notNull(other);
         return title.compareTo(other.title);
+    }
+
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Disc disc = (Disc) obj;
+        return new EqualsBuilder()
+                .append(asin, disc.asin)
+                .isEquals();
+    }
+
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(asin)
+                .toHashCode();
     }
 
     public static Comparator<Disc> sortBySakura() {
