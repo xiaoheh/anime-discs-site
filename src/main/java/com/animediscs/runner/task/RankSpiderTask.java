@@ -9,6 +9,8 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.*;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -58,7 +60,10 @@ public class RankSpiderTask implements SpiderTask {
                 String requestUrl = helper.sign(params);
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                 DocumentBuilder db = dbf.newDocumentBuilder();
-                document = db.parse(requestUrl);
+                URLConnection connection = new URL(requestUrl).openConnection();
+                connection.setConnectTimeout(3000);
+                connection.setReadTimeout(3000);
+                document = db.parse(connection.getInputStream());
                 tryCount = 0;
             } catch (IOException e) {
                 sleepThread();
