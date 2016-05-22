@@ -4,7 +4,7 @@ import com.animediscs.dao.Dao;
 import com.animediscs.model.Disc;
 import com.animediscs.model.DiscList;
 import com.animediscs.runner.AutoRunner;
-import com.animediscs.spider.AmazonAnimeSpider;
+import com.animediscs.spider.AmazonDiscSpider;
 import com.animediscs.support.BaseAction;
 import org.hibernate.criterion.Order;
 import org.json.JSONArray;
@@ -15,7 +15,7 @@ public class TableAction extends BaseAction {
 
     private Dao dao;
     private AutoRunner autoRunner;
-    private AmazonAnimeSpider amazonAnimeSpider;
+    private AmazonDiscSpider amazonDiscSpider;
 
     private Long id;
     private Long discId;
@@ -35,8 +35,8 @@ public class TableAction extends BaseAction {
     }
 
     @Autowired
-    public void setAmazonAnimeSpider(AmazonAnimeSpider amazonAnimeSpider) {
-        this.amazonAnimeSpider = amazonAnimeSpider;
+    public void setAmazonDiscSpider(AmazonDiscSpider amazonDiscSpider) {
+        this.amazonDiscSpider = amazonDiscSpider;
     }
 
     public void view() throws Exception {
@@ -110,7 +110,7 @@ public class TableAction extends BaseAction {
                 object.put("disc", buildDisc(disc));
                 object.put("success", true);
             } else {
-                amazonAnimeSpider.doUpdate(autoRunner.getAmazonRunner(), 3, id, asin);
+                amazonDiscSpider.doCreateDisc(autoRunner.getRankerRunner(), 1, id, asin);
                 object.put("error", "未找到指定碟片, 已安排从亚马逊查询, 查询成功后会自动添加到该碟片列表");
                 object.put("success", false);
             }

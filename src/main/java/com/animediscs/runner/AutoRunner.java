@@ -25,13 +25,13 @@ public class AutoRunner {
     private SakuraSpeedSpider sakuraSpeedSpider;
     private AmazonSpeedSpider amazonSpeedSpider;
     private AmazonAnimeSpider amazonAnimeSpider;
-    private AmazonDiscSpider amazonDiscSpider;
+    private AmazonRankSpider amazonRankSpider;
 
     public AutoRunner() {
         ExecutorService execute = Executors.newFixedThreadPool(1);
         sakuraRunner = new SpiderService("Sakura", 1, 1, execute);
-        amazonRunner = new SpiderService("Amazon", 3, 1, execute);
-        rankerRunner = new SpiderService("Ranker", 3, 1, execute);
+        amazonRunner = new SpiderService("Amazon", 2, 1, execute);
+        rankerRunner = new SpiderService("Ranker", 4, 1, execute);
     }
 
     @PostConstruct
@@ -43,17 +43,17 @@ public class AutoRunner {
             amazonSpeedSpider.doUpdate(amazonRunner, 1);
         });
 //        schedule("Amazon动画数据抓取", 15, 3600, () -> {
-//            amazonAnimeSpider.doUpdate(amazonRunner, 2);
+//            amazonAnimeSpider.doCreateDisc(amazonRunner, 2);
 //        });
-        schedule("Amazon重点排名抓取", 20, 120, () -> {
-            amazonDiscSpider.doUpdateHot(60, rankerRunner, 1);
-        });
-        schedule("Amazon次要排名抓取", 25, 300, () -> {
-            amazonDiscSpider.doUpdateExt(150, rankerRunner, 3);
-        });
-        schedule("Amazon全部排名抓取", 35, 1200, () -> {
-            amazonDiscSpider.doUpdateAll(600, rankerRunner, 2);
-        });
+//        schedule("Amazon重点排名抓取", 20, 120, () -> {
+//            amazonRankSpider.doUpdateHot(60, rankerRunner, 2);
+//        });
+//        schedule("Amazon次要排名抓取", 25, 300, () -> {
+//            amazonRankSpider.doUpdateExt(150, rankerRunner, 4);
+//        });
+//        schedule("Amazon全部排名抓取", 35, 1200, () -> {
+//            amazonRankSpider.doUpdateAll(600, rankerRunner, 3);
+//        });
         schedule("任务线程状态报告", 0, 30, () -> {
             String timeout = Format.formatTimeout(startupTimeMillis);
             logger.printf(Level.INFO, "(%s): %s", timeout, sakuraRunner.getStatus());
@@ -77,12 +77,8 @@ public class AutoRunner {
         }, delay * 1000, period * 1000);
     }
 
-    public SpiderService getAmazonRunner() {
-        return amazonRunner;
-    }
-
-    public SpiderService getSakuraRunner() {
-        return sakuraRunner;
+    public SpiderService getRankerRunner() {
+        return rankerRunner;
     }
 
     private interface Callable {
@@ -105,8 +101,8 @@ public class AutoRunner {
     }
 
     @Autowired
-    public void setAmazonDiscSpider(AmazonDiscSpider amazonDiscSpider) {
-        this.amazonDiscSpider = amazonDiscSpider;
+    public void setAmazonRankSpider(AmazonRankSpider amazonRankSpider) {
+        this.amazonRankSpider = amazonRankSpider;
     }
 
 }

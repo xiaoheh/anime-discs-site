@@ -4,7 +4,7 @@ import com.animediscs.dao.Dao;
 import com.animediscs.model.Disc;
 import com.animediscs.model.DiscRank;
 import com.animediscs.runner.SpiderService;
-import com.animediscs.runner.task.JsonSpiderTask;
+import com.animediscs.runner.task.JsoupSpiderTask;
 import org.apache.logging.log4j.*;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class AmazonSpeedSpider {
                 });
                 logger.printf(Level.INFO, "成功更新Amazon速报数据(%02d - %02d)", start, start + 19);
             };
-            service.addTask(level, new JsonSpiderTask(String.format(format, page), () -> true, consumer));
+            service.addTask(level, new JsoupSpiderTask(String.format(format, page), () -> true, consumer));
         }
     }
 
