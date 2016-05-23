@@ -42,18 +42,18 @@ public class AutoRunner {
         schedule("Amazon速报数据抓取", 10, 120, () -> {
             amazonSpeedSpider.doUpdate(amazonRunner, 1);
         });
-//        schedule("Amazon动画数据抓取", 15, 3600, () -> {
-//            amazonAnimeSpider.doCreateDisc(amazonRunner, 2);
-//        });
-//        schedule("Amazon重点排名抓取", 20, 120, () -> {
-//            amazonRankSpider.doUpdateHot(60, rankerRunner, 2);
-//        });
-//        schedule("Amazon次要排名抓取", 25, 300, () -> {
-//            amazonRankSpider.doUpdateExt(150, rankerRunner, 4);
-//        });
-//        schedule("Amazon全部排名抓取", 35, 1200, () -> {
-//            amazonRankSpider.doUpdateAll(600, rankerRunner, 3);
-//        });
+        schedule("Amazon动画数据抓取", 15, 3600, () -> {
+            amazonAnimeSpider.doCreateDisc(amazonRunner, 2);
+        });
+        schedule("Amazon重点排名抓取", 20, 120, () -> {
+            amazonRankSpider.doUpdateHot(60, rankerRunner, 2);
+        });
+        schedule("Amazon次要排名抓取", 25, 300, () -> {
+            amazonRankSpider.doUpdateExt(150, rankerRunner, 4);
+        });
+        schedule("Amazon全部排名抓取", 35, 1200, () -> {
+            amazonRankSpider.doUpdateAll(600, rankerRunner, 3);
+        });
         schedule("任务线程状态报告", 0, 30, () -> {
             String timeout = Format.formatTimeout(startupTimeMillis);
             logger.printf(Level.INFO, "(%s): %s", timeout, sakuraRunner.getStatus());
