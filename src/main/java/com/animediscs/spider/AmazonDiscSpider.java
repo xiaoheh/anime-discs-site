@@ -45,16 +45,16 @@ public class AmazonDiscSpider {
                 disc.setTitle(Disc.titleOfDisc(disc.getJapan()));
                 disc.setAmzver(Disc.isAmzver(disc.getJapan()));
             } else if (node.getNodeName().equals("ProductGroup")) {
-                System.out.println(node.getTextContent());
                 switch (node.getTextContent()) {
                     case "Music":
                         disc.setType(DiscType.CD);
                         break;
                     case "DVD":
-                        disc.setType(DiscType.DVD);
-                        break;
-                    case "Blu-ray":
-                        disc.setType(DiscType.BD);
+                        if (disc.getJapan().contains("Blu-ray")) {
+                            disc.setType(DiscType.BD);
+                        } else {
+                            disc.setType(DiscType.DVD);
+                        }
                         break;
                     default:
                         disc.setType(DiscType.OTHER);
