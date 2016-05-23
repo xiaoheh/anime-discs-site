@@ -78,10 +78,23 @@ public class AmazonRankSpider {
             logger.printf(Level.INFO, "抓取服务忙, 暂停添加任务");
             return;
         }
+        List<Disc> discs = dao.findAll(Disc.class);
+        dao.execute(session -> {
+            Date yesterday = DateUtils.addDays(new Date(), -1);
+            session.createCriteria(DiscList.class)
+                    .add(Restrictions.eq("sakura", true))
+                    .add(Restrictions.gt("date", yesterday))
+                    .addOrder(Order.desc("name"))
+                    .list().forEach(o -> {
+                DiscList discList = (DiscList) o;
+                discList.getDiscs().sort(Disc.sortBySakura());
+                discs.removeAll(discList.getDiscs());
+                addUpdateTask("Amazon(All)", second, service, level, discList);
+            });
+        });
         DiscList discList = new DiscList();
-        discList.setName("all_disc");
-        discList.setTitle("全部碟片");
-        discList.setDiscs(dao.findAll(Disc.class));
+        discList.setTitle("其他碟片");
+        discList.setDiscs(discs);
         addUpdateTask("Amazon(All)", second, service, level, discList);
     }
 
