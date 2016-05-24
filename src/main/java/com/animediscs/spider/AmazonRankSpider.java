@@ -153,14 +153,16 @@ public class AmazonRankSpider {
     private boolean updateRank(Disc disc, Node rankNode) {
         boolean rankChanged = false;
         DiscRank discRank = getDiscRank(disc);
-        discRank.setPark(parseNumber(rankNode.getTextContent()));
-        discRank.setPadt(new Date());
-        if (discRank.getPark() != discRank.getPark1()) {
-            pushRank(discRank);
-            saveRank(discRank);
-            rankChanged = true;
+        if (needUpdate(discRank.getPadt1())) {
+            discRank.setPark(parseNumber(rankNode.getTextContent()));
+            discRank.setPadt(new Date());
+            if (discRank.getPark() != discRank.getPark1()) {
+                pushRank(discRank);
+                saveRank(discRank);
+                rankChanged = true;
+            }
+            dao.saveOrUpdate(discRank);
         }
-        dao.saveOrUpdate(discRank);
         return rankChanged;
     }
 
