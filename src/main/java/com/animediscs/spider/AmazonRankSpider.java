@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.animediscs.model.Disc.*;
 import static com.animediscs.util.Helper.nullSafeGet;
@@ -77,18 +78,30 @@ public class AmazonRankSpider {
         }
         Set<Disc> discs = new LinkedHashSet<>();
         dao.execute(session -> {
+            Set<Disc> later = new LinkedHashSet<>();
             findLatestSakura(session).list().forEach(o -> {
                 DiscList discList = (DiscList) o;
                 discList.getDiscs().stream()
                         .sorted(sortBySakura())
+                        .limit(40)
                         .forEach(discs::add);
+                discList.getDiscs().stream()
+                        .sorted(sortBySakura())
+                        .skip(40)
+                        .forEach(later::add);
+
+            });
+            Stream.of("kabaneri", "macross").forEach(name -> {
+                dao.lookup(DiscList.class, "name", name).getDiscs()
+                        .stream().sorted(sortByAmazon()).forEach(discs::add);
             });
             findNotSakura(session).list().forEach(o -> {
                 DiscList discList = (DiscList) o;
                 discList.getDiscs().stream()
                         .sorted(sortByAmazon())
-                        .forEach(discs::add);
+                        .forEach(later::add);
             });
+            later.forEach(discs::add);
         });
         dao.findAll(Disc.class).stream()
                 .sorted(sortByAmazon())
