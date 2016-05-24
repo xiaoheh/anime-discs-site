@@ -243,7 +243,9 @@ public class DiscListAction extends BaseAction {
                     }
                 }
                 if (rank.getPadt1() != null) {
-                    object.put("acot", rank.getPadt1().getTime());
+                    if (rank.getPadt1() != null) {
+                        object.put("acot", rank.getPadt1().getTime());
+                    }
                     object.put("rank1", rank.getPark1());
                     object.put("rank2", rank.getPark2());
                     object.put("rank3", rank.getPark3());
@@ -253,6 +255,9 @@ public class DiscListAction extends BaseAction {
             }
             DiscSakura sakura = disc.getSakura();
             if (sakura != null) {
+                if (sakura.getDate() != null) {
+                    object.put("stot", sakura.getDate().getTime());
+                }
                 object.put("curk", sakura.getCurk());
                 object.put("prrk", sakura.getPrrk());
                 object.put("cupt", sakura.getCupt());

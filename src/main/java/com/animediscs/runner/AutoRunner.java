@@ -43,7 +43,7 @@ public class AutoRunner {
             amazonSpeedSpider.doUpdate(amazonRunner, 1);
         });
 //        schedule("Amazon动画数据抓取", 15, 3600, () -> {
-//            amazonAnimeSpider.doCreateDisc(amazonRunner, 2);
+//            amazonAnimeSpider.doUpdate(amazonRunner, 2);
 //        });
         schedule("Amazon排名数据抓取", 20, 60, () -> {
             amazonRankSpider.doUpdateHot(rankerRunner, 2);

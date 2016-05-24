@@ -116,18 +116,16 @@
         </thead>
         <tbody>
         {{each table.discs as disc idx}}
-        <tr id="row-{{idx+1}}-{{idx2+1}}">
+        <tr id="row-{{idx+1}}">
             <td class="index hidden-xxs" data-number="{{idx+1}}">{{idx+1}}</td>
             <td class="index hidden-xxs zero-width">)</td>
-            <td class="rank" data-number="{{disc.rank1}}">
+            <td class="rank {{fm_time_class(disc.acot)}}" data-number="{{disc.rank1}}">
                 <a href="http://www.amazon.co.jp/dp/{{disc.asin}}">
                     {{disc.rank1 | fm_star:6}}/{{disc.rank2 | fm_star:6}}
                 </a>
             </td>
             <td class="sname">
-                <a href="${cookie.admin.value?"edit":"view"}_disc.jsp?id={{disc.id}}">
-                    {{disc.sname}} {{disc | fm_verstr}}
-                </a>
+                <a href="${cookie.admin.value?"edit":"view"}_disc.jsp?id={{disc.id}}">{{disc | fm_sname}}</a>
             </td>
         </tr>
         {{/each}}
@@ -172,11 +170,11 @@
         </tr>
         </thead>
         <tbody>
-        {{each table.discs as disc idx2}}
-        <tr>
-            <td class="index" data-number="{{idx2+1}}">{{idx2+1}}</td>
+        {{each table.discs as disc idx}}
+        <tr id="row-{{idx+1}}">
+            <td class="index" data-number="{{idx+1}}">{{idx+1}}</td>
             <td class="index zero-width">)</td>
-            <td class="arnk" data-number="{{disc.rank1}}">
+            <td class="arnk {{fm_time_class(disc.acot)}}" data-number="{{disc.rank1}}">
                 <a href="http://www.amazon.co.jp/dp/{{disc.asin}}">{{disc | fm_arnk}}</a>
             </td>
             <td class="atot" data-number="{{disc.atot}}">{{disc.atot | fm_timeout}}</td>

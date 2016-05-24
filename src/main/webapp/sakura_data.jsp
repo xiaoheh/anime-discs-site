@@ -50,6 +50,10 @@
                 width: 85px;
             }
 
+            table.table th.acot {
+                width: 115px;
+            }
+
             table.table th.srnk {
                 width: 155px;
             }
@@ -126,21 +130,14 @@
         <tr id="row-{{idx+1}}-{{idx2+1}}">
             <td class="index hidden-xxm" data-number="{{idx2+1}}">{{idx2+1}}</td>
             <td class="index hidden-xxm zero-width">)</td>
-            {{if disc.arnk != disc.curk}}
-            <td class="rank danger" data-number="{{disc.arnk}}">
-                <a href="http://rankstker.net/show.cgi?n={{disc.asin}}" target="_blank">{{disc | fm_nerk}}</a>
+            <td class="rank {{fm_rank_class(disc)}}" data-number="{{fm_rank_number(disc)}}">
+                <a href="http://rankstker.net/show.cgi?n={{disc.asin}}" target="_blank">{{disc | fm_rank}}</a>
             </td>
-            {{else}}
-            <td class="rank" data-number="{{disc.curk}}">
-                <a href="http://rankstker.net/show.cgi?n={{disc.asin}}" target="_blank">{{disc | fm_eqrk}}</a>
-            </td>
-            {{/if}}
             <td class="cupt hidden-xxs zero-width">(</td>
             <td class="cupt hidden-xxs" data-number="{{disc.cupt}}">{{disc.cupt | fm_star:6}}</td>
             <td class="cupt hidden-xxs zero-width"> pt)</td>
             <td class="sname">
-                <a href="${cookie.admin.value?"edit":"view"}_disc.jsp?id={{disc.id}}">{{disc.sname}} {{disc |
-                    fm_verstr}}</a>
+                <a href="${cookie.admin.value?"edit":"view"}_disc.jsp?id={{disc.id}}">{{disc | fm_sname}}</a>
             </td>
         </tr>
         {{/if}}
@@ -170,8 +167,10 @@
             <th class="index sorter">序号</th>
             <th class="index zero-width"></th>
             <th class="arnk sorter">Amazon</th>
-            <th class="atot sorter">更新时间</th>
+            <th class="atot sorter">上次抓取</th>
+            <th class="acot sorter">更新时间</th>
             <th class="srnk sorter">当前/前回</th>
+            <th class="stot sorter">更新时间</th>
             <th class="type sorter">类型</th>
             <th class="cupt zero-width"></th>
             <th class="cupt sorter">累积PT</th>
@@ -197,10 +196,12 @@
             <td class="arnk" data-number="{{disc.arnk}}">
                 <a href="http://www.amazon.co.jp/dp/{{disc.asin}}" target="_blank">{{disc.arnk | fm_number}}位</a>
             </td>
-            <td class="atot" data-number="{{disc.amdt}}">{{disc.amdt | fm_timeout}}</td>
+            <td class="atot" data-number="{{disc.atot}}">{{disc.atot | fm_timeout}}</td>
+            <td class="acot" data-number="{{disc.acot}}">{{disc.acot | fm_date:'yy/MM/dd hh:mm'}}</td>
             <td class="srnk" data-number="{{disc.curk}}">
                 <a href="http://rankstker.net/show.cgi?n={{disc.asin}}" target="_blank">{{disc | fm_srnk}}</a>
             </td>
+            <td class="stot" data-number="{{disc.stot}}">{{disc.stot | fm_timeout}}</td>
             <td class="type" data-number="{{disc.type}}">{{disc | fm_type}}</td>
             <td class="cupt zero-width">(</td>
             <td class="cupt" data-number="{{disc.cupt}}">{{disc.cupt | fm_sakura}} pt</td>

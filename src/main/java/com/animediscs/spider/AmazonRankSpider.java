@@ -189,7 +189,7 @@ public class AmazonRankSpider {
 
     private void loggerRankUnChange(Level level, Disc disc, AtomicInteger count) {
         logger.printf(level, "排名数据保持不变, ASIN=%s, Rank=%d, Title=%s, 还剩%d个未更新",
-                disc.getAsin(), disc.getTitle(), disc.getRank().getPark1(), count.decrementAndGet());
+                disc.getAsin(), disc.getRank().getPark1(), disc.getTitle(), count.decrementAndGet());
     }
 
     private void loggerNoRank(Level level, Disc disc, AtomicInteger count) {

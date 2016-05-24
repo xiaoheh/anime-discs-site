@@ -108,7 +108,7 @@ public class SpiderService {
                 doSumitForUpdate(task);
             } catch (IOException e) {
                 if (task.isContinue(e)) {
-                    taskList.add(task);
+                    taskList.add(0, task);
                     String format = "%s 抓取任务遇到网络错误, 已安排重试, 任务链接为: %s";
                     logger.printf(Level.DEBUG, format, name, task.getText());
                     logger.catching(Level.DEBUG, e);
