@@ -80,6 +80,7 @@ public class SakuraSpeedSpider {
             discSakura.setCupt(parseNumber(tr.child(2).text()));
             discSakura.setCubk(parseNumber(tr.child(3).text()));
             discSakura.setSday(getSday(disc));
+            discSakura.setDate(updateTime);
             dao.saveOrUpdate(discSakura);
             discs.add(disc);
         });

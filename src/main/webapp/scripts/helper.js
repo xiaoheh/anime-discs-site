@@ -48,11 +48,11 @@ template.helper('fm_timeout', function (time) {
 
 function fm_timeout(time) {
     if (time == null) {
-        return "--分 --秒";
+        return "00分 00秒";
     }
     var timeout = new Date().getTime() - time;
     if (timeout < 0) {
-        return "--分 --秒";
+        return "00分 00秒";
     }
     if (timeout >= 3600000) {
         return fm_hour(timeout) + " " + fm_hour_end(timeout);
@@ -137,14 +137,6 @@ function fm_number(number, format) {
     return number < 0 ? "-" + result : result;
 }
 
-template.helper("fm_verstr", function (disc) {
-    return fm_verstr(disc);
-});
-
-function fm_verstr(disc) {
-    return disc["amzver"] ? fm_type(disc) + " 卐" : fm_type(disc);
-}
-
 template.helper("fm_type", function (disc) {
     return fm_type(disc);
 });
@@ -182,28 +174,83 @@ function fm_arnk(disc) {
     return fm_sakura(disc["rank1"]) + "位/" + fm_sakura(disc["rank2"]) + "位";
 }
 
-template.helper("fm_eqrk", function (disc) {
-    return fm_eqrk(disc);
+template.helper("fm_sname", function (disc) {
+    return fm_sname(disc);
 });
 
-function fm_eqrk(disc) {
-    return fm_star(disc["curk"]) + "/" + fm_star(disc["prrk"]);
+function fm_sname(disc) {
+    var sname_text = disc["sname"] + " " + fm_type(disc);
+    return disc["amzver"] ? sname_text + " 卐" : sname_text;
 }
 
-template.helper("fm_nerk", function (disc) {
-    return fm_nerk(disc);
+template.helper("fm_rank", function (disc, length) {
+    return fm_rank(disc, length);
 });
 
-function fm_nerk(disc) {
-    return fm_star(disc["rank1"]) + "/" + fm_star(disc["rank2"]);
+function fm_rank(disc, length) {
+    if (is_sakura_late(disc)) {
+        return fm_star(disc["rank1"], length) + "/" + fm_star(disc["rank2"], length);
+    } else {
+        return fm_star(disc["curk"], length) + "/" + fm_star(disc["prrk"], length);
+    }
 }
 
-template.helper("is_timeout", function (time) {
-    return is_timeout(time);
+function is_sakura_late(disc) {
+    return disc["acot"] && disc["rank1"] != disc["curk"] && disc["acot"] > disc["stot"] - 300000
+}
+
+template.helper("fm_rank_number", function (disc) {
+    return fm_rank_number(disc);
 });
 
-function is_timeout(time) {
+function fm_rank_number(disc) {
+    if (is_sakura_late(disc)) {
+        return disc["rank1"];
+    } else {
+        return disc["curk"];
+    }
+}
+
+template.helper("fm_rank_class", function (disc) {
+    return fm_rank_class(disc);
+});
+
+function fm_rank_class(disc) {
+    if (is_sakura_late(disc)) {
+        return "danger";
+    } else {
+        return fm_time_class(disc["stot"]);
+    }
+}
+
+template.helper("fm_time_class", function (time) {
+    return fm_time_class(time);
+});
+
+function fm_time_class(time) {
+    if (is_timein(time, 10)) {
+        return "success";
+    }
+    if (is_timeout(time, 60)) {
+        return "warning";
+    }
+    return "";
+}
+
+template.helper("is_timeout", function (time, minute) {
+    return is_timeout(time, minute);
+});
+
+function is_timeout(time, minute) {
+    minute = minute || 120;
     if (time)
-        return new Date().getTime() - time > 7200000;
+        return new Date().getTime() - time > minute * 60000;
+    return false;
+}
+
+function is_timein(time, minute) {
+    minute = minute || 120;
+    if (time)
+        return new Date().getTime() - time < minute * 60000;
     return false;
 }

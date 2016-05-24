@@ -29,7 +29,7 @@ public class AmazonAnimeSpider {
         this.dao = dao;
     }
 
-    public void doCreateDisc(SpiderService service, int level) {
+    public void doUpdate(SpiderService service, int level) {
         String url = "http://www.amazon.co.jp/b/ref=amb_link_13349006_1?ie=UTF8" +
                 "&node=4367309051&pf_rd_m=AN1VRQENFRJN5&pf_rd_s=merchandised-search-leftnav" +
                 "&pf_rd_r=0GGNJ6034BX1979PRQTC&pf_rd_t=101&pf_rd_p=312858289&pf_rd_i=562020";

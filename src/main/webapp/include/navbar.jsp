@@ -37,6 +37,7 @@
                         <li><a href="list_table.jsp">查看所有碟片列表</a></li>
                         <li><a href="list_disc.jsp?filter=table&name=mydvd">球总的动画列表</a></li>
                         <li><a href="list_disc.jsp?filter=table&name=mycd">站长的音乐列表</a></li>
+                        <li class="divider"></li>
                         <li><a href="list_disc.jsp?filter=table&name=kabaneri">甲铁城的卡巴内利</a></li>
                         <li><a href="list_disc.jsp?filter=table&name=macross">超时空要塞Δ</a></li>
                     </ul>
