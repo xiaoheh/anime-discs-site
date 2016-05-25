@@ -9,8 +9,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.*;
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -65,6 +64,8 @@ public class RankSpiderTask implements SpiderTask {
                 connection.setReadTimeout(3000);
                 document = db.parse(connection.getInputStream());
                 tryCount = 0;
+            } catch (SocketTimeoutException e) {
+                throw e;
             } catch (IOException e) {
                 sleepThread();
                 throw e;
