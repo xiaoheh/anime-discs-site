@@ -5,8 +5,8 @@
     <%@ include file="include/meta.jsp" %>
     <title>Anime Discs - 碟片列表</title>
     <%@ include file="include/import.jsp" %>
-    <link href="styles/table.css" rel="stylesheet"/>
-    <script src="scripts/table.js"></script>
+    <link href="styles/table-20160526.css" rel="stylesheet"/>
+    <script src="scripts/table-20160526.js"></script>
     <style>
         /* 小设备 */
         @media (max-width: 767px) {
