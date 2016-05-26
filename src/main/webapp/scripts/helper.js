@@ -217,7 +217,11 @@ template.helper("fm_rank_class", function (disc) {
 
 function fm_rank_class(disc) {
     if (is_sakura_late(disc)) {
-        return "danger";
+        if (is_timein(disc["acot"], 10)) {
+            return "danger";
+        } else {
+            return "info";
+        }
     } else {
         return fm_time_class(disc["stot"]);
     }
