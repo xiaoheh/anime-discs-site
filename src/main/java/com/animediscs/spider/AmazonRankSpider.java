@@ -55,7 +55,8 @@ public class AmazonRankSpider {
             AtomicInteger count = new AtomicInteger(discs.size());
             infoUpdateStart("Amazon(Hot)", discList.getTitle(), count);
             discs.forEach(disc -> {
-                service.addTask(level, new RankSpiderTask(disc.getAsin(), needUpdate(disc), document -> {
+                Supplier<Boolean> test = needUpdate(disc, 45);
+                service.addTask(level, new RankSpiderTask(disc.getAsin(), test, document -> {
                     if (updateRank(disc, document, count, Level.INFO)) {
                         needUpdate.set(true);
                     }
@@ -110,7 +111,8 @@ public class AmazonRankSpider {
         AtomicInteger count = new AtomicInteger(discs.size());
         infoUpdateStart("Amazon(All)", "所有碟片", count);
         discs.forEach(disc -> {
-            service.addTask(level, new RankSpiderTask(disc.getAsin(), needUpdate(disc), document -> {
+            Supplier<Boolean> test = needUpdate(disc, 30);
+            service.addTask(level, new RankSpiderTask(disc.getAsin(), test, document -> {
                 if (updateRank(disc, document, count, Level.INFO)) {
                     needUpdate.set(true);
                 }
@@ -140,8 +142,8 @@ public class AmazonRankSpider {
                 .addOrder(Order.desc("name"));
     }
 
-    private Supplier<Boolean> needUpdate(Disc disc) {
-        return () -> needUpdate(nullSafeGet(disc.getRank(), DiscRank::getPadt1));
+    private Supplier<Boolean> needUpdate(Disc disc, int minute) {
+        return () -> needUpdate(nullSafeGet(disc.getRank(), DiscRank::getPadt1), minute);
     }
 
     private boolean updateRank(Disc disc, Document document, AtomicInteger count, Level level) {
@@ -166,7 +168,7 @@ public class AmazonRankSpider {
     private boolean updateRank(Disc disc, Node rankNode) {
         boolean rankChanged = false;
         DiscRank discRank = getDiscRank(disc);
-        if (needUpdate(discRank.getPadt1())) {
+        if (needUpdate(discRank.getPadt1(), 20)) {
             discRank.setPark(parseNumber(rankNode.getTextContent()));
             discRank.setPadt(new Date());
             if (discRank.getPark() != discRank.getPark1()) {
@@ -179,8 +181,8 @@ public class AmazonRankSpider {
         return rankChanged;
     }
 
-    private boolean needUpdate(Date date) {
-        Date twentyMintue = DateUtils.addMinutes(new Date(), -20);
+    private boolean needUpdate(Date date, int minute) {
+        Date twentyMintue = DateUtils.addMinutes(new Date(), -minute);
         return date == null || date.compareTo(twentyMintue) < 0;
     }
 
