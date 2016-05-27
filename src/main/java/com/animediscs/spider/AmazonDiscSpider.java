@@ -7,7 +7,8 @@ import com.animediscs.runner.task.DiscSpiderTask;
 import org.apache.logging.log4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,46 +35,45 @@ public class AmazonDiscSpider {
     }
 
     private void addDiscFromAmazon(String asin, Long id, Document document) {
-        Node itemAttributes = document.getElementsByTagName("ItemAttributes").item(0);
-        NodeList childNodes = itemAttributes.getChildNodes();
+        Document items = getNode(document, "ItemAttributes").getOwnerDocument();
         Disc disc = new Disc();
         disc.setAsin(asin);
-        for (int i = 0; i < childNodes.getLength(); i++) {
-            Node node = childNodes.item(i);
-            if (node.getNodeName().equals("Title")) {
-                disc.setJapan(node.getTextContent());
-                disc.setTitle(Disc.titleOfDisc(disc.getJapan()));
-                disc.setAmzver(Disc.isAmzver(disc.getJapan()));
-            } else if (node.getNodeName().equals("ProductGroup")) {
-                switch (node.getTextContent()) {
-                    case "Music":
-                        disc.setType(DiscType.CD);
-                        break;
-                    case "DVD":
-                        if (disc.getJapan().contains("Blu-ray")) {
-                            disc.setType(DiscType.BD);
-                        } else {
-                            disc.setType(DiscType.DVD);
-                        }
-                        break;
-                    default:
-                        disc.setType(DiscType.OTHER);
-                        break;
-                }
-            } else if (node.getNodeName().equals("ReleaseDate")) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                disc.setRelease(parseDate(sdf, node.getTextContent()));
-            }
-
-        }
+        disc.setJapan(getValue(items, "Title"));
+        disc.setTitle(Disc.titleOfDisc(disc.getJapan()));
+        disc.setAmzver(Disc.isAmzver(disc.getJapan()));
+        setType(disc, getValue(items, "ProductGroup"));
+        setRelease(disc, getValue(items, "ReleaseDate"));
         dao.save(disc);
-
-        Node rank = document.getElementsByTagName("SalesRank").item(0);
-        updateRank(getDiscRank(disc), rank.getTextContent());
-
+        Node rank = getNode(document, "SalesRank");
+        if (rank != null) {
+            updateRank(getDiscRank(disc), getValue(rank));
+        }
         dao.execute(session -> {
             dao.get(DiscList.class, id).getDiscs().add(disc);
         });
+    }
+
+    private void setRelease(Disc disc, String dateText) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        disc.setRelease(parseDate(sdf, dateText));
+    }
+
+    private void setType(Disc disc, String typeText) {
+        switch (typeText) {
+            case "Music":
+                disc.setType(DiscType.CD);
+                break;
+            case "DVD":
+                if (disc.getJapan().contains("Blu-ray")) {
+                    disc.setType(DiscType.BD);
+                } else {
+                    disc.setType(DiscType.DVD);
+                }
+                break;
+            default:
+                disc.setType(DiscType.OTHER);
+                break;
+        }
     }
 
     private DiscRank getDiscRank(Disc disc) {
@@ -116,6 +116,18 @@ public class AmazonDiscSpider {
         record.setDate(rank.getPadt());
         record.setRank(rank.getPark());
         dao.save(record);
+    }
+
+    private Node getNode(Document document, String itemAttributes) {
+        return document.getElementsByTagName(itemAttributes).item(0);
+    }
+
+    private String getValue(Document items, String title) {
+        return getValue(getNode(items, title));
+    }
+
+    private String getValue(Node rank) {
+        return rank.getTextContent();
     }
 
 }
