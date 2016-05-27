@@ -1,6 +1,5 @@
 package com.animediscs.spider;
 
-import com.animediscs.model.DiscType;
 import com.animediscs.dao.Dao;
 import com.animediscs.model.*;
 import com.animediscs.runner.SpiderService;
@@ -56,12 +55,8 @@ public class SakuraSpeedSpider {
         if (!updateText.equals("更新中")) {
             Date japanDate = parseDate(update, updateText);
             Date chinaDate = DateUtils.addHours(japanDate, -1);
-            if (discList.isBefore(chinaDate)) {
-                updateDiscList(table, discList, chinaDate);
-                logger.printf(Level.INFO, "成功更新Sakura速报数据(%s)", discList.getTitle());
-            } else {
-                logger.printf(Level.INFO, "不需更新Sakura速报数据(%s)", discList.getTitle());
-            }
+            updateDiscList(table, discList, chinaDate);
+            logger.printf(Level.INFO, "成功更新Sakura速报数据(%s)", discList.getTitle());
         } else {
             logger.printf(Level.INFO, "延后更新Sakura速报数据(%s), 原因: Sakura网站数据更新中.", discList.getTitle());
         }
