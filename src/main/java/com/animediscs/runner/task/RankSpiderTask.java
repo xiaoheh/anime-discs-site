@@ -2,32 +2,35 @@ package com.animediscs.runner.task;
 
 import com.animediscs.runner.SpiderTask;
 import com.animediscs.spider.SignedRequestsHelper;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.*;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.*;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class RankSpiderTask implements SpiderTask {
 
-    private static final String AWS_ACCESS_KEY_ID = "AKIAIYEBYCYVUWSSTGEA";
-    private static final String AWS_SECRET_KEY = "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";
-    private static final String ASSOCIATE_TAG = "animediscs-20";
     private static final String ENDPOINT = "ecs.amazonaws.jp";
     private static SignedRequestsHelper helper;
 
     static {
         try {
-            helper = SignedRequestsHelper.getInstance(ENDPOINT, AWS_ACCESS_KEY_ID, AWS_SECRET_KEY, ASSOCIATE_TAG);
+            Properties properties = new Properties();
+            properties.load(new FileReader("config/amazon-config.txt"));
+            String accessKey = properties.getProperty("amazon.access");
+            String secretKey = properties.getProperty("amazon.secret");
+            String associateTag = properties.getProperty("amazon.userid");
+            helper = SignedRequestsHelper.getInstance(ENDPOINT, accessKey, secretKey, associateTag);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger logger = LogManager.getLogger(RankSpiderTask.class);
+            logger.printf(Level.WARN, "未能正确载入配置或初始化AmazonSpider");
+            logger.catching(Level.WARN, e);
         }
     }
 
