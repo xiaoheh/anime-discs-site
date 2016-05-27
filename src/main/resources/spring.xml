@@ -11,6 +11,10 @@
 	   http://www.springframework.org/schema/tx
 	   http://www.springframework.org/schema/tx/spring-tx.xsd">
 
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:config.properties"/>
+    </bean>
+
     <context:component-scan base-package="com.animediscs"/>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
@@ -22,19 +26,19 @@
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource">
             <bean class="com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource">
-                <property name="user" value="root"/>
-                <property name="password" value="fuhaiwei"/>
-                <property name="serverName" value="localhost"/>
-                <property name="databaseName" value="animediscs"/>
-                <property name="encoding" value="UTF-8"/>
+                <property name="user" value="${database.user}"/>
+                <property name="password" value="${database.pass}"/>
+                <property name="serverName" value="${database.host}"/>
+                <property name="databaseName" value="${database.name}"/>
+                <property name="encoding" value="${database.encoding}"/>
             </bean>
         </property>
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.show_sql">false</prop>
-                <prop key="hibernate.format_sql">true</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2dll}</prop>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
             </props>
         </property>
         <property name="packagesToScan">
