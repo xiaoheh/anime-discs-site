@@ -24,10 +24,6 @@
             width: 70px;
         }
 
-        table.table td.title {
-            text-align: left;
-        }
-
     </style>
 </head>
 <body>

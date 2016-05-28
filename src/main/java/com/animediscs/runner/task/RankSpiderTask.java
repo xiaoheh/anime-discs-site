@@ -45,7 +45,7 @@ public class RankSpiderTask implements SpiderTask {
         this.text = text;
         this.test = test;
         this.consumer = consumer;
-        this.maxRetry = MAX_RETRY_COUNT;
+        this.maxRetry = 10;
     }
 
     @Override

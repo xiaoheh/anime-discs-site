@@ -39,13 +39,6 @@
         padding-left: 20px;
     }
 
-    table.table th.index {
-        width: 32px;
-        text-align: center;
-        padding-left: 2px;
-        padding-right: 2px;
-    }
-
     table.table td {
         text-align: center;
     }
