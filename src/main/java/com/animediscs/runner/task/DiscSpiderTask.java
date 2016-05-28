@@ -45,7 +45,7 @@ public class DiscSpiderTask implements SpiderTask {
         this.text = text;
         this.test = test;
         this.consumer = consumer;
-        this.maxRetry = MAX_RETRY_COUNT;
+        this.maxRetry = 5;
     }
 
     @Override
