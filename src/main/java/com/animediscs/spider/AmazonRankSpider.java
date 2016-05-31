@@ -90,11 +90,12 @@ public class AmazonRankSpider {
                         .sorted(sortBySakura())
                         .skip(40)
                         .forEach(later::add);
-
             });
-            Stream.of("kabaneri", "macross").forEach(name -> {
-                dao.lookup(DiscList.class, "name", name).getDiscs()
-                        .stream().sorted(sortByAmazon()).forEach(discs::add);
+            Stream.of("kabaneri", "macross", "rezero").forEach(name -> {
+                DiscList discList = dao.lookup(DiscList.class, "name", name);
+                if (discList != null) {
+                    discList.getDiscs().stream().sorted(sortByAmazon()).forEach(discs::add);
+                }
             });
             findNotSakura(session).list().forEach(o -> {
                 DiscList discList = (DiscList) o;
@@ -143,6 +144,7 @@ public class AmazonRankSpider {
     }
 
     private Supplier<Boolean> needUpdate(Disc disc, int minute) {
+        dao.refresh(disc);
         return () -> needUpdate(nullSafeGet(disc.getRank(), DiscRank::getPadt1), minute);
     }
 
