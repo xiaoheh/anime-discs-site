@@ -40,7 +40,7 @@
                         <li class="divider"></li>
                         <li><a href="list_disc.jsp?filter=table&name=kabaneri">甲铁城的卡巴内利</a></li>
                         <li><a href="list_disc.jsp?filter=table&name=macross">超时空要塞Δ</a></li>
-                        <li><a href="list_disc.jsp?filter=table&name=rezero">超时空要塞Δ</a></li>
+                        <li><a href="list_disc.jsp?filter=table&name=rezero">RE: 从零开始的异世界生活</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
