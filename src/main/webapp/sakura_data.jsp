@@ -6,7 +6,7 @@
     <title>Anime Discs - Sakura数据</title>
     <%@ include file="include/import.jsp" %>
     <link href="styles/table-20160527.css" rel="stylesheet"/>
-    <script src="scripts/table-20160526.js"></script>
+    <script src="scripts/table-20160531.js"></script>
     <style>
         /* 小设备 */
         @media (max-width: 767px) {
@@ -18,15 +18,8 @@
                 padding-right: 2px;
             }
 
-            table.table th.index {
-                width: 32px;
-                text-align: center;
-                padding-left: 2px;
-                padding-right: 2px;
-            }
-
             table.table th.rank {
-                width: 92px;
+                width: 95px;
             }
 
             table.table th.cupt {
@@ -39,63 +32,63 @@
         @media (min-width: 768px) {
 
             table.table th.index {
-                width: 60px;
+                width: 70px;
             }
 
             table.table th.arnk {
-                width: 85px;
-            }
-
-            table.table th.atot {
-                width: 85px;
-            }
-
-            table.table th.acot {
-                width: 115px;
-            }
-
-            table.table th.srnk {
-                width: 155px;
-            }
-
-            table.table th.type {
-                width: 60px;
-            }
-
-            table.table th.cupt {
                 width: 95px;
             }
 
+            table.table th.atot {
+                width: 95px;
+            }
+
+            table.table th.acot {
+                width: 125px;
+            }
+
+            table.table th.srnk {
+                width: 165px;
+            }
+
+            table.table th.type {
+                width: 70px;
+            }
+
+            table.table th.cupt {
+                width: 105px;
+            }
+
             table.table th.sday {
-                width: 85px;
+                width: 95px;
             }
 
             table.table th.cubk {
-                width: 100px;
+                width: 110px;
             }
 
             table.table th.release {
-                width: 90px;
+                width: 100px;
             }
 
             table.table th.rank1 {
-                width: 85px;
+                width: 95px;
             }
 
             table.table th.rank2 {
-                width: 85px;
+                width: 95px;
             }
 
             table.table th.rank3 {
-                width: 85px;
+                width: 95px;
             }
 
             table.table th.rank4 {
-                width: 85px;
+                width: 95px;
             }
 
             table.table th.rank5 {
-                width: 85px;
+                width: 95px;
             }
 
         }
