@@ -11,5 +11,5 @@
     <script src="scripts/main/bootstrap.min.js"></script>
     <script src="scripts/main/template.js"></script>
     <script src="scripts/project-20160531.js"></script>
-    <script src="scripts/helper-20160526.js"></script>
+    <script src="scripts/helper-20160531.js"></script>
     <!-- Import 结束 -->

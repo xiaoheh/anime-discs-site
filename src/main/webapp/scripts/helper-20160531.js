@@ -196,7 +196,7 @@ function fm_rank(disc, length) {
 }
 
 function is_sakura_late(disc) {
-    return disc["acot"] && disc["rank1"] != disc["curk"] && disc["acot"] > disc["stot"] - 300000
+    return disc["acot"] && disc["rank1"] != disc["curk"] && disc["acot"] > disc["stot"] - 20 * 60000
 }
 
 template.helper("fm_rank_number", function (disc) {
