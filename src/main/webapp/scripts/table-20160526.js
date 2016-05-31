@@ -29,17 +29,21 @@ function render_profile(quick) {
         });
     }
 
+    function get_checked_key() {
+        return page.key("checked-01");
+    }
+
     function save_checked_status() {
         var checked = [];
         $("#div-hidden").find(":checked").each(function () {
             checked.push($(this).data("class"));
         });
-        $.cookie(page.url() + "-checked", checked.join("-"), {expires: 7});
+        $.cookie(get_checked_key(), checked.join("-"), {expires: 7});
     }
 
     function restore_checked() {
-        if ($.cookie(page.url() + "-checked")) {
-            apply_checked($.cookie(page.url() + "-checked").split("-"));
+        if ($.cookie(get_checked_key())) {
+            apply_checked($.cookie(get_checked_key()).split("-"));
         } else {
             $("#div-quick").find("button").first().click();
         }
