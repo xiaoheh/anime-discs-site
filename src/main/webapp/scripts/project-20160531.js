@@ -73,6 +73,9 @@ function initial_object() {
         page.back = function () {
             history.back();
         };
+        page.key = function (key) {
+            return this.url() + "-" + key;
+        }
     }
 
     function init_form() {
