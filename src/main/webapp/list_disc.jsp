@@ -11,18 +11,6 @@
         /* 小设备 */
         @media (max-width: 767px) {
 
-            table.table tbody {
-                counter-reset: table-id;
-            }
-
-            table.table tbody tr {
-                counter-increment: table-id;
-            }
-
-            table.table tbody td.index:before {
-                content: counter(table-id);
-            }
-
             table.table th.index {
                 width: 45px;
                 text-align: center;
@@ -35,12 +23,6 @@
             }
 
             table.table td.rank {
-                padding-left: 2px;
-                padding-right: 2px;
-            }
-
-            table.table td.index {
-                text-align: center;
                 padding-left: 2px;
                 padding-right: 2px;
             }
@@ -135,7 +117,7 @@
         <tbody>
         {{each table.discs as disc idx}}
         <tr id="row-{{idx+1}}">
-            <td class="index hidden-xxs"></td>
+            <td class="index hidden-xxs" data-number="{{idx+1}}">{{idx+1}}</td>
             <td class="index hidden-xxs zero-width">)</td>
             <td class="rank {{fm_time_class(disc.acot)}}" data-number="{{disc.rank1}}">
                 <a href="http://www.amazon.co.jp/dp/{{disc.asin}}">
