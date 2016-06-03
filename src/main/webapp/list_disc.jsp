@@ -27,6 +27,12 @@
                 padding-right: 2px;
             }
 
+            table.table td.index {
+                text-align: center;
+                padding-left: 2px;
+                padding-right: 2px;
+            }
+
         }
 
         /* 大设备 */
