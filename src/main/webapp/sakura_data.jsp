@@ -11,6 +11,18 @@
         /* 小设备 */
         @media (max-width: 767px) {
 
+            table.table tbody {
+                counter-reset: table-id;
+            }
+
+            table.table tbody tr {
+                counter-increment: table-id;
+            }
+
+            table.table tbody td.index:before {
+                content: counter(table-id);
+            }
+
             table.table th.index {
                 width: 32px;
                 text-align: center;
@@ -24,6 +36,12 @@
 
             table.table th.cupt {
                 width: 66px;
+            }
+
+            table.table td.index {
+                text-align: center;
+                padding-left: 2px;
+                padding-right: 2px;
             }
 
         }
@@ -121,7 +139,7 @@
         {{each table.discs as disc idx2}}
         {{if disc.arnk < 9999 && disc.curk < 9999 && disc.prrk < 9999}}
         <tr id="row-{{idx+1}}-{{idx2+1}}">
-            <td class="index hidden-xxm" data-number="{{idx2+1}}">{{idx2+1}}</td>
+            <td class="index hidden-xxm"></td>
             <td class="index hidden-xxm zero-width">)</td>
             <td class="rank {{fm_rank_class(disc)}}" data-number="{{fm_rank_number(disc)}}">
                 <a href="http://rankstker.net/show.cgi?n={{disc.asin}}" target="_blank">{{disc | fm_rank}}</a>
