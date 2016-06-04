@@ -231,21 +231,11 @@ public class DiscListAction extends BaseAction {
             }
             DiscRank rank = disc.getRank();
             if (rank != null) {
-                if (discList.isTop100()) {
-                    if (rank.getSpdt() != null) {
-                        object.put("arnk", rank.getSpdt());
-                        object.put("atot", rank.getSpdt().getTime());
-                    }
-                } else {
-                    if (rank.getPadt() != null) {
-                        object.put("arnk", rank.getPark());
-                        object.put("atot", rank.getPadt().getTime());
-                    }
+                if (rank.getPadt() != null) {
+                    object.put("atot", rank.getPadt().getTime());
                 }
                 if (rank.getPadt1() != null) {
-                    if (rank.getPadt1() != null) {
-                        object.put("acot", rank.getPadt1().getTime());
-                    }
+                    object.put("acot", rank.getPadt1().getTime());
                     object.put("rank1", rank.getPark1());
                     object.put("rank2", rank.getPark2());
                     object.put("rank3", rank.getPark3());
