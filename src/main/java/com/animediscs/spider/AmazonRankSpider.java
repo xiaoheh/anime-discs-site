@@ -91,10 +91,12 @@ public class AmazonRankSpider {
                         .skip(40)
                         .forEach(later::add);
             });
-            Stream.of("kabaneri", "macross", "rezero").forEach(name -> {
+            Stream.of("kabaneri", "macross", "rezero", "haifuri").forEach(name -> {
                 DiscList discList = dao.lookup(DiscList.class, "name", name);
                 if (discList != null) {
-                    discList.getDiscs().stream().sorted(sortByAmazon()).forEach(discs::add);
+                    discList.getDiscs().stream()
+                            .sorted(sortByAmazon())
+                            .forEach(discs::add);
                 }
             });
             findNotSakura(session).list().forEach(o -> {
