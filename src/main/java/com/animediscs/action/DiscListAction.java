@@ -44,13 +44,17 @@ public class DiscListAction extends BaseAction {
         if ("cd".equals(type)) {
             responseDiscList(findCd());
         } else {
-            responseDiscList(findDvd());
+            if ("top100".equals(name)) {
+                responseDiscList(findDvd(100));
+            } else {
+                responseDiscList(findDvd());
+            }
         }
     }
 
     private void responseDiscList(DiscList discList) throws IOException {
         if (latest) {
-            discList.getDiscs().removeIf(disc -> getSday(disc) < -14);
+            discList.getDiscs().removeIf(disc -> getSday(disc) < -7);
         }
         JSONObject object = new JSONObject();
         if (discList.getId() != null) {
@@ -121,6 +125,14 @@ public class DiscListAction extends BaseAction {
                     .list();
             discs.sort(sortByAmazon());
             discList.setDiscs(discs);
+        });
+        return discList;
+    }
+
+    private DiscList findDvd(int limit) {
+        DiscList discList = findDvd();
+        discList.getDiscs().removeIf(disc -> {
+            return disc.getRank() != null && disc.getRank().getPark() > limit;
         });
         return discList;
     }
