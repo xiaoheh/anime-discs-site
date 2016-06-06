@@ -126,7 +126,7 @@
             <td class="index hidden-xxs" data-number="{{idx+1}}">{{idx+1}}</td>
             <td class="index hidden-xxs zero-width">)</td>
             <td class="rank {{fm_time_class(disc.acot)}}" data-number="{{disc.rank1}}">
-                <a href="http://www.amazon.co.jp/dp/{{disc.asin}}">
+                <a href="http://rankstker.net/show.cgi?n={{disc.asin}}">
                     {{disc.rank1 | fm_star:6}}/{{disc.rank2 | fm_star:6}}
                 </a>
             </td>
@@ -181,7 +181,7 @@
             <td class="index" data-number="{{idx+1}}">{{idx+1}}</td>
             <td class="index zero-width">)</td>
             <td class="arnk {{fm_time_class(disc.acot)}}" data-number="{{disc.rank1}}">
-                <a href="http://www.amazon.co.jp/dp/{{disc.asin}}">{{disc | fm_arnk}}</a>
+                <a href="http://rankstker.net/show.cgi?n={{disc.asin}}">{{disc | fm_arnk}}</a>
             </td>
             <td class="atot" data-number="{{disc.atot}}">{{disc.atot | fm_timeout}}</td>
             <td class="acot" data-number="{{disc.acot}}">{{disc.acot | fm_date:'yy/MM/dd hh:mm'}}</td>
