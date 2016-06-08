@@ -108,7 +108,10 @@ public class AmazonRankSpider {
             later.forEach(discs::add);
         });
         dao.findAll(Disc.class).stream()
-                .sorted(sortByAmazon())
+                .filter(disc -> getSday(disc) >= -7)
+                .forEach(discs::add);
+        dao.findAll(Disc.class).stream()
+                .filter(disc -> disc.getRank() == null || disc.getRank().getPark() <= 200)
                 .forEach(discs::add);
         AtomicBoolean needUpdate = new AtomicBoolean(false);
         AtomicInteger count = new AtomicInteger(discs.size());
@@ -128,7 +131,12 @@ public class AmazonRankSpider {
                 }
             }));
         });
+    }
 
+    private int getSday(Disc disc) {
+        long currentTime = System.currentTimeMillis();
+        long releaseTime = disc.getRelease().getTime() - 3600000L;
+        return (int) ((releaseTime - currentTime) / 86400000L);
     }
 
     private Criteria findLatestSakura(Session session) {

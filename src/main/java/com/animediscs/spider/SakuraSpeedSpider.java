@@ -13,8 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static com.animediscs.model.Disc.*;
@@ -80,8 +79,17 @@ public class SakuraSpeedSpider {
             discs.add(disc);
         });
         discList.setDate(updateTime);
-        discList.setDiscs(discs);
-        dao.saveOrUpdate(discList);
+        if (discList.isTop100()) {
+            discList.setDiscs(discs);
+            dao.saveOrUpdate(discList);
+        } else {
+            dao.execute(session -> {
+                session.update(discList);
+                Set<Disc> discSet = new HashSet<>(discList.getDiscs());
+                discs.stream().filter(disc -> !discSet.contains(disc))
+                        .forEach(discList.getDiscs()::add);
+            });
+        }
     }
 
     private int getSday(Disc disc) {
