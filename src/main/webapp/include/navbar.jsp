@@ -29,7 +29,6 @@
                         <li><a href="sakura_data.jsp">SAKURA数据</a></li>
                         <li><a href="list_disc.jsp?filter=type&type=dvd&latest=true">近期的动画碟片</a></li>
                         <li><a href="list_disc.jsp?filter=type&type=cd&latest=true">近期的音乐碟片</a></li>
-                        <li><a href="list_disc.jsp?filter=table&name=1604-bak">4月新番列表备份</a></li>
                         <li><a href="list_disc.jsp?filter=type&type=dvd&name=top100">TOP100列表备份</a></li>
                     </ul>
                 </li>
