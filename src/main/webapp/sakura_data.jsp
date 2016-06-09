@@ -11,6 +11,18 @@
         /* 小设备 */
         @media (max-width: 767px) {
 
+            table.table tbody {
+                counter-reset: table-id;
+            }
+
+            table.table tbody tr {
+                counter-increment: table-id;
+            }
+
+            table.table tbody td.index:before {
+                content: counter(table-id);
+            }
+
             table.table th.index {
                 width: 32px;
                 text-align: center;
@@ -115,7 +127,6 @@
         <thead>
         <tr>
             <th class="index hidden-xxm">ID</th>
-            <th class="index hidden-xxm zero-width"></th>
             <th class="rank sorter">排名</th>
             <th class="cupt hidden-xxs zero-width"></th>
             <th class="cupt hidden-xxs sorter">累积</th>
@@ -127,8 +138,7 @@
         {{each table.discs as disc idx2}}
         {{if disc.arnk < 9999 && disc.curk < 9999 && disc.prrk < 9999}}
         <tr id="row-{{idx+1}}-{{idx2+1}}">
-            <td class="index hidden-xxm" data-number="{{idx2+1}}">{{idx2+1}}</td>
-            <td class="index hidden-xxm zero-width">)</td>
+            <td class="index hidden-xxm"></td>
             <td class="rank {{fm_rank_class(disc)}}" data-number="{{fm_rank_number(disc)}}">
                 <a href="http://rankstker.net/show.cgi?n={{disc.asin}}" target="_blank">{{disc | fm_rank}}</a>
             </td>
@@ -345,6 +355,9 @@
         setTimeout(function () {
             if (cache.is_first("restore")) {
                 offset.restore();
+                if (device.is_small()) {
+                    $("th.rank").click();
+                }
             } else {
                 offset.load();
             }
