@@ -240,6 +240,7 @@ public class DiscListAction extends BaseAction {
             }
             if (disc.getRelease() != null) {
                 object.put("release", disc.getRelease().getTime());
+                object.put("sday", getSday(disc));
             }
             DiscRank rank = disc.getRank();
             if (rank != null) {
@@ -264,9 +265,6 @@ public class DiscListAction extends BaseAction {
                 object.put("prrk", sakura.getPrrk());
                 object.put("cupt", sakura.getCupt());
                 object.put("cubk", sakura.getCubk());
-                object.put("sday", sakura.getSday());
-            } else if (disc.getRelease() != null) {
-                object.put("sday", getSday(disc));
             }
             array.put(object);
         });
