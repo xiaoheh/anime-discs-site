@@ -19,7 +19,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.animediscs.model.Disc.*;
@@ -43,32 +42,34 @@ public class AmazonRankSpider {
             logger.printf(Level.INFO, "抓取服务忙, 暂停添加任务");
             return;
         }
+        List<Disc> discs = new LinkedList<>();
         dao.execute(session -> {
-            DiscList discList = (DiscList) findLatestSakura(session)
+            findLatestSakura(session)
                     .setFirstResult(1)
-                    .setMaxResults(1)
-                    .uniqueResult();
-            List<Disc> discs = discList.getDiscs().stream()
-                    .sorted(sortBySakura()).limit(15)
-                    .collect(Collectors.toList());
-            AtomicBoolean needUpdate = new AtomicBoolean(false);
-            AtomicInteger count = new AtomicInteger(discs.size());
-            infoUpdateStart("Amazon(Hot)", discList.getTitle(), count);
-            discs.forEach(disc -> {
-                Supplier<Boolean> test = needUpdate(disc, 45);
-                service.addTask(level, new RankSpiderTask(disc.getAsin(), test, document -> {
-                    if (updateRank(disc, document, count, Level.INFO)) {
-                        needUpdate.set(true);
-                    }
-                    if (count.get() == 0) {
-                        infoUpdateFinish("Amazon(Hot)", discList.getTitle());
-                        if (needUpdate.get()) {
-                            logger.info("发现排名有变化, 准备更新全部排名数据");
-                            doUpdateAll(service, level + 1);
-                        }
-                    }
-                }));
+                    .list().forEach(o -> {
+                DiscList discList = (DiscList) o;
+                discList.getDiscs().stream()
+                        .sorted(sortBySakura()).limit(15)
+                        .forEach(discs::add);
             });
+        });
+        AtomicBoolean needUpdate = new AtomicBoolean(false);
+        AtomicInteger count = new AtomicInteger(discs.size());
+        infoUpdateStart("Amazon(Hot)", "近期新番", count);
+        discs.forEach(disc -> {
+            Supplier<Boolean> test = needUpdate(disc, 45);
+            service.addTask(level, new RankSpiderTask(disc.getAsin(), test, document -> {
+                if (updateRank(disc, document, count, Level.INFO)) {
+                    needUpdate.set(true);
+                }
+                if (count.get() == 0) {
+                    infoUpdateFinish("Amazon(Hot)", "近期新番");
+                    if (needUpdate.get()) {
+                        logger.info("发现排名有变化, 准备更新全部排名数据");
+                        doUpdateAll(service, level + 1);
+                    }
+                }
+            }));
         });
     }
 
