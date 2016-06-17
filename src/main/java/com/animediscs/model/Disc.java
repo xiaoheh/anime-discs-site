@@ -99,7 +99,7 @@ public class Disc extends BaseModel implements Comparable<Disc> {
         this.release = release;
     }
 
-    @OneToOne(mappedBy = "disc")
+    @OneToOne(mappedBy = "disc", cascade = CascadeType.REFRESH)
     public DiscRank getRank() {
         return rank;
     }
