@@ -6,7 +6,6 @@ import com.animediscs.model.DiscList;
 import com.animediscs.runner.AutoRunner;
 import com.animediscs.spider.AmazonDiscSpider;
 import com.animediscs.support.BaseAction;
-import org.hibernate.criterion.Order;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,18 +50,12 @@ public class TableAction extends BaseAction {
 
     public void list() throws Exception {
         JSONArray array = new JSONArray();
-        dao.execute(session -> {
-            session.createCriteria(DiscList.class)
-                    .addOrder(Order.desc("sakura"))
-                    .addOrder(Order.desc("title"))
-                    .list().forEach(o -> {
-                DiscList discList = (DiscList) o;
-                JSONObject object = new JSONObject();
-                object.put("id", discList.getId());
-                object.put("name", discList.getName());
-                object.put("title", discList.getTitle());
-                array.put(object);
-            });
+        dao.findAll(DiscList.class).stream().sorted().forEach(discList -> {
+            JSONObject object = new JSONObject();
+            object.put("id", discList.getId());
+            object.put("name", discList.getName());
+            object.put("title", discList.getTitle());
+            array.put(object);
         });
         responseJson(array.toString());
     }

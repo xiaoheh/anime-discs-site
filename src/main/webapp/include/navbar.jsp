@@ -27,8 +27,9 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">推荐<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="sakura_data.jsp">SAKURA数据</a></li>
-                        <li><a href="list_disc.jsp?filter=type&type=dvd&latest=true">近期的动画碟片</a></li>
-                        <li><a href="list_disc.jsp?filter=type&type=cd&latest=true">近期的音乐碟片</a></li>
+                        <li><a href="list_disc.jsp?filter=table&name=mydvd">球总的动画列表</a></li>
+                        <li><a href="list_disc.jsp?filter=table&name=mycd">站长的音乐列表</a></li>
+                        <li><a href="list_disc.jsp?filter=table&name=myfav">站长的动画列表</a></li>
                         <li><a href="list_disc.jsp?filter=type&type=dvd&name=top100">TOP100列表备份</a></li>
                     </ul>
                 </li>
@@ -36,12 +37,9 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">列表<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="list_table.jsp">查看所有碟片列表</a></li>
-                        <li><a href="list_disc.jsp?filter=table&name=mydvd">球总的动画列表</a></li>
-                        <li><a href="list_disc.jsp?filter=table&name=mycd">站长的音乐列表</a></li>
-                        <li class="divider"></li>
+                        <li><a href="list_disc.jsp?filter=table&name=rezero">RE: 从零开始的异世界生活</a></li>
                         <li><a href="list_disc.jsp?filter=table&name=kabaneri">甲铁城的卡巴内利</a></li>
                         <li><a href="list_disc.jsp?filter=table&name=macross">超时空要塞Δ</a></li>
-                        <li><a href="list_disc.jsp?filter=table&name=rezero">RE: 从零开始的异世界生活</a></li>
                         <li><a href="list_disc.jsp?filter=table&name=haifuri">高校舰队 (青春波纹)</a></li>
                     </ul>
                 </li>

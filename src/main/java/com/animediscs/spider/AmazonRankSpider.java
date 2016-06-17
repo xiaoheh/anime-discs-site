@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+import java.util.stream.Stream.Builder;
 
 import static com.animediscs.model.Disc.*;
 import static com.animediscs.util.Helper.nullSafeGet;
@@ -92,7 +93,15 @@ public class AmazonRankSpider {
                         .skip(40)
                         .forEach(later::add);
             });
-            Stream.of("kabaneri", "macross", "rezero", "haifuri").forEach(name -> {
+            Builder<String> builder = Stream.builder();
+            builder.add("myfav");
+            builder.add("rezero");
+            builder.add("kabaneri");
+            builder.add("macross");
+            builder.add("haifuri");
+            builder.add("mydvd");
+            builder.add("mycd");
+            builder.build().forEach(name -> {
                 DiscList discList = dao.lookup(DiscList.class, "name", name);
                 if (discList != null) {
                     discList.getDiscs().stream()
