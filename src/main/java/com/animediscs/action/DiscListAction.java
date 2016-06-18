@@ -54,7 +54,11 @@ public class DiscListAction extends BaseAction {
 
     private void responseDiscList(DiscList discList) throws IOException {
         if (latest) {
-            discList.getDiscs().removeIf(disc -> getSday(disc) < -7);
+            discList.getDiscs().removeIf(disc -> {
+                boolean flag1 = getSday(disc) < -7;
+                boolean flag2 = disc.getRank() != null && disc.getRank().getPark() > 200;
+                return flag1 && flag2;
+            });
         }
         JSONObject object = new JSONObject();
         if (discList.getId() != null) {

@@ -46,8 +46,8 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">浏览<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="list_disc.jsp?filter=type&type=dvd">所有动画碟片</a></li>
-                        <li><a href="list_disc.jsp?filter=type&type=cd">所有音乐碟片</a></li>
+                        <li><a href="list_disc.jsp?filter=type&type=dvd&latest=true">近期动画碟片</a></li>
+                        <li><a href="list_disc.jsp?filter=type&type=cd&latest=true">近期音乐碟片</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
