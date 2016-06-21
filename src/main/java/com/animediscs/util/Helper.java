@@ -1,5 +1,6 @@
 package com.animediscs.util;
 
+import com.animediscs.model.Disc;
 import org.apache.logging.log4j.*;
 
 import java.util.function.Function;
@@ -26,6 +27,12 @@ public abstract class Helper {
 
     public static <T, R> R nullSafeGet(T t, Function<T, R> mapper) {
         return t == null ? null : mapper.apply(t);
+    }
+
+    public static int getSday(Disc disc) {
+        long currentTime = System.currentTimeMillis();
+        long releaseTime = disc.getRelease().getTime() - 3600000L;
+        return (int) Math.floorDiv(releaseTime - currentTime, 86400000L);
     }
 
 }

@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
 import static com.animediscs.model.Disc.*;
-import static com.animediscs.util.Helper.nullSafeGet;
+import static com.animediscs.util.Helper.*;
 import static com.animediscs.util.Parser.parseNumber;
 
 @Service
@@ -141,12 +141,6 @@ public class AmazonRankSpider {
                 }
             }));
         });
-    }
-
-    private int getSday(Disc disc) {
-        long currentTime = System.currentTimeMillis();
-        long releaseTime = disc.getRelease().getTime() - 3600000L;
-        return (int) ((releaseTime - currentTime) / 86400000L);
     }
 
     private Criteria findLatestSakura(Session session) {
