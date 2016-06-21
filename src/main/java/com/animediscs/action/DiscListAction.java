@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.animediscs.model.Disc.sortByAmazon;
+import static com.animediscs.util.Helper.getSday;
 import static com.animediscs.util.Helper.nullSafeGet;
 
 public class DiscListAction extends BaseAction {
@@ -81,12 +82,6 @@ public class DiscListAction extends BaseAction {
         if (time != null) {
             object.put("time", time.longValue());
         }
-    }
-
-    private int getSday(Disc disc) {
-        long currentTime = System.currentTimeMillis();
-        long releaseTime = disc.getRelease().getTime() - 3600000L;
-        return (int) ((releaseTime - currentTime) / 86400000L);
     }
 
     private DiscList findAll() {

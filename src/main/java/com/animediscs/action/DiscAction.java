@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.animediscs.util.Helper.getSday;
 import static com.animediscs.util.Parser.parseDate;
 
 public class DiscAction extends BaseAction {
@@ -74,12 +75,6 @@ public class DiscAction extends BaseAction {
             object.put("sday", getSday(disc));
         }
         responseJson(object.toString());
-    }
-
-    private int getSday(Disc disc) {
-        long currentTime = System.currentTimeMillis();
-        long releaseTime = disc.getRelease().getTime() - 3600000L;
-        return (int) ((releaseTime - currentTime) / 86400000L);
     }
 
     public void edit() throws Exception {

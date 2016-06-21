@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 
 import static com.animediscs.model.Disc.*;
 import static com.animediscs.model.DiscList.titleOfSeason;
+import static com.animediscs.util.Helper.getSday;
 import static com.animediscs.util.Parser.*;
 
 @Service
@@ -90,12 +91,6 @@ public class SakuraSpeedSpider {
                         .forEach(discList.getDiscs()::add);
             });
         }
-    }
-
-    private int getSday(Disc disc) {
-        long currentTime = System.currentTimeMillis();
-        long releaseTime = disc.getRelease().getTime() - 3600000L;
-        return (int) ((releaseTime - currentTime) / 86400000L);
     }
 
     private Disc getDisc(String asin, Element tr) {
