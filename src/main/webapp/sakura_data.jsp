@@ -164,12 +164,6 @@
             <span>更新时间: {{table.time | fm_date:"yyyy-MM-dd hh:mm:ss"}}</span>
             <span>(距离现在 {{table.time | fm_timeout}})</span>
             {{/if}}
-            {{if is_timeout(table.time)}}
-            <div class="text-warning">
-                <span>提示: Sakura可能是延迟了两小时以上, 建议打开更多Amazon排名数据.</span>
-                <span>(点击功能 -> 自定义表格格式 -> Amazon排名模式 或 手动选中Rank1 ~ 5)</span>
-            </div>
-            {{/if}}
         </caption>
         <thead>
         <tr>
