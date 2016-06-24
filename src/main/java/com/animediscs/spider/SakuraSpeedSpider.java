@@ -146,6 +146,7 @@ public class SakuraSpeedSpider {
             discList.setName(name);
             discList.setTitle(title);
             discList.setSakura(true);
+            dao.save(discList);
         }
         return discList;
     }

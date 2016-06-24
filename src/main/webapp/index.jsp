@@ -11,8 +11,11 @@
 <h4 style="margin-bottom: 15px">推荐访问的页面:</h4>
 <ul style="font-size: 16px; margin-bottom: 5px">
     <li style="margin-bottom: 10px"><a href="sakura_data.jsp">SAKURA数据</a></li>
-    <li style="margin-bottom: 10px"><a href="list_disc.jsp?filter=type&type=dvd&latest=true">近期的动画碟片</a></li>
-    <li style="margin-bottom: 10px"><a href="list_disc.jsp?filter=type&type=cd&latest=true">近期的音乐碟片</a></li>
+    <li style="margin-bottom: 10px"><a href="sakura_data.jsp#2016-04">SAKURA数据(定位到4月)</a></li>
+    <li style="margin-bottom: 10px"><a href="sakura_data.jsp#2016-07">SAKURA数据(定位到7月)</a></li>
+    <li style="margin-bottom: 10px"><a href="list_disc.jsp?filter=table&name=mydvd">球总的动画列表</a></li>
+    <li style="margin-bottom: 10px"><a href="list_disc.jsp?filter=table&name=myfav">站长的动画列表</a></li>
+    <li style="margin-bottom: 10px"><a href="list_disc.jsp?filter=table&name=mycd">Schalke04的音乐列表</a></li>
 </ul>
 
 <script id="navbar-tmpl" type="text/html">
