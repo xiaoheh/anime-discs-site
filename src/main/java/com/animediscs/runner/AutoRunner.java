@@ -45,7 +45,7 @@ public class AutoRunner {
 //        schedule("Amazon动画数据抓取", 15, 3600, () -> {
 //            amazonAnimeSpider.doUpdate(amazonRunner, 2);
 //        });
-        schedule("Amazon排名数据抓取", 20, 60, () -> {
+        schedule("Amazon排名数据抓取", 20, 120, () -> {
             amazonRankSpider.doUpdateHot(rankerRunner, 2);
         });
         schedule("Amazon排名数据抓取", 25, 1200, () -> {
