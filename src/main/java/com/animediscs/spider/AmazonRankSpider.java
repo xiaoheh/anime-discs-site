@@ -50,7 +50,7 @@ public class AmazonRankSpider {
                     .list().forEach(o -> {
                 DiscList discList = (DiscList) o;
                 discList.getDiscs().stream()
-                        .sorted(sortBySakura()).limit(15)
+                        .sorted(sortBySakura()).limit(10)
                         .forEach(discs::add);
             });
         });
@@ -86,11 +86,11 @@ public class AmazonRankSpider {
                 DiscList discList = (DiscList) o;
                 discList.getDiscs().stream()
                         .sorted(sortBySakura())
-                        .limit(40)
+                        .limit(30)
                         .forEach(discs::add);
                 discList.getDiscs().stream()
                         .sorted(sortBySakura())
-                        .skip(40)
+                        .skip(30)
                         .forEach(later::add);
             });
             Builder<String> builder = Stream.builder();
