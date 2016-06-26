@@ -60,7 +60,6 @@
                         <li><a href="http://tieba.baidu.com/p/4452227415?pn=9999" target="_blank">马三角专楼</a></li>
                         <li><a href="http://tieba.baidu.com/p/4438693662?pn=9999" target="_blank">从零开始专楼</a></li>
                         <li><a href="http://tieba.baidu.com/p/4438519074?pn=9999" target="_blank">青春波纹专楼</a></li>
-                        <li><a href="http://tieba.baidu.com/p/4441536024?pn=9999" target="_blank">黑色残骸专楼</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
