@@ -36,14 +36,15 @@
     <ul>
         <li><a href="http://tieba.baidu.com/f?kw=名作之壁&ie=utf-8" target="_blank">名作之壁吧</a></li>
         <li><a href="http://tieba.baidu.com/f?kw=壁吧专楼&ie=utf-8" target="_blank">壁吧专楼吧</a></li>
+        <li><a href="http://tieba.baidu.com/p/4644300539?pn=9999" target="_blank">PT排名走势(7月)</a></li>
         <li><a href="http://tieba.baidu.com/p/4448722919?pn=9999" target="_blank">PT排名走势(4月)</a></li>
     </ul>
     <h4>推荐访问的专楼:</h4>
     <ul>
-        <li><a href="http://tieba.baidu.com/p/4452273267?pn=9999" target="_blank">甲铁城专楼</a></li>
-        <li><a href="http://tieba.baidu.com/p/4452227415?pn=9999" target="_blank">马三角专楼</a></li>
+        <li><a href="http://tieba.baidu.com/p/4642957344?pn=9999" target="_blank">Rewrite专楼</a></li>
+        <li><a href="http://tieba.baidu.com/p/4642964735?pn=9999" target="_blank">Sunshine专楼</a></li>
         <li><a href="http://tieba.baidu.com/p/4438693662?pn=9999" target="_blank">从零开始专楼</a></li>
-        <li><a href="http://tieba.baidu.com/p/4438519074?pn=9999" target="_blank">青春波纹专楼</a></li>
+        <li><a href="http://tieba.baidu.com/p/4452227415?pn=9999" target="_blank">超时空要塞专楼</a></li>
     </ul>
     <h4>贴吧搜索辅助:</h4>
     <ul>
