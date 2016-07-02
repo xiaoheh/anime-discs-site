@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -24,7 +25,7 @@ import java.util.stream.Stream.Builder;
 
 import static com.animediscs.model.Disc.*;
 import static com.animediscs.util.Helper.*;
-import static com.animediscs.util.Parser.parseNumber;
+import static com.animediscs.util.Parser.*;
 
 @Service
 public class AmazonRankSpider {
@@ -95,6 +96,7 @@ public class AmazonRankSpider {
             });
             Builder<String> builder = Stream.builder();
             builder.add("myfav");
+            builder.add("llss");
             builder.add("rezero");
             builder.add("kabaneri");
             builder.add("macross");
@@ -164,7 +166,7 @@ public class AmazonRankSpider {
 
     private boolean updateRank(Disc disc, Document document, AtomicInteger count, Level level) {
         if (document != null) {
-            Node rankNode = document.getElementsByTagName("SalesRank").item(0);
+            Node rankNode = getNode(document, "SalesRank");
             if (rankNode != null) {
                 if (updateRank(disc, rankNode)) {
                     loggerRankChange(level, disc, count);
@@ -175,10 +177,35 @@ public class AmazonRankSpider {
             } else {
                 loggerNoRank(level, disc, count);
             }
+            updateDiscInfo(disc, document);
         } else {
             loggerSkipUpdate(level, disc, count);
         }
         return false;
+    }
+
+    private void updateDiscInfo(Disc disc, Document document) {
+        Document items = getNode(document, "ItemAttributes").getOwnerDocument();
+        disc.setJapan(getValue(items, "Title"));
+        setRelease(disc, getValue(items, "ReleaseDate"));
+        dao.update(disc);
+    }
+
+    private void setRelease(Disc disc, String dateText) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        disc.setRelease(parseDate(sdf, dateText));
+    }
+
+    private Node getNode(Document document, String itemAttributes) {
+        return document.getElementsByTagName(itemAttributes).item(0);
+    }
+
+    private String getValue(Document items, String title) {
+        return getValue(getNode(items, title));
+    }
+
+    private String getValue(Node rank) {
+        return rank.getTextContent();
     }
 
     private boolean updateRank(Disc disc, Node rankNode) {
