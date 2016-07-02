@@ -31,7 +31,7 @@ public class AutoRunner {
         ExecutorService execute = Executors.newFixedThreadPool(1);
         sakuraRunner = new SpiderService("Sakura", 1, 1, execute);
         amazonRunner = new SpiderService("Amazon", 2, 1, execute);
-        rankerRunner = new SpiderService("Ranker", 4, 1, execute);
+        rankerRunner = new SpiderService("Ranker", 4, 2, execute);
     }
 
     @PostConstruct
