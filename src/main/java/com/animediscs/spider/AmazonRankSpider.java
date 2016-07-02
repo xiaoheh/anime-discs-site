@@ -3,7 +3,7 @@ package com.animediscs.spider;
 import com.animediscs.dao.Dao;
 import com.animediscs.model.*;
 import com.animediscs.runner.SpiderService;
-import com.animediscs.runner.task.RankSpiderTask;
+import com.animediscs.runner.task.DiscSpiderTask;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.logging.log4j.*;
 import org.hibernate.Criteria;
@@ -59,7 +59,7 @@ public class AmazonRankSpider {
         infoUpdateStart("Amazon(Hot)", "近期新番", count);
         discs.forEach(disc -> {
             Supplier<Boolean> test = needUpdate(disc, 45);
-            service.addTask(level, new RankSpiderTask(disc.getAsin(), test, document -> {
+            service.addTask(level, new DiscSpiderTask(disc.getAsin(), test, document -> {
                 if (updateRank(disc, document, count, Level.INFO)) {
                     needUpdate.set(true);
                 }
@@ -128,7 +128,7 @@ public class AmazonRankSpider {
         infoUpdateStart("Amazon(All)", "所有碟片", count);
         discs.forEach(disc -> {
             Supplier<Boolean> test = needUpdate(disc, 30);
-            service.addTask(level, new RankSpiderTask(disc.getAsin(), test, document -> {
+            service.addTask(level, new DiscSpiderTask(disc.getAsin(), test, document -> {
                 if (updateRank(disc, document, count, Level.INFO)) {
                     needUpdate.set(true);
                 }

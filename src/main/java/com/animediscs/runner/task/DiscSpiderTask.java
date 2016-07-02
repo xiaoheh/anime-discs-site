@@ -16,23 +16,24 @@ import java.util.function.Supplier;
 
 public class DiscSpiderTask implements SpiderTask {
 
-    private static final String ENDPOINT = "ecs.amazonaws.jp";
-    private static SignedRequestsHelper helper;
-
-    static {
+    private static int count;
+    private static ThreadLocal<SignedRequestsHelper> helper = ThreadLocal.withInitial(() -> {
         try {
+            count++;
             Properties properties = new Properties();
             properties.load(new FileReader("config/amazon-config.txt"));
-            String accessKey = properties.getProperty("amazon.access");
-            String secretKey = properties.getProperty("amazon.secret");
-            String associateTag = properties.getProperty("amazon.userid");
-            helper = SignedRequestsHelper.getInstance(ENDPOINT, accessKey, secretKey, associateTag);
+            String endpoint = "ecs.amazonaws.jp";
+            String accessKey = properties.getProperty("amazon.access." + count);
+            String secretKey = properties.getProperty("amazon.secret." + count);
+            String associateTag = properties.getProperty("amazon.userid." + count);
+            return SignedRequestsHelper.getInstance(endpoint, accessKey, secretKey, associateTag);
         } catch (Exception e) {
-            Logger logger = LogManager.getLogger(RankSpiderTask.class);
+            Logger logger = LogManager.getLogger(DiscSpiderTask.class);
             logger.printf(Level.WARN, "未能正确载入配置或初始化AmazonSpider");
             logger.catching(Level.WARN, e);
+            throw new RuntimeException(e);
         }
-    }
+    });
 
     private String text;
     private Supplier<Boolean> test;
@@ -59,7 +60,7 @@ public class DiscSpiderTask implements SpiderTask {
                 params.put("ItemId", text);
                 params.put("ResponseGroup", "ItemAttributes,SalesRank");
 
-                String requestUrl = helper.sign(params);
+                String requestUrl = helper.get().sign(params);
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                 DocumentBuilder db = dbf.newDocumentBuilder();
                 URLConnection connection = new URL(requestUrl).openConnection();
