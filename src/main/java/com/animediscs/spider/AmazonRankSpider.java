@@ -96,6 +96,7 @@ public class AmazonRankSpider {
             });
             Builder<String> builder = Stream.builder();
             builder.add("myfav");
+            builder.add("llss");
             builder.add("rezero");
             builder.add("kabaneri");
             builder.add("macross");
