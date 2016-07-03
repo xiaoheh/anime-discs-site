@@ -2,13 +2,13 @@ package com.animediscs.runner;
 
 import com.animediscs.spider.*;
 import com.animediscs.util.Format;
+import com.animediscs.util.Helper;
 import org.apache.logging.log4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -28,10 +28,17 @@ public class AutoRunner {
     private AmazonRankSpider amazonRankSpider;
 
     public AutoRunner() {
+
         ExecutorService execute = Executors.newFixedThreadPool(1);
+        int accountCount = getAccountCount();
         sakuraRunner = new SpiderService("Sakura", 1, 1, execute);
         amazonRunner = new SpiderService("Amazon", 2, 1, execute);
-        rankerRunner = new SpiderService("Ranker", 4, 2, execute);
+        rankerRunner = new SpiderService("Ranker", 4, accountCount, execute);
+    }
+
+    private int getAccountCount() {
+        Properties properties = Helper.loadProperties("config/amazon-config.txt");
+        return Integer.parseInt(properties.getProperty("amazon.account.count"));
     }
 
     @PostConstruct

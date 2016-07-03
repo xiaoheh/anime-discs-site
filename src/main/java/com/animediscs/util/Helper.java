@@ -3,6 +3,9 @@ package com.animediscs.util;
 import com.animediscs.model.Disc;
 import org.apache.logging.log4j.*;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.function.Function;
 
 public abstract class Helper {
@@ -33,6 +36,18 @@ public abstract class Helper {
         long currentTime = System.currentTimeMillis();
         long releaseTime = disc.getRelease().getTime() - 3600000L;
         return (int) Math.floorDiv(releaseTime - currentTime, 86400000L);
+    }
+
+    public static Properties loadProperties(String path) {
+        Properties properties = new Properties();
+        try {
+            properties.load(new FileReader(path));
+        } catch (IOException e) {
+            logger.printf(Level.WARN, "不能正确载入配置文件: %s", path);
+            logger.catching(Level.WARN, e);
+            throw new RuntimeException(e);
+        }
+        return properties;
     }
 
 }
