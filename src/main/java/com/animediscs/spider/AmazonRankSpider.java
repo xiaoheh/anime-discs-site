@@ -162,7 +162,9 @@ public class AmazonRankSpider {
     private Supplier<Boolean> needUpdate(Disc disc, int minute) {
         return () -> {
             DiscRank rank = disc.getRank();
-            dao.refresh(rank);
+            if (rank != null) {
+                dao.refresh(rank);
+            }
             return needUpdate(nullSafeGet(rank, DiscRank::getPadt1), minute);
         };
     }
