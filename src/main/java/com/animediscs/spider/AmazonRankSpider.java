@@ -160,8 +160,11 @@ public class AmazonRankSpider {
     }
 
     private Supplier<Boolean> needUpdate(Disc disc, int minute) {
-        dao.refresh(disc);
-        return () -> needUpdate(nullSafeGet(disc.getRank(), DiscRank::getPadt1), minute);
+        return () -> {
+            DiscRank rank = disc.getRank();
+            dao.refresh(rank);
+            return needUpdate(nullSafeGet(rank, DiscRank::getPadt1), minute);
+        };
     }
 
     private boolean updateRank(Disc disc, Document document, AtomicInteger count, Level level) {
@@ -185,6 +188,7 @@ public class AmazonRankSpider {
     }
 
     private void updateDiscInfo(Disc disc, Document document) {
+        dao.refresh(disc);
         Document items = getNode(document, "ItemAttributes").getOwnerDocument();
         disc.setJapan(getValue(items, "Title"));
         setRelease(disc, getValue(items, "ReleaseDate"));
@@ -228,10 +232,13 @@ public class AmazonRankSpider {
     private void updateSakura(Disc disc) {
         DiscSakura sakura = disc.getSakura();
         DiscRank rank = disc.getRank();
-        if (sakura != null && sakura.getCurk() == rank.getPark2()) {
-            sakura.setCurk(rank.getPark1());
-            sakura.setPrrk(rank.getPark2());
-            dao.update(sakura);
+        if (sakura != null) {
+            dao.refresh(sakura);
+            if (sakura.getCurk() == rank.getPark2()) {
+                sakura.setCurk(rank.getPark1());
+                sakura.setPrrk(rank.getPark2());
+                dao.update(sakura);
+            }
         }
     }
 
