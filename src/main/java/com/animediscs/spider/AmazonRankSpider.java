@@ -232,6 +232,7 @@ public class AmazonRankSpider {
             sakura.setDate(rank.getPadt1());
             sakura.setCurk(rank.getPark1());
             sakura.setPrrk(rank.getPark2());
+            dao.update(sakura);
         }
     }
 
