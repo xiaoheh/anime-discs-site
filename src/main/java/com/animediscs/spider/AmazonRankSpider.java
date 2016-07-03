@@ -226,10 +226,9 @@ public class AmazonRankSpider {
     }
 
     private void updateSakura(Disc disc) {
-        Date oneHour = DateUtils.addHours(new Date(), -1);
         DiscSakura sakura = disc.getSakura();
-        if (sakura != null && sakura.getDate().compareTo(oneHour) < 0) {
-            DiscRank rank = disc.getRank();
+        DiscRank rank = disc.getRank();
+        if (sakura != null && sakura.getCurk() == rank.getPark2()) {
             sakura.setDate(rank.getPadt1());
             sakura.setCurk(rank.getPark1());
             sakura.setPrrk(rank.getPark2());
