@@ -20,10 +20,12 @@
         <div id="info-tab" class="tab-pane fade in active">
             <div class="form-group">
                 <label>碟片标题</label>
+                <a href="http://rankstker.net/show.cgi?n={{asin}}" target="_blank">Sakura链接</a>
                 <input type="text" class="form-control" value="{{title}}">
             </div>
             <div class="form-group">
                 <label>日文原名</label>
+                <a href="http://www.amazon.co.jp/dp/{{asin}}" target="_blank">Amazon链接</a>
                 <div class="textarea-readonly">{{japan}}</div>
             </div>
             <div class="form-group">
