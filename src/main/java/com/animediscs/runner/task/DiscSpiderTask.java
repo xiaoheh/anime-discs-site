@@ -2,6 +2,7 @@ package com.animediscs.runner.task;
 
 import com.animediscs.runner.SpiderTask;
 import com.animediscs.spider.SignedRequestsHelper;
+import com.animediscs.util.Helper;
 import org.apache.logging.log4j.*;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -20,8 +21,7 @@ public class DiscSpiderTask implements SpiderTask {
     private static ThreadLocal<SignedRequestsHelper> helper = ThreadLocal.withInitial(() -> {
         try {
             count++;
-            Properties properties = new Properties();
-            properties.load(new FileReader("config/amazon-config.txt"));
+            Properties properties = Helper.loadProperties("config/amazon-config.txt");
             String endpoint = "ecs.amazonaws.jp";
             String accessKey = properties.getProperty("amazon.access." + count);
             String secretKey = properties.getProperty("amazon.secret." + count);
