@@ -237,6 +237,7 @@ public class AmazonRankSpider {
         if (sakura != null) {
             dao.refresh(sakura);
             if (sakura.getCurk() == rank.getPark2()) {
+                sakura.setDate(rank.getPadt1());
                 sakura.setCurk(rank.getPark1());
                 sakura.setPrrk(rank.getPark2());
                 dao.update(sakura);

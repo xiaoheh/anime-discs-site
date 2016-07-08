@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,6 +19,7 @@ public class AutoRunner {
 
     private Logger logger = LogManager.getLogger(AutoRunner.class);
     private long startupTimeMillis = System.currentTimeMillis();
+    private ExecutorService execute;
 
     private SpiderService sakuraRunner;
     private SpiderService amazonRunner;
@@ -26,11 +29,11 @@ public class AutoRunner {
     private AmazonSpeedSpider amazonSpeedSpider;
     private AmazonAnimeSpider amazonAnimeSpider;
     private AmazonRankSpider amazonRankSpider;
+    private EveryHourCompute everyHourCompute;
 
     public AutoRunner() {
-
-        ExecutorService execute = Executors.newFixedThreadPool(1);
         int accountCount = getAccountCount();
+        execute = Executors.newFixedThreadPool(1);
         sakuraRunner = new SpiderService("Sakura", 1, 1, execute);
         amazonRunner = new SpiderService("Amazon", 2, 1, execute);
         rankerRunner = new SpiderService("Ranker", 4, accountCount, execute);
@@ -58,12 +61,36 @@ public class AutoRunner {
         schedule("Amazon排名数据抓取", 25, 1200, () -> {
             amazonRankSpider.doUpdateAll(rankerRunner, 4);
         });
+        everHour("每小时计算任务", () -> {
+            everyHourCompute.doCompute(execute);
+        });
         schedule("任务线程状态报告", 0, 30, () -> {
             String timeout = Format.formatTimeout(startupTimeMillis);
             logger.printf(Level.INFO, "(%s): %s", timeout, sakuraRunner.getStatus());
             logger.printf(Level.INFO, "(%s): %s", timeout, amazonRunner.getStatus());
             logger.printf(Level.INFO, "(%s): %s", timeout, rankerRunner.getStatus());
         });
+    }
+
+    private void everHour(String name, Callable callable) {
+        logger.printf(Level.INFO, "已添加计划任务 %s, 下个小时01分开始运行, 每小时运行一次", name);
+        LocalDateTime dateTime = LocalDateTime.now();
+        if (dateTime.getNano() != 0 || dateTime.getSecond() != 0 || dateTime.getMinute() != 1) {
+            dateTime = dateTime.withNano(0).withSecond(0).withMinute(1).plusHours(1);
+        }
+        Date firstTime = Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                try {
+                    callable.call();
+                } catch (Exception e) {
+                    logger.printf(Level.WARN, "计划任务 %s 出现错误: %s: %s",
+                            name, e.getClass().getSimpleName(), e.getMessage());
+                    logger.catching(Level.DEBUG, e);
+                }
+            }
+        }, firstTime, 3600000);
     }
 
     private void schedule(String name, long delay, long period, Callable callable) {
@@ -107,6 +134,11 @@ public class AutoRunner {
     @Autowired
     public void setAmazonRankSpider(AmazonRankSpider amazonRankSpider) {
         this.amazonRankSpider = amazonRankSpider;
+    }
+
+    @Autowired
+    public void setEveryHourCompute(EveryHourCompute everyHourCompute) {
+        this.everyHourCompute = everyHourCompute;
     }
 
 }

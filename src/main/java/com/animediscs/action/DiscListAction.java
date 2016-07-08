@@ -100,12 +100,6 @@ public class DiscListAction extends BaseAction {
             dao.execute(session -> {
                 List<Disc> discs = dao.get(DiscList.class, discList.getId()).getDiscs();
                 discs.sort(sortByAmazon());
-                if ("mycd".equals(name)) {
-                    updateCdSakura(discs);
-                }
-                if ("mydvd".equals(name)) {
-                    updateDvdSakura(discs);
-                }
                 discList.setDiscs(discs);
             });
         } else {
@@ -145,82 +139,9 @@ public class DiscListAction extends BaseAction {
                     .add(Restrictions.eq("type", DiscType.CD))
                     .list();
             discs.sort(sortByAmazon());
-            updateCdSakura(discs);
             discList.setDiscs(discs);
         });
         return discList;
-    }
-
-    private void updateCdSakura(List<Disc> discs) {
-        discs.forEach(disc -> {
-            DiscSakura sakura = disc.getSakura();
-            if (sakura == null) {
-                sakura = new DiscSakura();
-            }
-            sakura.setDisc(disc);
-            if (disc.getRank() != null) {
-                sakura.setCurk(disc.getRank().getPark1());
-                sakura.setPrrk(disc.getRank().getPark2());
-            }
-            sakura.setSday(getSday(disc));
-            if (needUpdateCupt(sakura)) {
-                sakura.setCupt(getCdCupt(disc));
-            }
-            sakura.setDate(new Date());
-            dao.save(sakura);
-        });
-    }
-
-    private void updateDvdSakura(List<Disc> discs) {
-        discs.forEach(disc -> {
-            DiscSakura sakura = disc.getSakura();
-            if (sakura == null) {
-                sakura = new DiscSakura();
-            }
-            sakura.setDisc(disc);
-            if (disc.getRank() != null) {
-                sakura.setCurk(disc.getRank().getPark1());
-                sakura.setPrrk(disc.getRank().getPark2());
-            }
-            sakura.setSday(getSday(disc));
-            if (needUpdateCupt(sakura)) {
-                sakura.setCupt(getDvdCupt(disc));
-            }
-            sakura.setDate(new Date());
-            dao.save(sakura);
-        });
-    }
-
-    private boolean needUpdateCupt(DiscSakura sakura) {
-        if (sakura.getDate() == null) {
-            return true;
-        }
-        if (sakura.getSday() < 0) {
-            return false;
-        }
-        Date date = new Date();
-        date = DateUtils.setMinutes(date, 0);
-        date = DateUtils.setSeconds(date, 0);
-        date = DateUtils.setMilliseconds(date, 0);
-        return date.compareTo(sakura.getDate()) > 0;
-    }
-
-    private int getCdCupt(Disc disc) {
-        return (int) (0.5 + dao.query(session -> {
-            List<DiscRecord> records = RankAction.getRecords(disc, session);
-            return RankAction.computeRecordsPtOfCd(disc, records).stream()
-                    .mapToDouble(DiscRecord::getCupt)
-                    .findFirst().orElse(0);
-        }));
-    }
-
-    private int getDvdCupt(Disc disc) {
-        return (int) (0.5 + dao.query(session -> {
-            List<DiscRecord> records = RankAction.getRecords(disc, session);
-            return RankAction.computeRecordsPtOfDvd(disc, records).stream()
-                    .mapToDouble(DiscRecord::getCupt)
-                    .findFirst().orElse(0);
-        }));
     }
 
     private JSONArray buildDiscList(DiscList discList) {
