@@ -153,6 +153,9 @@
         {{/each}}
         </tbody>
     </table>
+    <div style="margin-top: -10px; margin-bottom: 10px; font-size: 16px">
+        <a href="list_disc.jsp?filter=table&name={{table.name}}">点击查看所有碟片(含10000名以外)</a>
+    </div>
     {{/each}}
 </script>
 <script id="template" type="text/html">
