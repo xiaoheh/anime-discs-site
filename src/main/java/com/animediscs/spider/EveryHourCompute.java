@@ -43,11 +43,13 @@ public class EveryHourCompute {
                 } else {
                     dao.refresh(sakura);
                 }
-                sakura.setCupt(getCupt(disc));
                 sakura.setSday(getSday(disc));
+                if (sakura.getSday() > -2) {
+                    sakura.setCupt(getCupt(disc));
+                    logger.printf(Level.INFO, "正在计算PT:「%s」->(%d pt)",
+                            disc.getTitle(), sakura.getCupt());
+                }
                 dao.saveOrUpdate(sakura);
-                logger.printf(Level.INFO, "正在计算PT, %s->%d pt",
-                        disc.getTitle(), sakura.getCupt());
             });
         });
     }
