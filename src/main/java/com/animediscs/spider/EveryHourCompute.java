@@ -37,19 +37,14 @@ public class EveryHourCompute {
         discs.forEach(disc -> {
             execute.execute(() -> {
                 DiscSakura sakura = disc.getSakura();
-                if (sakura == null) {
-                    sakura = new DiscSakura();
-                    sakura.setDisc(disc);
-                } else {
+                if (sakura != null && sakura.getSday() >= -1) {
                     dao.refresh(sakura);
-                }
-                sakura.setSday(getSday(disc));
-                if (sakura.getSday() > -2) {
+                    sakura.setSday(getSday(disc));
                     sakura.setCupt(getCupt(disc));
                     logger.printf(Level.INFO, "正在计算PT:「%s」->(%d pt)",
                             disc.getTitle(), sakura.getCupt());
+                    dao.saveOrUpdate(sakura);
                 }
-                dao.saveOrUpdate(sakura);
             });
         });
     }
