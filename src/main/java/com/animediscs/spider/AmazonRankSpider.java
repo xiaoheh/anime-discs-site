@@ -242,6 +242,14 @@ public class AmazonRankSpider {
                 sakura.setPrrk(rank.getPark2());
                 dao.update(sakura);
             }
+        } else {
+            sakura = new DiscSakura();
+            sakura.setDisc(disc);
+            sakura.setDate(rank.getPadt1());
+            sakura.setCurk(rank.getPark1());
+            sakura.setPrrk(rank.getPark2());
+            sakura.setSday(getSday(disc));
+            dao.save(sakura);
         }
     }
 
