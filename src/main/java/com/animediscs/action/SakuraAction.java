@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 
+import static com.animediscs.util.Helper.getSday;
+import static org.apache.commons.lang3.time.DateUtils.isSameDay;
+
 public class SakuraAction extends BaseAction {
 
     private static Cache<String> index = new Cache<>(3000);
@@ -100,11 +103,27 @@ public class SakuraAction extends BaseAction {
             }
             object.put("curk", sakura.getCurk());
             object.put("prrk", sakura.getPrrk());
-            object.put("cupt", sakura.getCupt());
-            object.put("cubk", sakura.getCubk());
-            object.put("sday", sakura.getSday());
+            if (isUpdated(sakura)) {
+                object.put("cupt", sakura.getCupt());
+                object.put("cubk", sakura.getCubk());
+                object.put("sday", sakura.getSday());
+            } else {
+                object.put("cupt", 0);
+                object.put("cubk", 0);
+                object.put("sday", getSday(disc));
+            }
         }
         return object;
+    }
+
+    private boolean isUpdated(DiscSakura sakura) {
+        Date date = sakura.getDate();
+        if (date == null) {
+            return false;
+        }
+        Date nowDate = new Date();
+        Date twoHour = DateUtils.addHours(nowDate, -2);
+        return isSameDay(date, nowDate) || date.compareTo(twoHour) > 0;
     }
 
 }

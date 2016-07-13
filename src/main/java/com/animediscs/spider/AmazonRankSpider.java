@@ -236,21 +236,15 @@ public class AmazonRankSpider {
         DiscRank rank = disc.getRank();
         if (sakura != null) {
             dao.refresh(sakura);
-            if (sakura.getCurk() == rank.getPark2()) {
-                sakura.setDate(rank.getPadt1());
-                sakura.setCurk(rank.getPark1());
-                sakura.setPrrk(rank.getPark2());
-                dao.update(sakura);
-            }
         } else {
             sakura = new DiscSakura();
             sakura.setDisc(disc);
-            sakura.setDate(rank.getPadt1());
-            sakura.setCurk(rank.getPark1());
-            sakura.setPrrk(rank.getPark2());
-            sakura.setSday(getSday(disc));
-            dao.save(sakura);
         }
+        sakura.setDate(rank.getPadt1());
+        sakura.setCurk(rank.getPark1());
+        sakura.setPrrk(rank.getPark2());
+        sakura.setSday(getSday(disc));
+        dao.saveOrUpdate(sakura);
     }
 
     private boolean needUpdate(Date date, int minute) {
