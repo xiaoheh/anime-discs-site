@@ -14,11 +14,11 @@
 <button onclick="do_update()">更新全表</button>
 <script>
     function edit_mode() {
-        $.cookie("admin", true, {expires: 7});
+        $.cookie("admin", true, {expires: 999});
         alert("已经切换为编辑模式");
     }
     function view_mode() {
-        $.cookie("admin", false, {expires: 7});
+        $.cookie("admin", false, {expires: 999});
         alert("已经切换为浏览模式");
     }
     function do_update() {
