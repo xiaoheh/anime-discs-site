@@ -70,8 +70,8 @@ public class DiscAction extends BaseAction {
             object.put("prrk", sakura.getPrrk());
             object.put("cupt", sakura.getCupt());
             object.put("cubk", sakura.getCubk());
-            object.put("sday", sakura.getSday());
-        } else if (disc.getRelease() != null) {
+        }
+        if (disc.getRelease() != null) {
             object.put("sday", getSday(disc));
         }
         responseJson(object.toString());
