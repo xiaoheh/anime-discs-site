@@ -30,6 +30,7 @@
         <li><a href="sakura_data.jsp#2016-04">SAKURA数据(定位到4月)</a></li>
         <li><a href="list_disc.jsp?filter=table&name=mydvd">球总的动画列表</a></li>
         <li><a href="list_disc.jsp?filter=table&name=myfav">站长的动画列表</a></li>
+        <li><a href="list_disc.jsp?filter=table&name=xxlonge">xxlonge的动画列表</a></li>
         <li><a href="list_disc.jsp?filter=table&name=mycd">Schalke04的音乐列表</a></li>
     </ul>
     <h4>推荐访问的专贴:</h4>

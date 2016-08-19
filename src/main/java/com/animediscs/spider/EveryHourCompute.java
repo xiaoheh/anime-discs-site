@@ -30,6 +30,9 @@ public class EveryHourCompute {
             dao.lookup(DiscList.class, "name", "mydvd")
                     .getDiscs()
                     .forEach(discs::add);
+            dao.lookup(DiscList.class, "name", "xxlonge")
+                    .getDiscs()
+                    .forEach(discs::add);
             dao.findBy(Disc.class, "type", DiscType.CD)
                     .forEach(discs::add);
         });

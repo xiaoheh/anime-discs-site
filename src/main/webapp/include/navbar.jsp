@@ -29,6 +29,7 @@
                         <li><a href="sakura_data.jsp">SAKURA数据</a></li>
                         <li><a href="list_disc.jsp?filter=table&name=mydvd">球总的动画列表</a></li>
                         <li><a href="list_disc.jsp?filter=table&name=myfav">站长的动画列表</a></li>
+                        <li><a href="list_disc.jsp?filter=table&name=xxlonge">xxlonge的动画列表</a></li>
                         <li><a href="list_disc.jsp?filter=table&name=mycd">Schalke04的音乐列表</a></li>
                         <li><a href="list_disc.jsp?filter=type&type=dvd&name=top100">TOP100列表备份</a></li>
                     </ul>

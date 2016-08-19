@@ -113,9 +113,13 @@ public class RankAction extends BaseAction {
 
     public static Boolean isQiuDvd(Dao dao, Disc disc) {
         return dao.query(session -> {
-            DiscList discList = dao.lookup(DiscList.class, "name", "mydvd");
-            return discList != null && discList.getDiscs().contains(disc);
+            return needCompute(dao, disc, "mydvd") || needCompute(dao, disc, "xxlonge");
         });
+    }
+
+    private static Boolean needCompute(Dao dao, Disc disc, String name) {
+        DiscList discList = dao.lookup(DiscList.class, "name", name);
+        return discList != null && discList.getDiscs().contains(disc);
     }
 
     public static List<DiscRecord> getRecords(Disc disc, Session session) {

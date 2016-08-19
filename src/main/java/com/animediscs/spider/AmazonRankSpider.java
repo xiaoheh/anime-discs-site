@@ -101,6 +101,7 @@ public class AmazonRankSpider {
             builder.add("kabaneri");
             builder.add("macross");
             builder.add("haifuri");
+            builder.add("xxlonge");
             builder.add("mydvd");
             builder.add("mycd");
             builder.build().forEach(name -> {
