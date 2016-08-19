@@ -307,7 +307,8 @@
     }
 
     function handle_data(data) {
-        navbar.add_postion(this.name, this.title);
+        navbar.add_postion(data.name, data.title);
+        document.title = data.title;
     }
 
     function render_page(data) {
