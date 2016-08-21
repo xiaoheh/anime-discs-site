@@ -45,7 +45,7 @@
         <li><a href="http://tieba.baidu.com/p/4642957344?pn=9999" target="_blank">Rewrite专楼</a></li>
         <li><a href="http://tieba.baidu.com/p/4642964735?pn=9999" target="_blank">Sunshine专楼</a></li>
         <li><a href="http://tieba.baidu.com/p/4438693662?pn=9999" target="_blank">从零开始专楼</a></li>
-        <li><a href="http://tieba.baidu.com/p/4452227415?pn=9999" target="_blank">超时空要塞专楼</a></li>
+        <li><a href="http://tieba.baidu.com/p/4742544885?pn=9999" target="_blank">超时空要塞专楼</a></li>
     </ul>
     <h4>贴吧搜索辅助:</h4>
     <ul>
