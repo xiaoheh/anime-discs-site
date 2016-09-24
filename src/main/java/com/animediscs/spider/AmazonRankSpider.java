@@ -101,6 +101,7 @@ public class AmazonRankSpider {
             builder.add("kabaneri");
             builder.add("macross");
             builder.add("haifuri");
+            builder.add("xxlonge");
             builder.add("mydvd");
             builder.add("mycd");
             builder.build().forEach(name -> {
@@ -191,7 +192,11 @@ public class AmazonRankSpider {
 
     private void updateDiscInfo(Disc disc, Document document) {
         dao.refresh(disc);
-        Document items = getNode(document, "ItemAttributes").getOwnerDocument();
+        Node itemAttributes = getNode(document, "ItemAttributes");
+        if (itemAttributes == null) {
+            throw new RuntimeException("未返回碟片详细信息, ASIN=" + disc.getAsin());
+        }
+        Document items = itemAttributes.getOwnerDocument();
         disc.setJapan(getValue(items, "Title"));
         setRelease(disc, getValue(items, "ReleaseDate"));
         dao.update(disc);

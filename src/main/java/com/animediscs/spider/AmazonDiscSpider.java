@@ -35,7 +35,11 @@ public class AmazonDiscSpider {
     }
 
     private void addDiscFromAmazon(String asin, Long id, Document document) {
-        Document items = getNode(document, "ItemAttributes").getOwnerDocument();
+        Node itemAttributes = getNode(document, "ItemAttributes");
+        if (itemAttributes == null) {
+            throw new RuntimeException("未返回碟片详细信息, ASIN=" + asin);
+        }
+        Document items = itemAttributes.getOwnerDocument();
         Disc disc = new Disc();
         disc.setAsin(asin);
         disc.setJapan(getValue(items, "Title"));
