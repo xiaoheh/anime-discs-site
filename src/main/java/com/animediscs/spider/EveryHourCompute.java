@@ -25,19 +25,21 @@ public class EveryHourCompute {
     }
 
     public void doCompute(ExecutorService execute) throws Exception {
-        Set<Disc> discs = new LinkedHashSet<>();
+        Set<Disc> sakuraList = new LinkedHashSet<>();
+        Set<Disc> computeList = new LinkedHashSet<>();
         dao.execute(session -> {
-            dao.lookup(DiscList.class, "name", "mydvd")
-                    .getDiscs()
-                    .forEach(discs::add);
-            dao.lookup(DiscList.class, "name", "xxlonge")
-                    .getDiscs()
-                    .forEach(discs::add);
+            dao.findBy(DiscList.class, "sakura", true)
+                    .stream().map(DiscList::getDiscs)
+                    .forEach(sakuraList::addAll);
+            dao.lookup(DiscList.class, "name", "mydvd").getDiscs()
+                    .forEach(computeList::add);
+            dao.lookup(DiscList.class, "name", "xxlonge").getDiscs()
+                    .forEach(computeList::add);
             dao.findBy(Disc.class, "type", DiscType.CD)
-                    .forEach(discs::add);
+                    .forEach(computeList::add);
         });
-        logger.printf(Level.INFO, "正在计算PT, 共%d个", discs.size());
-        discs.forEach(disc -> {
+        logger.printf(Level.INFO, "正在计算PT, 共%d个", computeList.size());
+        computeList.forEach(disc -> {
             execute.execute(() -> {
                 DiscSakura sakura = disc.getSakura();
                 if (sakura != null && sakura.getSday() >= -1) {
@@ -50,6 +52,21 @@ public class EveryHourCompute {
                 }
             });
         });
+        logger.printf(Level.INFO, "正在清除其他碟片PT");
+        dao.findAll(Disc.class).stream()
+                .filter(disc -> !sakuraList.contains(disc))
+                .filter(disc -> !computeList.contains(disc))
+                .forEach(disc -> {
+                    DiscSakura sakura = disc.getSakura();
+                    if (sakura != null && sakura.getSday() >= -1) {
+                        dao.refresh(sakura);
+                        sakura.setSday(getSday(disc));
+                        sakura.setCupt(0);
+                        logger.printf(Level.INFO, "正在清除PT:「%s」->(%d pt)",
+                                disc.getTitle(), sakura.getCupt());
+                        dao.saveOrUpdate(sakura);
+                    }
+                });
     }
 
     private int getCupt(Disc disc) {
