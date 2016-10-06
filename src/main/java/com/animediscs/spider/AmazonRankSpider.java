@@ -97,6 +97,8 @@ public class AmazonRankSpider {
             Builder<String> builder = Stream.builder();
             builder.add("myfav");
             builder.add("touken");
+            builder.add("euphonium");
+            builder.add("gundam");
             builder.add("brave");
             builder.add("llss");
             builder.add("rezero");

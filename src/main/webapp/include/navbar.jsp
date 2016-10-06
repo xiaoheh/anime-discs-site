@@ -39,6 +39,8 @@
                     <ul class="dropdown-menu">
                         <li><a href="list_table.jsp">查看所有碟片列表</a></li>
                         <li><a href="list_disc.jsp?filter=table&name=touken">刀剑乱舞-花丸-</a></li>
+                        <li><a href="list_disc.jsp?filter=table&name=euphonium">吹响吧! 悠风号2</a></li>
+                        <li><a href="list_disc.jsp?filter=table&name=gundam">机动战士高达</a></li>
                         <li><a href="list_disc.jsp?filter=table&name=brave">无畏魔女</a></li>
                         <li><a href="list_disc.jsp?filter=table&name=llss">LoveLive! Sunshine!!</a></li>
                         <li><a href="list_disc.jsp?filter=table&name=rezero">RE: 从零开始的异世界生活</a></li>
