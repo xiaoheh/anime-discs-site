@@ -6,9 +6,12 @@ import com.animediscs.model.DiscList;
 import com.animediscs.runner.AutoRunner;
 import com.animediscs.spider.AmazonDiscSpider;
 import com.animediscs.support.BaseAction;
+import com.animediscs.util.Helper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static com.animediscs.util.Helper.getSday;
 
 public class TableAction extends BaseAction {
 
@@ -115,6 +118,7 @@ public class TableAction extends BaseAction {
         JSONObject object = new JSONObject();
         object.put("id", disc.getId());
         object.put("asin", disc.getAsin());
+        object.put("sday", getSday(disc));
         object.put("title", disc.getTitle());
         return object;
     }
