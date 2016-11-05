@@ -128,7 +128,11 @@ public class SakuraSpeedSpider {
         if (dateText.length() == 8) {
             dateText = "20" + dateText;
         }
-        return parseDate(release, dateText);
+		try {
+	        return parseDate(release, dateText);
+		} catch (RuntimeException e) {
+			return new Date();
+		}
     }
 
     private DiscList getDiscList(String name) {

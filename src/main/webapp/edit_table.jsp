@@ -59,6 +59,7 @@
         <tr>
             <th style="width: 60px; text-align: center; padding-left: 8px">操作</th>
             <th class="sorter" style="width: 120px">ASIN</th>
+            <th class="sorter" style="width: 95px">剩余天数</th>
             <th class="sorter">碟片标题</th>
         </tr>
         </thead>
@@ -67,6 +68,7 @@
         <tr id="{{disc.id}}">
             <td><a href="javascript:remove('{{disc.id}}')">移除</a></td>
             <td><a href="http://www.amazon.co.jp/dp/{{disc.asin}}">{{disc.asin}}</a></td>
+            <td data-number="{{disc.sday}}">{{disc.sday}}天</td>
             <td style="text-align: left"><a href="edit_disc.jsp?id={{disc.id}}">{{disc.title}}</a></td>
         </tr>
         {{/each}}
@@ -87,6 +89,7 @@
     <tr id="{{id}}">
         <td><a href="javascript:remove('{{id}}')">移除</a></td>
         <td><a href="http://www.amazon.co.jp/dp/{{asin}}">{{asin}}</a></td>
+        <td data-number="{{sday}}">{{sday}}天</td>
         <td style="text-align: left"><a href="edit_disc.jsp?id={{id}}">{{title}}</a></td>
     </tr>
 </script>
