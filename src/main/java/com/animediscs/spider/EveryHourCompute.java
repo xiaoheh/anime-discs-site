@@ -27,16 +27,16 @@ public class EveryHourCompute {
     public void doCompute(ExecutorService execute) throws Exception {
         Set<Disc> sakuraList = new LinkedHashSet<>();
         Set<Disc> computeList = new LinkedHashSet<>();
+        Set<Disc> needRecord = new LinkedHashSet<>();
         dao.execute(session -> {
             dao.findBy(DiscList.class, "sakura", true)
                     .stream().map(DiscList::getDiscs)
                     .forEach(sakuraList::addAll);
-            dao.lookup(DiscList.class, "name", "mydvd").getDiscs()
-                    .forEach(computeList::add);
-            dao.lookup(DiscList.class, "name", "xxlonge").getDiscs()
-                    .forEach(computeList::add);
             dao.findBy(Disc.class, "type", DiscType.CD)
                     .forEach(computeList::add);
+            dao.findAll(DiscList.class)
+                    .stream().map(DiscList::getDiscs)
+                    .forEach(needRecord::addAll);
         });
         logger.printf(Level.INFO, "正在计算PT, 共%d个", computeList.size());
         computeList.forEach(disc -> {
@@ -66,6 +66,16 @@ public class EveryHourCompute {
                                 disc.getTitle(), sakura.getCupt());
                         dao.saveOrUpdate(sakura);
                     }
+                });
+        logger.printf(Level.INFO, "正在清理过期的排名记录");
+        dao.findAll(Disc.class).stream()
+                .filter(disc -> !needRecord.contains(disc))
+                .filter(disc -> getSday(disc) < -10)
+                .forEach(disc -> {
+                    logger.printf(Level.INFO, "正在清除排名:「%s」",
+                            disc.getTitle());
+                    dao.findBy(DiscRecord.class, "disc", disc)
+                            .forEach(dao::delete);
                 });
     }
 
