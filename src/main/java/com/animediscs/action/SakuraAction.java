@@ -73,16 +73,8 @@ public class SakuraAction extends BaseAction {
         object.put("release", disc.getRelease().getTime());
         DiscRank rank = disc.getRank();
         if (rank != null) {
-            if (top100) {
-                if (rank.getSpdt() != null) {
-                    object.put("arnk", rank.getSprk());
-                    object.put("atot", rank.getSpdt().getTime());
-                }
-            } else {
-                if (rank.getPadt() != null) {
-                    object.put("arnk", rank.getPark());
-                    object.put("atot", rank.getPadt().getTime());
-                }
+            if (rank.getPadt() != null) {
+                object.put("atot", rank.getPadt().getTime());
             }
             if (rank.getPadt1() != null) {
                 object.put("acot", rank.getPadt1().getTime());
