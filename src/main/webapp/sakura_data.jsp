@@ -136,7 +136,7 @@
         </thead>
         <tbody>
         {{each table.discs as disc idx2}}
-        {{if disc.arnk < 9999 && disc.curk < 9999 && disc.prrk < 9999}}
+        {{if disc.rank1 < 9999 && disc.curk < 9999 && disc.prrk < 9999}}
         <tr id="row-{{idx+1}}-{{idx2+1}}">
             <td class="index hidden-xxm"></td>
             <td class="rank {{fm_rank_class(disc)}}" data-number="{{fm_rank_number(disc)}}">
@@ -199,8 +199,8 @@
         <tr>
             <td class="index" data-number="{{idx2+1}}">{{idx2+1}}</td>
             <td class="index zero-width">)</td>
-            <td class="arnk" data-number="{{disc.arnk}}">
-                <a href="http://www.amazon.co.jp/dp/{{disc.asin}}" target="_blank">{{disc.arnk | fm_number}}位</a>
+            <td class="arnk" data-number="{{disc.rank1}}">
+                <a href="http://www.amazon.co.jp/dp/{{disc.asin}}" target="_blank">{{disc.rank1 | fm_number}}位</a>
             </td>
             <td class="atot" data-number="{{disc.atot}}">{{disc.atot | fm_timeout}}</td>
             <td class="acot" data-number="{{disc.acot}}">{{disc.acot | fm_date:'yy/MM/dd hh:mm'}}</td>
