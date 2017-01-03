@@ -59,14 +59,11 @@
                     <ul class="dropdown-menu">
                         <li><a href="http://tieba.baidu.com/f?kw=名作之壁&ie=utf-8" target="_blank">名作之壁吧</a></li>
                         <li><a href="http://tieba.baidu.com/f?kw=壁吧专楼&ie=utf-8" target="_blank">壁吧专楼吧</a></li>
-                        <li><a href="http://tieba.baidu.com/p/4802024610?pn=9999" target="_blank">PT排名走势(10月)</a></li>
-                        <li><a href="http://tieba.baidu.com/p/4644300539?pn=9999" target="_blank">PT排名走势(07月)</a></li>
-                        <li><a href="http://tieba.baidu.com/p/4802507106?pn=9999" target="_blank">刀剑乱舞专楼</a></li>
-                        <li><a href="http://tieba.baidu.com/p/4802511386?pn=9999" target="_blank">三月的狮子专楼</a></li>
+                        <li><a href="http://tieba.baidu.com/p/4923220045?pn=9999" target="_blank">PT排名走势(17年01月)</a></li>
+                        <li><a href="http://tieba.baidu.com/p/4802024610?pn=9999" target="_blank">PT排名走势(16年10月)</a></li>
                         <li><a href="http://tieba.baidu.com/p/4802499796?pn=9999" target="_blank">吹响!悠风号2专楼</a></li>
                         <li><a href="http://tieba.baidu.com/p/4633906279?pn=9999" target="_blank">Sunshine专楼</a></li>
                         <li><a href="http://tieba.baidu.com/p/4773136352?pn=9999" target="_blank">从零开始专楼</a></li>
-                        <li><a href="http://tieba.baidu.com/p/4731917825?pn=9999" target="_blank">超时空要塞专楼</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
