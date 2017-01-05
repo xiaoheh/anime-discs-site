@@ -34,6 +34,10 @@ public class EveryHourCompute {
                     .forEach(sakuraList::addAll);
             dao.findBy(Disc.class, "type", DiscType.CD)
                     .forEach(computeList::add);
+            dao.lookup(DiscList.class, "name", "mydvd").getDiscs()
+                    .forEach(computeList::add);
+            dao.lookup(DiscList.class, "name", "xxlonge").getDiscs()
+                    .forEach(computeList::add);
             dao.findAll(DiscList.class)
                     .stream().map(DiscList::getDiscs)
                     .forEach(needRecord::addAll);
