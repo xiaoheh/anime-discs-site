@@ -29,9 +29,17 @@
         <li><a href="sakura_data.jsp#2017-01">SAKURA数据(定位到17年01月)</a></li>
         <li><a href="sakura_data.jsp#2016-10">SAKURA数据(定位到16年10月)</a></li>
         <li><a href="list_disc.jsp?filter=table&name=mydvd">球总的动画列表</a></li>
-        <li><a href="list_disc.jsp?filter=table&name=myfav">站长的动画列表</a></li>
         <li><a href="list_disc.jsp?filter=table&name=xxlonge">xxlonge的动画列表</a></li>
         <li><a href="list_disc.jsp?filter=table&name=mycd">Schalke04的音乐列表</a></li>
+    </ul>
+    <h4>推荐访问的列表</h4>
+    <ul>
+        <li><a href="list_disc.jsp?filter=table&name=shinyray">小魔女学园</a></li>
+        <li><a href="list_disc.jsp?filter=table&name=konosuba">为美好的世界献上祝福</a></li>
+        <li><a href="list_disc.jsp?filter=table&name=yuri">YURI!!! on ICE</a></li>
+        <li><a href="list_disc.jsp?filter=table&name=euphonium">吹响吧! 悠风号2</a></li>
+        <li><a href="list_disc.jsp?filter=table&name=llss">LoveLive! Sunshine!!</a></li>
+        <li><a href="list_disc.jsp?filter=table&name=other">其他热门动画的碟片</a></li>
     </ul>
     <h4>推荐访问的专贴:</h4>
     <ul>
@@ -43,8 +51,9 @@
     </ul>
     <h4>推荐访问的专楼:</h4>
     <ul>
-        <li><a href="http://tieba.baidu.com/p/4802507106?pn=9999" target="_blank">刀剑乱舞专楼</a></li>
-        <li><a href="http://tieba.baidu.com/p/4802511386?pn=9999" target="_blank">三月的狮子专楼</a></li>
+        <li><a href="http://tieba.baidu.com/p/4916808077?pn=9999" target="_blank">小魔女学园专楼</a></li>
+        <li><a href="http://tieba.baidu.com/p/4917870075?pn=9999" target="_blank">Urara 迷路帖专楼</a></li>
+        <li><a href="http://tieba.baidu.com/p/4807037526?pn=9999" target="_blank">YURI!!! ON ICE专楼</a></li>
         <li><a href="http://tieba.baidu.com/p/4802499796?pn=9999" target="_blank">吹响!悠风号2专楼</a></li>
         <li><a href="http://tieba.baidu.com/p/4633906279?pn=9999" target="_blank">Sunshine专楼</a></li>
         <li><a href="http://tieba.baidu.com/p/4773136352?pn=9999" target="_blank">从零开始专楼</a></li>
@@ -59,9 +68,6 @@
         </a></li>
         <li><a href="http://tieba.baidu.com/f?kw=名作之壁&ie=utf-8&tab=good&cid=1" target="_blank">
             周榜单
-        </a></li>
-        <li><a href="http://tieba.baidu.com/f/search/res?ie=utf-8&kw=壁吧专楼&qw=专楼%2016夏&only_thread=1" target="_blank">
-            7月专楼
         </a></li>
     </ul>
 </div>
