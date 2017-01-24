@@ -21,7 +21,7 @@ public class DiscSpiderTask implements SpiderTask {
     private static ThreadLocal<SignedRequestsHelper> helper = ThreadLocal.withInitial(() -> {
         try {
             count++;
-            Properties properties = Helper.loadProperties("config/amazon-config.txt");
+            Properties properties = Helper.loadProperties("config/setting.properties");
             String endpoint = "ecs.amazonaws.jp";
             String accessKey = properties.getProperty("amazon.access." + count);
             String secretKey = properties.getProperty("amazon.secret." + count);

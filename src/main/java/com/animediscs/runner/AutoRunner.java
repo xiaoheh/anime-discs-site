@@ -40,7 +40,7 @@ public class AutoRunner {
     }
 
     private int getAccountCount() {
-        Properties properties = Helper.loadProperties("config/amazon-config.txt");
+        Properties properties = Helper.loadProperties("config/setting.properties");
         return Integer.parseInt(properties.getProperty("amazon.account.count"));
     }
 
