@@ -1,0 +1,22 @@
+# environment configuration
+
+# admin password
+admin.password=<your password>
+
+# amazon account count
+amazon.account.count=3
+
+# amazon account 1
+amazon.userid.1=xingyuan-22
+amazon.access.1=AKIAI6MSHAX66TVVBUEA
+amazon.secret.1=<your secret>
+
+# amazon account 2
+amazon.userid.2=animediscs-20
+amazon.access.2=AKIAIBMQON7HH5TK6LRA
+amazon.secret.2=<your secret>
+
+# amazon account 3
+amazon.userid.3=animediscs2-22
+amazon.access.3=AKIAIXUD6WRQBXVXUJDQ
+amazon.secret.3=<your secret>
