@@ -30,6 +30,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Base64.Encoder;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SignedRequestsHelper {
 
@@ -37,6 +38,9 @@ public class SignedRequestsHelper {
     private static final String HMAC_SHA256_ALGORITHM = "HmacSHA256";
     private static final String REQUEST_URI = "/onca/xml";
     private static final String REQUEST_METHOD = "GET";
+
+    private String name;
+    private AtomicInteger count = new AtomicInteger(0);
 
     private String endpoint = null;
     private String awsAccessKeyId = null;
@@ -47,13 +51,14 @@ public class SignedRequestsHelper {
     private Mac mac = null;
 
     public static SignedRequestsHelper getInstance(
-            String endpoint, String awsAccessKeyId, String awsSecretKey, String associateTag)
+            String endpoint, String awsAccessKeyId, String awsSecretKey, String associateTag, String name)
             throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
         SignedRequestsHelper instance = new SignedRequestsHelper();
         instance.endpoint = endpoint.toLowerCase();
         instance.awsAccessKeyId = awsAccessKeyId;
         instance.awsSecretKey = awsSecretKey;
         instance.associateTag = associateTag;
+        instance.name = name;
 
         byte[] secretyKeyBytes = instance.awsSecretKey.getBytes(UTF8_CHARSET);
         instance.secretKeySpec = new SecretKeySpec(secretyKeyBytes, HMAC_SHA256_ALGORITHM);
@@ -129,6 +134,14 @@ public class SignedRequestsHelper {
             out = s;
         }
         return out;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public AtomicInteger getCount() {
+        return count;
     }
 
 }
