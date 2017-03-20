@@ -59,8 +59,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="http://tieba.baidu.com/p/4916808077?pn=9999" target="_blank">小魔女学园专楼</a></li>
                         <li><a href="http://tieba.baidu.com/p/4917870075?pn=9999" target="_blank">Urara 迷路帖专楼</a></li>
-                        <li><a href="http://tieba.baidu.com/p/4807037526?pn=9999" target="_blank">YURI!!! ON ICE专楼</a></li>
-                        <li><a href="http://tieba.baidu.com/p/4802499796?pn=9999" target="_blank">吹响!悠风号2专楼</a></li>
+                        <li><a href="http://tieba.baidu.com/p/4956531567?pn=9999" target="_blank">YURI!!! ON ICE专楼</a></li>
                         <li><a href="http://tieba.baidu.com/p/4633906279?pn=9999" target="_blank">Sunshine专楼</a></li>
                         <li><a href="http://tieba.baidu.com/p/4773136352?pn=9999" target="_blank">从零开始专楼</a></li>
                     </ul>

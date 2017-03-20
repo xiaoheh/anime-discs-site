@@ -26,6 +26,7 @@
     <h4>推荐访问的页面:</h4>
     <ul>
         <li><a href="sakura_data.jsp">SAKURA数据</a></li>
+        <li><a href="sakura_data.jsp#2017-04">SAKURA数据(定位到17年04月)</a></li>
         <li><a href="sakura_data.jsp#2017-01">SAKURA数据(定位到17年01月)</a></li>
         <li><a href="sakura_data.jsp#2016-10">SAKURA数据(定位到16年10月)</a></li>
         <li><a href="list_disc.jsp?filter=table&name=mydvd">球总的动画列表</a></li>
@@ -53,8 +54,7 @@
     <ul>
         <li><a href="http://tieba.baidu.com/p/4916808077?pn=9999" target="_blank">小魔女学园专楼</a></li>
         <li><a href="http://tieba.baidu.com/p/4917870075?pn=9999" target="_blank">Urara 迷路帖专楼</a></li>
-        <li><a href="http://tieba.baidu.com/p/4807037526?pn=9999" target="_blank">YURI!!! ON ICE专楼</a></li>
-        <li><a href="http://tieba.baidu.com/p/4802499796?pn=9999" target="_blank">吹响!悠风号2专楼</a></li>
+        <li><a href="http://tieba.baidu.com/p/4956531567?pn=9999" target="_blank">YURI!!! ON ICE专楼</a></li>
         <li><a href="http://tieba.baidu.com/p/4633906279?pn=9999" target="_blank">Sunshine专楼</a></li>
         <li><a href="http://tieba.baidu.com/p/4773136352?pn=9999" target="_blank">从零开始专楼</a></li>
     </ul>
