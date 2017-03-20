@@ -48,7 +48,7 @@ template.helper('fm_timeout', function (time) {
 
 function fm_timeout(time) {
     if (time == null) {
-        return "00分 00秒";
+        return "--分 --秒";
     }
     var timeout = new Date().getTime() - time;
     if (timeout < 0) {
