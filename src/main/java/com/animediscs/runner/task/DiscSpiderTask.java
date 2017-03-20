@@ -3,30 +3,40 @@ package com.animediscs.runner.task;
 import com.animediscs.runner.SpiderTask;
 import com.animediscs.spider.SignedRequestsHelper;
 import com.animediscs.util.Helper;
-import org.apache.logging.log4j.*;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.*;
-import java.io.FileReader;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.net.*;
-import java.util.*;
+import java.net.SocketTimeoutException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class DiscSpiderTask implements SpiderTask {
 
     private static int count;
+
     private static ThreadLocal<SignedRequestsHelper> helper = ThreadLocal.withInitial(() -> {
         try {
-            count++;
+            synchronized (DiscSpiderTask.class) {
+                count++;
+            }
             Properties properties = Helper.loadProperties("config/setting.properties");
             String endpoint = "ecs.amazonaws.jp";
             String accessKey = properties.getProperty("amazon.access." + count);
             String secretKey = properties.getProperty("amazon.secret." + count);
             String associateTag = properties.getProperty("amazon.userid." + count);
-            return SignedRequestsHelper.getInstance(endpoint, accessKey, secretKey, associateTag);
+            return SignedRequestsHelper.getInstance(endpoint, accessKey, secretKey, associateTag, "API-" + count);
         } catch (Exception e) {
             Logger logger = LogManager.getLogger(DiscSpiderTask.class);
             logger.printf(Level.WARN, "未能正确载入配置或初始化AmazonSpider");
@@ -68,6 +78,7 @@ public class DiscSpiderTask implements SpiderTask {
                 connection.setReadTimeout(3000);
                 document = db.parse(connection.getInputStream());
                 tryCount = 0;
+                helper.get().getCount().incrementAndGet();
             } catch (SocketTimeoutException e) {
                 throw e;
             } catch (IOException e) {
@@ -81,7 +92,10 @@ public class DiscSpiderTask implements SpiderTask {
 
     private void sleepThread() {
         try {
-            LogManager.getLogger(this).printf(Level.INFO, "访问Amazon API太快了, 休息10秒钟.");
+            Logger logger = LogManager.getLogger(this);
+            String name = helper.get().getName();
+            int count = helper.get().getCount().get();
+            logger.printf(Level.INFO, "访问Amazon API太快了, 休息10秒钟. (%s:%d)", name, count);
             Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();

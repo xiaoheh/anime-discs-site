@@ -5,7 +5,7 @@
     <title>Anime Discs - 碟片信息</title>
     <%@ include file="include/import.jsp" %>
     <link href="styles/table-20160527.css" rel="stylesheet"/>
-    <script src="scripts/table-20160531.js"></script>
+    <script src="scripts/table-20170321.js"></script>
 </head>
 <body>
 <%@ include file="include/navbar.jsp" %>
