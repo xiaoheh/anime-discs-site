@@ -94,15 +94,22 @@ function tablesorter(table) {
     }
 
     function compare_to($a, $b) {
-        if ($a.data("number") != null) {
-            return get_number($a) - get_number($b);
-        } else {
-            return get_text($a).localeCompare(get_text($b));
+        if (has_number($a) || has_number($b)) {
+            if (has_number($a) && has_number($b)) {
+                return get_number($a) - get_number($b);
+            } else {
+                return has_number($a) ? 1 : -1;
+            }
         }
+        return get_text($a).localeCompare(get_text($b));
     }
 
     function get_number($td) {
         return parseInt($td.data("number"));
+    }
+
+    function has_number($td) {
+        return $td.data("number") != null && $td.data("number") != "";
     }
 
     function get_text($td) {
