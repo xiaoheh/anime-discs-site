@@ -109,7 +109,7 @@ function tablesorter(table) {
     }
 
     function has_number($td) {
-        return $td.data("number") != null && $td.data("number") != "";
+        return $td.data("number") !== undefined && $td.data("number") !== "";
     }
 
     function get_text($td) {
