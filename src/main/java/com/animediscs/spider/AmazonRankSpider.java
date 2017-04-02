@@ -5,7 +5,9 @@ import com.animediscs.model.*;
 import com.animediscs.runner.SpiderService;
 import com.animediscs.runner.task.DiscSpiderTask;
 import org.apache.commons.lang3.time.DateUtils;
-import org.apache.logging.log4j.*;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
@@ -23,9 +25,12 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
-import static com.animediscs.model.Disc.*;
-import static com.animediscs.util.Helper.*;
-import static com.animediscs.util.Parser.*;
+import static com.animediscs.model.Disc.sortByAmazon;
+import static com.animediscs.model.Disc.sortBySakura;
+import static com.animediscs.util.Helper.getSday;
+import static com.animediscs.util.Helper.nullSafeGet;
+import static com.animediscs.util.Parser.parseDate;
+import static com.animediscs.util.Parser.parseNumber;
 
 @Service
 public class AmazonRankSpider {
@@ -51,7 +56,7 @@ public class AmazonRankSpider {
                     .list().forEach(o -> {
                 DiscList discList = (DiscList) o;
                 discList.getDiscs().stream()
-                        .sorted(sortBySakura()).limit(10)
+                        .sorted(sortBySakura()).limit(5)
                         .forEach(discs::add);
             });
         });
@@ -95,10 +100,6 @@ public class AmazonRankSpider {
                         .forEach(later::add);
             });
             Builder<String> builder = Stream.builder();
-            builder.add("shinyray");
-            builder.add("konosuba");
-            builder.add("yuri");
-            builder.add("llss");
             builder.add("other");
             builder.build().forEach(name -> {
                 DiscList discList = dao.lookup(DiscList.class, "name", name);
@@ -114,7 +115,7 @@ public class AmazonRankSpider {
                         .sorted(sortByAmazon())
                         .forEach(later::add);
             });
-            later.forEach(discs::add);
+            discs.addAll(later);
         });
         dao.findAll(Disc.class).stream()
                 .filter(disc -> getSday(disc) >= -7)

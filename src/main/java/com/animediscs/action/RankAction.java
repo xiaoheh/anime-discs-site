@@ -1,7 +1,9 @@
 package com.animediscs.action;
 
 import com.animediscs.dao.Dao;
-import com.animediscs.model.*;
+import com.animediscs.model.Disc;
+import com.animediscs.model.DiscRecord;
+import com.animediscs.model.DiscType;
 import com.animediscs.support.BaseAction;
 import org.apache.commons.lang3.time.DateUtils;
 import org.hibernate.Session;
@@ -11,7 +13,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class RankAction extends BaseAction {
@@ -36,14 +40,7 @@ public class RankAction extends BaseAction {
             JSONObject object = new JSONObject();
             object.put("title", disc.getTitle());
             object.put("type", disc.getType().name());
-
-            if (isQiuDvd(dao, disc)) {
-                object.put("ranks", buildRanksOfPt(disc, computePtOfDvd()));
-            } else if (disc.getType() == DiscType.CD) {
-                object.put("ranks", buildRanksOfPt(disc, computePtOfCd()));
-            } else {
-                object.put("ranks", buildRanks(disc));
-            }
+            object.put("ranks", buildRanksOfPt(disc, computePtOfDvd()));
             responseJson(object.toString());
         }
     }
@@ -82,19 +79,6 @@ public class RankAction extends BaseAction {
         };
     }
 
-    private JSONArray buildRanks(Disc disc) {
-        JSONArray array = new JSONArray();
-        dao.execute(session -> {
-            getRecords(disc, session).forEach(record -> {
-                JSONObject object = new JSONObject();
-                object.put("date", record.getDate().getTime() + 3600000);
-                object.put("rank", record.getRank());
-                array.put(object);
-            });
-        });
-        return array;
-    }
-
     private JSONArray buildRanksOfPt(Disc disc, Consumer<DiscRecord> consumer) {
         JSONArray array = new JSONArray();
         dao.execute(session -> {
@@ -109,17 +93,6 @@ public class RankAction extends BaseAction {
             });
         });
         return array;
-    }
-
-    public static Boolean isQiuDvd(Dao dao, Disc disc) {
-        return dao.query(session -> {
-            return needCompute(dao, disc, "mydvd") || needCompute(dao, disc, "xxlonge");
-        });
-    }
-
-    private static Boolean needCompute(Dao dao, Disc disc, String name) {
-        DiscList discList = dao.lookup(DiscList.class, "name", name);
-        return discList != null && discList.getDiscs().contains(disc);
     }
 
     public static List<DiscRecord> getRecords(Disc disc, Session session) {
@@ -137,7 +110,7 @@ public class RankAction extends BaseAction {
         return computeRecordsPt(disc, records, computePtOfDvd());
     }
 
-    public static List<DiscRecord> computeRecordsPt(Disc disc, List<DiscRecord> records, Consumer<DiscRecord> consumer) {
+    private static List<DiscRecord> computeRecordsPt(Disc disc, List<DiscRecord> records, Consumer<DiscRecord> consumer) {
         Date date = new Date();
         date = DateUtils.addHours(date, -1);
         date = DateUtils.setMinutes(date, 0);

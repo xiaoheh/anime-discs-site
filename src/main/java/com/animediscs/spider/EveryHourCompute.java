@@ -3,11 +3,15 @@ package com.animediscs.spider;
 import com.animediscs.action.RankAction;
 import com.animediscs.dao.Dao;
 import com.animediscs.model.*;
-import org.apache.logging.log4j.*;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
 import static com.animediscs.util.Helper.getSday;
@@ -26,24 +30,20 @@ public class EveryHourCompute {
 
     public void doCompute(ExecutorService execute) throws Exception {
         Set<Disc> sakuraList = new LinkedHashSet<>();
-        Set<Disc> computeList = new LinkedHashSet<>();
         Set<Disc> needRecord = new LinkedHashSet<>();
+        Set<Disc> latestList = new LinkedHashSet<>();
         dao.execute(session -> {
             dao.findBy(DiscList.class, "sakura", true)
                     .stream().map(DiscList::getDiscs)
                     .forEach(sakuraList::addAll);
-            dao.findBy(Disc.class, "type", DiscType.CD)
-                    .forEach(computeList::add);
-            dao.lookup(DiscList.class, "name", "mydvd").getDiscs()
-                    .forEach(computeList::add);
-            dao.lookup(DiscList.class, "name", "xxlonge").getDiscs()
-                    .forEach(computeList::add);
             dao.findAll(DiscList.class)
                     .stream().map(DiscList::getDiscs)
                     .forEach(needRecord::addAll);
+            latestList.addAll(dao.findBy(Disc.class, "type", DiscType.CD));
+            latestList.addAll(dao.lookup(DiscList.class, "name", "shiqiu").getDiscs());
         });
-        logger.printf(Level.INFO, "正在计算PT, 共%d个", computeList.size());
-        computeList.forEach(disc -> {
+        logger.printf(Level.INFO, "正在计算PT, 共%d个", latestList.size());
+        latestList.forEach(disc -> {
             execute.execute(() -> {
                 DiscSakura sakura = disc.getSakura();
                 if (sakura != null && sakura.getSday() >= -1) {
@@ -59,7 +59,7 @@ public class EveryHourCompute {
         logger.printf(Level.INFO, "正在清除其他碟片PT");
         dao.findAll(Disc.class).stream()
                 .filter(disc -> !sakuraList.contains(disc))
-                .filter(disc -> !computeList.contains(disc))
+                .filter(disc -> !latestList.contains(disc))
                 .forEach(disc -> {
                     DiscSakura sakura = disc.getSakura();
                     if (sakura != null && sakura.getSday() >= -1) {
