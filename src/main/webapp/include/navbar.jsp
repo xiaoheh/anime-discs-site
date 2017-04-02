@@ -36,33 +36,19 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">列表<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="list_disc.jsp?filter=table&name=shinyray">小魔女学园</a></li>
-                        <li><a href="list_disc.jsp?filter=table&name=konosuba">为美好的世界献上祝福</a></li>
-                        <li><a href="list_disc.jsp?filter=table&name=yuri">YURI!!! on ICE</a></li>
-                        <li><a href="list_disc.jsp?filter=table&name=euphonium">吹响吧! 悠风号2</a></li>
-                        <li><a href="list_disc.jsp?filter=table&name=llss">LoveLive! Sunshine!!</a></li>
-                        <li><a href="list_disc.jsp?filter=table&name=other">其他热门动画的碟片</a></li>
+                        <%@ include file="season-list.jsp" %>
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">专贴<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="http://tieba.baidu.com/f?kw=名作之壁&ie=utf-8" target="_blank">名作之壁吧</a></li>
-                        <li><a href="http://tieba.baidu.com/f?kw=壁吧专楼&ie=utf-8" target="_blank">壁吧专楼吧</a></li>
-                        <li><a href="http://tieba.baidu.com/p/4923220045?pn=9999" target="_blank">PT排名走势(17年01月)</a></li>
-                        <li><a href="http://tieba.baidu.com/p/4802024610?pn=9999" target="_blank">PT排名走势(16年10月)</a></li>
-                        <li><a href="http://tieba.baidu.com/p/4644300539?pn=9999" target="_blank">PT排名走势(16年07月)</a></li>
+                        <%@ include file="season-tieba.jsp" %>
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">专楼<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="http://tieba.baidu.com/p/4916808077?pn=9999" target="_blank">小魔女学园专楼</a></li>
-                        <li><a href="http://tieba.baidu.com/p/4917870075?pn=9999" target="_blank">Urara 迷路帖专楼</a></li>
-                        <li><a href="http://tieba.baidu.com/p/4807037526?pn=9999" target="_blank">YURI!!! ON ICE专楼</a></li>
-                        <li><a href="http://tieba.baidu.com/p/4802499796?pn=9999" target="_blank">吹响!悠风号2专楼</a></li>
-                        <li><a href="http://tieba.baidu.com/p/4633906279?pn=9999" target="_blank">Sunshine专楼</a></li>
-                        <li><a href="http://tieba.baidu.com/p/4773136352?pn=9999" target="_blank">从零开始专楼</a></li>
+                        <%@ include file="season-zhuan.jsp" %>
                     </ul>
                 </li>
                 <li class="dropdown">

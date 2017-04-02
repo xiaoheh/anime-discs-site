@@ -7,7 +7,7 @@
 
     <groupId>fuhaiwei</groupId>
     <artifactId>anime-discs</artifactId>
-    <version>3.3.8</version>
+    <version>3.3.9</version>
 
     <properties>
         <java.version>1.8</java.version>
