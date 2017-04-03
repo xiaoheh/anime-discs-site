@@ -32,6 +32,7 @@
         <li><a href="list_disc.jsp?filter=table&name=shiqiu">球总的动画列表</a></li>
         <li><a href="list_disc.jsp?filter=table&name=xxlonge">xxlonge的动画列表</a></li>
         <li><a href="list_disc.jsp?filter=table&name=music">wbn213的音乐列表</a></li>
+        <li><a href="list_disc.jsp?filter=table&name=oped">新番OPED音乐列表</a></li>
     </ul>
     <h4>推荐访问的列表</h4>
     <ul>
