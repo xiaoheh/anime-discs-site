@@ -41,6 +41,11 @@ public class RankAction extends BaseAction {
             object.put("title", disc.getTitle());
             object.put("type", disc.getType().name());
             object.put("ranks", buildRanksOfPt(disc, computePtOfDvd()));
+            if (disc.getType() == DiscType.CD) {
+                object.put("ranks", buildRanksOfPt(disc, computePtOfCd()));
+            } else {
+                object.put("ranks", buildRanksOfPt(disc, computePtOfDvd()));
+            }
             responseJson(object.toString());
         }
     }
