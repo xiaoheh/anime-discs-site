@@ -34,7 +34,7 @@
 <script id="template" type="text/html">
     <table class="table sorter table-bordered table-striped">
         <caption>
-            <span>{{title}} 的全部排名</span>
+            <span>{{title}} 的全部排名 (此处时间均为日本时间)</span>
         </caption>
         <thead>
         <tr>
