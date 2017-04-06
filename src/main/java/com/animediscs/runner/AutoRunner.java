@@ -3,14 +3,19 @@ package com.animediscs.runner;
 import com.animediscs.spider.*;
 import com.animediscs.util.Format;
 import com.animediscs.util.Helper;
-import org.apache.logging.log4j.*;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.Date;
+import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -82,30 +87,33 @@ public class AutoRunner {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
-                try {
-                    callable.call();
-                } catch (Exception e) {
-                    logger.printf(Level.WARN, "计划任务 %s 出现错误: %s: %s",
-                            name, e.getClass().getSimpleName(), e.getMessage());
-                    logger.catching(Level.DEBUG, e);
-                }
+                invokeCallable(callable, name);
             }
         }, firstTime, 3600000);
+        timer.schedule(new TimerTask() {
+            public void run() {
+                invokeCallable(callable, name);
+            }
+        }, 60000);
     }
 
     private void schedule(String name, long delay, long period, Callable callable) {
         logger.printf(Level.INFO, "已添加计划任务 %s, %d秒后开始运行, 每%d秒运行一次", name, delay, period);
         new Timer(true).schedule(new TimerTask() {
             public void run() {
-                try {
-                    callable.call();
-                } catch (Exception e) {
-                    logger.printf(Level.WARN, "计划任务 %s 出现错误: %s: %s",
-                            name, e.getClass().getSimpleName(), e.getMessage());
-                    logger.catching(Level.DEBUG, e);
-                }
+                invokeCallable(callable, name);
             }
         }, delay * 1000, period * 1000);
+    }
+
+    private void invokeCallable(Callable callable, String name) {
+        try {
+            callable.call();
+        } catch (Exception e) {
+            logger.printf(Level.WARN, "计划任务 %s 出现错误: %s: %s",
+                    name, e.getClass().getSimpleName(), e.getMessage());
+            logger.catching(Level.DEBUG, e);
+        }
     }
 
     public SpiderService getRankerRunner() {
