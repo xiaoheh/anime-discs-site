@@ -3,7 +3,7 @@
         "http://struts.apache.org/dtds/struts-2.3.dtd">
 <!--suppress Struts2ModelInspection -->
 <struts>
-    <constant name="struts.devMode" value="true"/>
+    <constant name="struts.devMode" value="false"/>
     <constant name="struts.i18n.encoding" value="UTF-8"/>
     <constant name="struts.action.extension" value="do"/>
 

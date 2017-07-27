@@ -31,7 +31,7 @@ public class EveryHourCompute {
     public void doCompute(ExecutorService execute) throws Exception {
         Set<Disc> sakuraList = new LinkedHashSet<>();
         Set<Disc> needRecord = new LinkedHashSet<>();
-        Set<Disc> latestList = new LinkedHashSet<>();
+        Set<Disc> computeList = new LinkedHashSet<>();
         dao.execute(session -> {
             dao.findBy(DiscList.class, "sakura", true)
                     .stream().map(DiscList::getDiscs)
@@ -39,11 +39,12 @@ public class EveryHourCompute {
             dao.findAll(DiscList.class)
                     .stream().map(DiscList::getDiscs)
                     .forEach(needRecord::addAll);
-            latestList.addAll(dao.findBy(Disc.class, "type", DiscType.CD));
-            latestList.addAll(dao.lookup(DiscList.class, "name", "shiqiu").getDiscs());
+            computeList.addAll(dao.findBy(Disc.class, "type", DiscType.CD));
+            computeList.addAll(dao.lookup(DiscList.class, "name", "shiqiu").getDiscs());
+            computeList.addAll(dao.lookup(DiscList.class, "name", "saenai").getDiscs());
         });
-        logger.printf(Level.INFO, "正在计算PT, 共%d个", latestList.size());
-        latestList.forEach(disc -> {
+        logger.printf(Level.INFO, "正在计算PT, 共%d个", computeList.size());
+        computeList.forEach(disc -> {
             execute.execute(() -> {
                 DiscSakura sakura = disc.getSakura();
                 if (sakura != null && sakura.getSday() >= -1) {
@@ -59,7 +60,7 @@ public class EveryHourCompute {
         logger.printf(Level.INFO, "正在清除其他碟片PT");
         dao.findAll(Disc.class).stream()
                 .filter(disc -> !sakuraList.contains(disc))
-                .filter(disc -> !latestList.contains(disc))
+                .filter(disc -> !computeList.contains(disc))
                 .forEach(disc -> {
                     DiscSakura sakura = disc.getSakura();
                     if (sakura != null && sakura.getSday() >= -1) {
