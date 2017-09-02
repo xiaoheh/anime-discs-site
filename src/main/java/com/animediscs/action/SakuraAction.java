@@ -28,10 +28,8 @@ public class SakuraAction extends BaseAction {
         String text = index.update(() -> {
             JSONArray array = new JSONArray();
             dao.execute(session -> {
-                Date yesterday = DateUtils.addDays(new Date(), -1);
                 session.createCriteria(DiscList.class)
                         .add(Restrictions.eq("sakura", true))
-                        .add(Restrictions.gt("date", yesterday))
                         .addOrder(Order.desc("name"))
                         .list().forEach(o -> {
                     array.put(buildDiscList((DiscList) o));
