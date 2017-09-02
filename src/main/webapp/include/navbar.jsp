@@ -26,6 +26,7 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">推荐<b class="caret"></b></a>
                     <ul class="dropdown-menu">
+                        <li><a href="bmoe.do">B萌2017</a></li>
                         <li><a href="sakura_data.jsp">SAKURA数据</a></li>
                         <li><a href="list_disc.jsp?filter=table&name=shiqiu">球总的动画列表</a></li>
                         <li><a href="list_disc.jsp?filter=table&name=xxlonge">xxlonge的动画列表</a></li>
