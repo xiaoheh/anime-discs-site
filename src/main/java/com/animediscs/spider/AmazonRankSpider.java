@@ -144,10 +144,8 @@ public class AmazonRankSpider {
     }
 
     private Criteria findLatestSakura(Session session) {
-        Date yesterday = DateUtils.addDays(new Date(), -1);
         return session.createCriteria(DiscList.class)
                 .add(Restrictions.eq("sakura", true))
-                .add(Restrictions.gt("date", yesterday))
                 .addOrder(Order.desc("name"));
     }
 
