@@ -52,13 +52,17 @@ public class SakuraSpeedSpider {
 
     private void updateDiscList(Element table, String updateText) {
         DiscList discList = getDiscList(table.parent().id());
-        if (!updateText.equals("更新中")) {
+        if (updateText.equals("更新中")) {
+            logger.printf(Level.INFO, "延后更新Sakura速报数据(%s), 原因: Sakura网站数据更新中.", discList.getTitle());
+        } else {
             Date japanDate = parseDate(update, updateText);
             Date chinaDate = DateUtils.addHours(japanDate, -1);
-            updateDiscList(table, discList, chinaDate);
-            logger.printf(Level.INFO, "成功更新Sakura速报数据(%s)", discList.getTitle());
-        } else {
-            logger.printf(Level.INFO, "延后更新Sakura速报数据(%s), 原因: Sakura网站数据更新中.", discList.getTitle());
+            if (DateUtils.addHours(chinaDate, 4).compareTo(new Date()) < 0) {
+                logger.printf(Level.INFO, "暂停更新Sakura速报数据(%s), 原因: Sakura网站数据过于陈旧.", discList.getTitle());
+            } else {
+                updateDiscList(table, discList, chinaDate);
+                logger.printf(Level.INFO, "成功更新Sakura速报数据(%s)", discList.getTitle());
+            }
         }
     }
 
@@ -129,11 +133,11 @@ public class SakuraSpeedSpider {
         if (dateText.length() == 8) {
             dateText = "20" + dateText;
         }
-		try {
-	        return parseDate(release, dateText);
-		} catch (RuntimeException e) {
-			return new Date();
-		}
+        try {
+            return parseDate(release, dateText);
+        } catch (RuntimeException e) {
+            return new Date();
+        }
     }
 
     private DiscList getDiscList(String name) {
