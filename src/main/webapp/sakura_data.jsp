@@ -114,6 +114,10 @@
 </head>
 <body>
 <%@ include file="include/navbar.jsp" %>
+现在日本sakura网站遇到一些问题，暂时不能抓取实时排名，据了解sakura网站管理员正努力修复该问题。
+在这种情况下，本网站正常抓取排名的同时，将暂时显示自己计算的PT，由于没有nico和高价补正可能与sakura的PT会有所不同。
+一旦sakura恢复更新，本网站会第一时间与其同步。
+<hr>
 <div id="content"></div>
 <script id="template-small" type="text/html">
     {{each tables as table idx}}
