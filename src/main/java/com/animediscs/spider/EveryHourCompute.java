@@ -29,25 +29,17 @@ public class EveryHourCompute {
     }
 
     public void doCompute(ExecutorService execute) throws Exception {
-        Set<Disc> sakuraList = new LinkedHashSet<>();
-        Set<Disc> needRecord = new LinkedHashSet<>();
         Set<Disc> computeList = new LinkedHashSet<>();
         dao.execute(session -> {
-            dao.findBy(DiscList.class, "sakura", true)
-                    .stream().map(DiscList::getDiscs)
-                    .forEach(sakuraList::addAll);
             dao.findAll(DiscList.class)
                     .stream().map(DiscList::getDiscs)
-                    .forEach(needRecord::addAll);
-            computeList.addAll(dao.findBy(Disc.class, "type", DiscType.CD));
-            computeList.addAll(dao.lookup(DiscList.class, "name", "shiqiu").getDiscs());
-            computeList.addAll(dao.lookup(DiscList.class, "name", "saenai").getDiscs());
+                    .forEach(computeList::addAll);
         });
         logger.printf(Level.INFO, "正在计算PT, 共%d个", computeList.size());
         computeList.forEach(disc -> {
             execute.execute(() -> {
                 DiscSakura sakura = disc.getSakura();
-                if (sakura != null && sakura.getSday() >= -1) {
+                if (sakura != null) {
                     dao.refresh(sakura);
                     sakura.setSday(getSday(disc));
                     sakura.setCupt(getCupt(disc));
@@ -57,25 +49,9 @@ public class EveryHourCompute {
                 }
             });
         });
-        logger.printf(Level.INFO, "正在清除其他碟片PT");
-        dao.findAll(Disc.class).stream()
-                .filter(disc -> !sakuraList.contains(disc))
-                .filter(disc -> !computeList.contains(disc))
-                .forEach(disc -> {
-                    DiscSakura sakura = disc.getSakura();
-                    if (sakura != null && sakura.getSday() >= -1) {
-                        dao.refresh(sakura);
-                        sakura.setSday(getSday(disc));
-                        sakura.setCupt(0);
-                        logger.printf(Level.INFO, "正在清除PT:「%s」->(%d pt)",
-                                disc.getTitle(), sakura.getCupt());
-                        dao.saveOrUpdate(sakura);
-                    }
-                });
         logger.printf(Level.INFO, "正在清理过期的排名记录");
         dao.findAll(Disc.class).stream()
-                .filter(disc -> !needRecord.contains(disc))
-                .filter(disc -> getSday(disc) < -10)
+                .filter(disc -> !computeList.contains(disc))
                 .forEach(disc -> {
                     logger.printf(Level.INFO, "正在清除排名:「%s」",
                             disc.getTitle());
