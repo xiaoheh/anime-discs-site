@@ -117,12 +117,6 @@ public class AmazonRankSpider {
             });
             discs.addAll(later);
         });
-        dao.findAll(Disc.class).stream()
-                .filter(disc -> getSday(disc) >= -7)
-                .forEach(discs::add);
-        dao.findAll(Disc.class).stream()
-                .filter(disc -> disc.getRank() == null || disc.getRank().getPark() <= 200)
-                .forEach(discs::add);
         AtomicBoolean needUpdate = new AtomicBoolean(false);
         AtomicInteger count = new AtomicInteger(discs.size());
         infoUpdateStart("Amazon(All)", "所有碟片", count);
