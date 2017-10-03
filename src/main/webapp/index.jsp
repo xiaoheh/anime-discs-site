@@ -25,7 +25,6 @@
     <h4>欢迎访问本站! </h4>
     <h4>推荐访问的页面:</h4>
     <ul>
-        <li><a href="bmoe.do">B萌2017</a></li>
         <li><a href="sakura_data.jsp">SAKURA数据</a></li>
         <li><a href="sakura_data.jsp#2017-10">SAKURA数据(定位到17年10月)</a></li>
         <li><a href="sakura_data.jsp#2017-07">SAKURA数据(定位到17年07月)</a></li>
