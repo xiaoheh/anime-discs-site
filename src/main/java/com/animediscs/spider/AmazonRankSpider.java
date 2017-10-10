@@ -100,6 +100,7 @@ public class AmazonRankSpider {
                         .forEach(later::add);
             });
             Builder<String> builder = Stream.builder();
+            builder.add("llss");
             builder.add("other");
             builder.build().forEach(name -> {
                 DiscList discList = dao.lookup(DiscList.class, "name", name);
