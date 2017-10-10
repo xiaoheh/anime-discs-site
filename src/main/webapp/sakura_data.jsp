@@ -11,18 +11,6 @@
         /* 小设备 */
         @media (max-width: 767px) {
 
-            table.table tbody {
-                counter-reset: table-id;
-            }
-
-            table.table tbody tr {
-                counter-increment: table-id;
-            }
-
-            table.table tbody td.index:before {
-                content: counter(table-id);
-            }
-
             table.table th.index {
                 width: 32px;
                 text-align: center;
@@ -127,6 +115,7 @@
         <thead>
         <tr>
             <th class="index hidden-xxm">ID</th>
+            <th class="index hidden-xxm zero-width"></th>
             <th class="rank sorter">排名</th>
             <th class="cupt hidden-xxs zero-width"></th>
             <th class="cupt hidden-xxs sorter">累积</th>
@@ -138,7 +127,8 @@
         {{each table.discs as disc idx2}}
         {{if disc.rank1 < 9999 && disc.curk < 9999 && disc.prrk < 9999}}
         <tr id="row-{{idx+1}}-{{idx2+1}}">
-            <td class="index hidden-xxm"></td>
+            <td class="index hidden-xxm inject">{{idx2+1}}</td>
+            <td class="index hidden-xxm zero-width">)</td>
             <td class="rank {{fm_rank_class(disc)}}" data-number="{{fm_rank_number(disc)}}">
                 <a href="http://rankstker.net/show.cgi?n={{disc.asin}}" target="_blank">{{disc | fm_rank}}</a>
             </td>
@@ -346,6 +336,14 @@
         offset.save();
     }
 
+    function create_index() {
+        $("table.sorter").each(function () {
+            $(this).find("td.index.inject").each(function (index) {
+                $(this).text(index + 1);
+            })
+        })
+    }
+
     function post_after_render() {
         table.sorter("table.table.sorter");
         table.load_status();
@@ -357,6 +355,9 @@
                 }
             } else {
                 offset.load();
+            }
+            if (device.is_small()) {
+                create_index();
             }
         }, 20);
         if (!device.is_small()) {
