@@ -12,6 +12,9 @@
             <result type="redirect">/sakura_data.jsp</result>
             <result name="admin">WEB-INF/admin.jsp</result>
         </action>
+        <action name="bmoe" class="com.animediscs.action.BmoeAction" method="list">
+            <result>/bmoe.jsp</result>
+        </action>
     </package>
 
     <package name="json" extends="struts-default">

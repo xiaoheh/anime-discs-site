@@ -1,10 +1,12 @@
 package com.animediscs.util;
 
 import com.animediscs.model.Disc;
-import org.apache.logging.log4j.*;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
 import java.util.Properties;
 import java.util.function.Function;
 
@@ -48,6 +50,27 @@ public abstract class Helper {
             throw new RuntimeException(e);
         }
         return properties;
+    }
+
+    public static String readText(File pathname) {
+        try {
+            return Files.readAllLines(pathname.toPath())
+                    .stream()
+                    .reduce((s1, s2) -> s1 + "\n" + s2)
+                    .orElse("");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void writeText(File pathname, String text) {
+        pathname.getParentFile().mkdirs();
+        try (PrintWriter writer = new PrintWriter(new FileWriter(pathname))) {
+            writer.println(text);
+            writer.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

@@ -51,7 +51,7 @@ public class AmazonRankSpider {
         }
         List<Disc> discs = new LinkedList<>();
         dao.execute(session -> {
-            findLatestSakura(session)
+            findSakura(session)
                     .setFirstResult(1)
                     .list().forEach(o -> {
                 DiscList discList = (DiscList) o;
@@ -88,7 +88,7 @@ public class AmazonRankSpider {
         Set<Disc> discs = new LinkedHashSet<>();
         dao.execute(session -> {
             Set<Disc> later = new LinkedHashSet<>();
-            findLatestSakura(session).list().forEach(o -> {
+            findSakura(session).list().forEach(o -> {
                 DiscList discList = (DiscList) o;
                 discList.getDiscs().stream()
                         .sorted(sortBySakura())
@@ -100,6 +100,7 @@ public class AmazonRankSpider {
                         .forEach(later::add);
             });
             Builder<String> builder = Stream.builder();
+            builder.add("llss");
             builder.add("other");
             builder.build().forEach(name -> {
                 DiscList discList = dao.lookup(DiscList.class, "name", name);
@@ -117,12 +118,6 @@ public class AmazonRankSpider {
             });
             discs.addAll(later);
         });
-        dao.findAll(Disc.class).stream()
-                .filter(disc -> getSday(disc) >= -7)
-                .forEach(discs::add);
-        dao.findAll(Disc.class).stream()
-                .filter(disc -> disc.getRank() == null || disc.getRank().getPark() <= 200)
-                .forEach(discs::add);
         AtomicBoolean needUpdate = new AtomicBoolean(false);
         AtomicInteger count = new AtomicInteger(discs.size());
         infoUpdateStart("Amazon(All)", "所有碟片", count);
@@ -143,11 +138,9 @@ public class AmazonRankSpider {
         });
     }
 
-    private Criteria findLatestSakura(Session session) {
-        Date yesterday = DateUtils.addDays(new Date(), -1);
+    private Criteria findSakura(Session session) {
         return session.createCriteria(DiscList.class)
                 .add(Restrictions.eq("sakura", true))
-                .add(Restrictions.gt("date", yesterday))
                 .addOrder(Order.desc("name"));
     }
 

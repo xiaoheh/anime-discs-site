@@ -51,6 +51,9 @@ function fm_timeout(time) {
         return "--分 --秒";
     }
     var timeout = new Date().getTime() - time;
+    if (timeout >= 3600000 * 24) {
+        return "很久以前";
+    }
     if (timeout < 0) {
         return "00分 00秒";
     }

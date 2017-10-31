@@ -26,6 +26,7 @@
     <h4>推荐访问的页面:</h4>
     <ul>
         <li><a href="sakura_data.jsp">SAKURA数据</a></li>
+        <li><a href="sakura_data.jsp#2017-10">SAKURA数据(定位到17年10月)</a></li>
         <li><a href="sakura_data.jsp#2017-07">SAKURA数据(定位到17年07月)</a></li>
         <li><a href="sakura_data.jsp#2017-04">SAKURA数据(定位到17年04月)</a></li>
         <li><a href="list_disc.jsp?filter=table&name=shiqiu">球总的动画列表</a></li>
