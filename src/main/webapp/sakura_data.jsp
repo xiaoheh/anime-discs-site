@@ -6,7 +6,7 @@
     <title>Anime Discs - Sakura数据</title>
     <%@ include file="include/import.jsp" %>
     <link href="styles/table-20160527.css" rel="stylesheet"/>
-    <script src="scripts/table-20170328.js"></script>
+    <script src="scripts/table-20171114.js"></script>
     <style>
         /* 小设备 */
         @media (max-width: 767px) {

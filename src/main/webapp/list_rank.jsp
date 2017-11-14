@@ -6,7 +6,7 @@
     <title>Anime Discs - 全部排名</title>
     <%@ include file="include/import.jsp" %>
     <link href="styles/table-20160527.css" rel="stylesheet"/>
-    <script src="scripts/table-20170328.js"></script>
+    <script src="scripts/table-20171114.js"></script>
     <style>
 
         table.table th.date {
