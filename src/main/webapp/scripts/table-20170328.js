@@ -51,7 +51,7 @@ function render_profile(quick) {
 
     function apply_checked(checked) {
         $("#div-hidden").find(":checkbox").each(function () {
-            if ($(this).prop("checked") != checked.indexOf($(this).data("class")) > -1) {
+            if ($(this).prop("checked") !== checked.indexOf($(this).data("class")) > -1) {
                 $(this).click();
             }
         });
@@ -96,7 +96,18 @@ function tablesorter(table) {
     function compare_to($a, $b) {
         if (has_number($a) || has_number($b)) {
             if (has_number($a) && has_number($b)) {
-                return get_number($a) - get_number($b);
+                var number_a = get_number($a);
+                var number_b = get_number($b);
+                if (number_a === number_b) {
+                    return 0;
+                }
+                if (number_a === 0) {
+                    return 1;
+                }
+                if (number_b === 0) {
+                    return -1;
+                }
+                return number_a - number_b;
             } else {
                 return has_number($a) ? 1 : -1;
             }
@@ -138,7 +149,7 @@ function load_status(status) {
     $(status).each(function () {
         if (this.th) {
             var $th = $("#" + this.id).find("th").eq(this.th);
-            if (this.st == "descing") {
+            if (this.st === "descing") {
                 $th.click();
                 $th.click();
             } else {
